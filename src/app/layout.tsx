@@ -10,22 +10,12 @@ import { GsapProvider } from '@/components/animations/gsap-provider'; // Import 
 import { SmoothScrollProvider } from '@/components/layout/smooth-scroll-provider'; // Import Smooth Scroll Provider
 import CustomCursor from '@/components/custom-cursor'; // Import Custom Cursor
 
-// Removed incorrect initializations causing the TypeError
-/*
-const geistSans = GeistSans({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = GeistMono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-*/
-
 export const metadata: Metadata = {
   title: 'Portfolio Pro - Kesari Dasaradh',
   description: 'Modern portfolio website for Kesari Dasaradh, showcasing backend development skills and modern UI/UX.',
+  icons: { // Add favicon link
+    icon: '/favicon.ico',
+  },
   // Add Open Graph and Twitter Card metadata later if needed
 };
 
@@ -37,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* Apply font variables directly from the imported objects */}
-      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
+      {/* Add suppressHydrationWarning to body to mitigate extension-related hydration errors */}
+      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
