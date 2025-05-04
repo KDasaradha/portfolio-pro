@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans'; // Import from geist/font/sans
-import { GeistMono } from 'geist/font/mono'; // Import from geist/font/mono
+// Correct imports
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster";
 
-// Correct way to initialize Geist fonts
+// Removed incorrect initializations causing the TypeError
+/*
 const geistSans = GeistSans({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -17,6 +19,7 @@ const geistMono = GeistMono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
+*/
 
 export const metadata: Metadata = {
   title: 'Portfolio Pro - Kesari Dasaradh',
@@ -31,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* Apply font variables to the body */}
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+      {/* Apply font variables directly from the imported objects */}
+      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
