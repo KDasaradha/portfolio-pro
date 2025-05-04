@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card'; // Added CardDescription
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send } from 'lucide-react'; // Replaced LinkIcon with Send
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, Link as LinkIcon } from 'lucide-react'; // Replaced LinkIcon with Send and Added LinkIcon back
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,6 +28,8 @@ export default function ContactSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLHeadingElement>(null); // Ref for header
+    const contactCard1Ref = useRef<HTMLDivElement>(null);
+    const contactCard2Ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -36,6 +38,7 @@ export default function ContactSection() {
                 opacity: 0,
                 y: 60,
                 duration: 0.9,
+                ease: 'power3.out',
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 85%",
@@ -43,27 +46,32 @@ export default function ContactSection() {
                 }
             });
 
-             // Animate contact cards with stagger
-             const contactCards = cardsRef.current?.children;
-             if (contactCards) {
-                 gsap.from(contactCards, {
-                    autoAlpha: 0,
-                    y: 70, // Increased offset
-                    scale: 0.95, // Add scale effect
-                    duration: 0.8,
-                    stagger: {
-                        amount: 0.4, // Total stagger duration
-                        from: "start",
-                        ease: "power2.out"
-                    },
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: cardsRef.current,
-                        start: "top 88%", // Adjust trigger slightly
-                        toggleActions: "play none none none",
-                    }
-                 });
-             }
+             // Animate contact cards with stagger and slightly different delays
+             gsap.from(contactCard1Ref.current, {
+                autoAlpha: 0,
+                y: 70, // Increased offset
+                scale: 0.95, // Add scale effect
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: contactCard1Ref.current,
+                    start: "top 88%", // Adjust trigger slightly
+                    toggleActions: "play none none none",
+                }
+             });
+              gsap.from(contactCard2Ref.current, {
+                autoAlpha: 0,
+                y: 70, // Increased offset
+                scale: 0.95, // Add scale effect
+                duration: 0.8,
+                delay: 0.2, // Stagger the second card slightly
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: contactCard2Ref.current,
+                    start: "top 88%", // Adjust trigger slightly
+                    toggleActions: "play none none none",
+                }
+             });
 
         }, sectionRef);
 
@@ -84,7 +92,7 @@ export default function ContactSection() {
 
         <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16"> {/* Increased gap */}
            {/* Contact Info Card */}
-           <div className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+           <div ref={contactCard1Ref} className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-accent bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
                 <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}
@@ -119,7 +127,7 @@ export default function ContactSection() {
            </div>
 
           {/* Social Links & Resume Card */}
-           <div className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+           <div ref={contactCard2Ref} className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-primary bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
                 <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}
@@ -168,11 +176,11 @@ export default function ContactSection() {
       {/* Add pattern styles if needed */}
        <style jsx>{`
         .pattern-circuit-board { /* Example pattern */
-            background-image: linear-gradient(rgba(var(--foreground-rgb), 0.03) 1px, transparent 1px), linear-gradient(to right, rgba(var(--foreground-rgb), 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
             background-size: 20px 20px;
         }
         .dark .pattern-circuit-board {
-            background-image: linear-gradient(rgba(var(--foreground-rgb), 0.05) 1px, transparent 1px), linear-gradient(to right, rgba(var(--foreground-rgb), 0.05) 1px, transparent 1px);
+            background-image: linear-gradient(hsl(var(--foreground) / 0.05) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
         }
        `}</style>
     </section>

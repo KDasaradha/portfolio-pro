@@ -4,13 +4,12 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { Menu, Moon, Sun, Code, X as CloseIcon } from 'lucide-react'; // Renamed X to avoid conflict
+import { Menu, Moon, Sun, Code, X as CloseIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useLenis } from '@/components/layout/lenis-provider'; // Import useLenis
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,7 +29,6 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const indicatorRef = useRef<HTMLSpanElement>(null);
-  const lenis = useLenis(); // Get Lenis instance
 
   // GSAP Animation for header entrance and scroll effects
   useEffect(() => {
@@ -50,8 +48,10 @@ export default function Header() {
         end: 99999,
         markers: false, // Disable markers
         onToggle: self => {
-          headerElement.classList.toggle('shadow-lg', self.isActive);
-          headerElement.classList.toggle('shadow-sm', !self.isActive);
+          if (headerElement) { // Check if headerElement exists
+            headerElement.classList.toggle('shadow-lg', self.isActive);
+            headerElement.classList.toggle('shadow-sm', !self.isActive);
+          }
         },
       });
 
@@ -67,7 +67,7 @@ export default function Header() {
 
            navItems.forEach(item => {
              const section = document.querySelector(item.href);
-             if (section) {
+             if (section && headerElement) { // Check if section and headerElement exist
                const rect = section.getBoundingClientRect();
                // Consider section active if its top is within a range below the header
                const sectionTop = rect.top;
@@ -128,15 +128,22 @@ export default function Header() {
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    if (lenis && href.startsWith('#')) {
-      lenis.scrollTo(href, {
-        offset: -(headerRef.current?.offsetHeight || 64) - 10, // Dynamic offset + extra padding
-        duration: 1.5, // Smoother scroll duration
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Ease out expo
-      });
-      setActiveHash(href); // Update active hash immediately
+    if (href.startsWith('#')) {
+      const targetElement = document.querySelector<HTMLElement>(href); // Ensure it's HTMLElement
+      if (targetElement) {
+        const offset = -(headerRef.current?.offsetHeight || 64) - 10; // Dynamic offset + extra padding
+        const targetTop = targetElement.offsetTop + offset; // Calculate target position
+
+        // Use GSAP for smooth scrolling
+        gsap.to(window, {
+          scrollTo: { y: targetTop, autoKill: false }, // AutoKill false might be needed if other scroll animations interfere
+          duration: 1, // Duration of the scroll animation
+          ease: 'power2.inOut', // Smooth easing function
+        });
+
+        setActiveHash(href); // Update active hash immediately
+      }
     } else if (href.startsWith('/')) {
-       // Handle regular navigation if needed
        window.location.href = href;
     }
     setIsMobileMenuOpen(false); // Close mobile menu regardless
@@ -161,13 +168,12 @@ export default function Header() {
               key={item.name}
               ref={(el) => navLinksRef.current[index] = el}
               href={item.href}
-              onClick={(e) => handleLinkClick(e, item.href)}
-              className={cn(
-                "relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-accent", // Increased padding
-                activeHash === item.href ? 'text-accent' : 'text-muted-foreground'
+              onClick={(e) => handleLinkClick(e,item.href)}
+              className={cn("relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-accent", // Increased padding
+                activeHash === item.href ? 'text-accent' : 'text-muted-foreground',
               )}
               data-cursor-interactive
-            >
+             >
               {item.name}
             </Link>
           ))}
@@ -222,13 +228,12 @@ export default function Header() {
                         <Link
                           href={item.href}
                           onClick={(e) => handleLinkClick(e, item.href)}
-                          className={cn(
-                            "text-lg font-medium transition-all duration-200 hover:text-accent py-2 rounded-md px-3 -ml-3 block", // Make full width clickable
+                          className={cn("text-lg font-medium transition-all duration-200 hover:text-accent py-2 rounded-md px-3 -ml-3 block", // Make full width clickable
                             activeHash === item.href ? 'text-accent bg-accent/10 font-semibold' : 'text-foreground' // Highlight active link
                           )}
                           data-cursor-interactive
-                        >
-                           <span className="pl-3">{item.name}</span> {/* Indent text slightly */}
+                         >
+                           <span className="pl-3">{item.name}</span>
                         </Link>
                       </SheetClose>
                     ))}
@@ -240,4 +245,4 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
