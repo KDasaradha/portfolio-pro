@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: var(--font-geist-sans), sans-serif;
-}
-
 @layer base {
   :root {
     --background: 216 28% 95%; /* Light Gray */

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'next/font/google'; // Correctly import GeistSans
-import { GeistMono } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans'; // Import from geist/font/sans
+import { GeistMono } from 'geist/font/mono'; // Import from geist/font/mono
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster";
 
+// Correct way to initialize Geist fonts
 const geistSans = GeistSans({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -30,7 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      {/* Apply font variables to the body */}
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
