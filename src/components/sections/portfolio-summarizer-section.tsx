@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, Sparkles, AlertCircle } from 'lucide-react'; // Added AlertCircle
+import { Loader2, Sparkles, AlertCircle } from 'lucide-react';
 import { generatePortfolioSummary, PortfolioSummaryInput } from '@/ai/flows/portfolio-summarizer';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -81,10 +81,15 @@ export default function PortfolioSummarizerSection() {
     // Animation for result/error appearance
    useEffect(() => {
     if (summary || error) {
-      gsap.fromTo(resultRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
-      );
+        // Ensure the result container is visible before animating
+        gsap.set(resultRef.current, { display: 'block' });
+        gsap.fromTo(resultRef.current,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+        );
+    } else {
+         // Hide result container if no summary or error
+         gsap.set(resultRef.current, { opacity: 0, y: 20, display: 'none' });
     }
    }, [summary, error]);
 
@@ -93,42 +98,58 @@ export default function PortfolioSummarizerSection() {
     setIsLoading(true);
     setError(null);
     setSummary(null);
+    console.log("Form values submitted:", values); // Log form values
 
     const input: PortfolioSummaryInput = {
       jobDescription: values.jobDescription,
       userSkills: values.userSkills.split(',').map(skill => skill.trim()).filter(skill => skill !== ''),
       githubUsername: values.githubUsername,
     };
+    console.log("Prepared input for AI flow:", input); // Log prepared input
 
     try {
       const result = await generatePortfolioSummary(input);
-      setSummary(result.summary);
-      form.reset({ // Optionally reset parts of the form keeping defaults
-           ...form.getValues(), // Keep current values
-           jobDescription: "" // Only reset job description
-       });
+      console.log("Received result from AI flow:", result); // Log the full result
+
+      if (result && result.summary) {
+          setSummary(result.summary);
+          console.log("Summary set successfully.");
+          form.reset({ // Optionally reset parts of the form keeping defaults
+               ...form.getValues(), // Keep current values
+               jobDescription: "" // Only reset job description
+           });
+      } else {
+          console.error("Received empty or invalid summary:", result);
+          setError("AI failed to generate a valid summary. Please try again.");
+      }
+
 
     } catch (err) {
-      console.error("Error generating summary:", err);
+      console.error("Error generating summary:", err); // Log the raw error
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
-      // Provide more specific feedback
-      if (errorMessage.includes('fetch')) {
-           setError('Could not connect to the AI service or GitHub. Please check your connection and try again.');
-      } else if (errorMessage.includes('GitHub repositories') || errorMessage.includes('user stats')) {
-           setError(`Could not fetch data for GitHub user "${input.githubUsername}". Please ensure the username is correct and public.`);
+      setError(`Error: ${errorMessage}`); // Set a generic error message initially
+      // Provide more specific feedback based on error content
+      if (errorMessage.includes('fetch') || errorMessage.includes('network')) {
+           setError('Could not connect to the AI service or GitHub. Please check your network connection and try again.');
+      } else if (errorMessage.includes('GitHub user') || errorMessage.includes('GitHub repos')) {
+           setError(`Could not fetch data for GitHub user "${input.githubUsername}". Please ensure the username is correct and the profile/repositories are public.`);
+      } else if (errorMessage.includes('rate limit')) {
+           setError('API rate limit exceeded. Please try again later.');
       }
        else {
-           setError(`An error occurred: ${errorMessage}`);
+           setError(`An unexpected error occurred while generating the summary. Details: ${errorMessage}`);
       }
+      console.log("Error state set:", error); // Log the error state
     } finally {
       setIsLoading(false);
+      console.log("Loading state set to false.");
     }
   }
 
   return (
-    <section ref={sectionRef} id="ai-summarizer" className="bg-gradient-to-b from-background to-secondary/10">
+    <section ref={sectionRef} id="ai-summarizer" className="bg-gradient-to-b from-background to-secondary/10 relative"> {/* Added relative */}
        {/* Animated Blob for subtle background effect */}
-       <div className="blob opacity-20 dark:opacity-30" style={{ top: '30%', left: '70%', width: '50vw', height: '50vw', animationDuration: '25s, 18s' }} />
+       <div className="blob opacity-20 dark:opacity-30 -z-10" style={{ top: '30%', left: '70%', width: '50vw', height: '50vw', animationDuration: '25s, 18s' }} />
       <div className="container mx-auto px-4 z-10 relative">
         <h2
           className="text-4xl font-bold mb-12 text-center gradient-text flex items-center justify-center gap-3"
@@ -162,6 +183,7 @@ export default function PortfolioSummarizerSection() {
                             className="resize-y min-h-[150px] bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                             {...field}
                             data-cursor-interactive
+                            suppressHydrationWarning // Added to textarea
                           />
                         </FormControl>
                         <FormMessage />
@@ -181,6 +203,7 @@ export default function PortfolioSummarizerSection() {
                                 className="bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                                 {...field}
                                 data-cursor-interactive
+                                suppressHydrationWarning // Added to input
                              />
                             </FormControl>
                             <FormDescription className="text-xs">
@@ -202,6 +225,7 @@ export default function PortfolioSummarizerSection() {
                                 className="bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                                 {...field}
                                 data-cursor-interactive
+                                suppressHydrationWarning // Added to input
                             />
                             </FormControl>
                             <FormDescription className="text-xs">
@@ -236,33 +260,37 @@ export default function PortfolioSummarizerSection() {
             </CardContent>
 
              {/* Results Area */}
-             {(error || summary) && (
-                <CardFooter className="p-6 border-t bg-muted/10">
-                    <div ref={resultRef} className="w-full opacity-0"> {/* Ref for animation */}
-                        {error && !isLoading && (
-                            <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
-                                <AlertCircle className="h-5 w-5" />
-                                <AlertTitle className="font-semibold">Generation Failed</AlertTitle>
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
-                        )}
-
-                        {summary && !isLoading && (
-                            <Card className="w-full bg-gradient-to-br from-accent/10 via-background to-accent/5 border border-accent/20 shadow-inner">
-                                <CardHeader>
-                                    <CardTitle className="text-xl flex items-center gap-2 text-primary">
-                                        <Sparkles className="h-5 w-5 text-accent" /> AI Generated Summary
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    {/* Use whitespace-pre-line to respect newlines from AI */}
-                                    <p className="text-base text-foreground leading-relaxed whitespace-pre-line">{summary}</p>
-                                </CardContent>
-                            </Card>
-                        )}
-                     </div>
-                </CardFooter>
-             )}
+            <CardFooter className="p-6 border-t bg-muted/10">
+                {/* The ref is now on the direct child div */}
+                <div ref={resultRef} className="w-full opacity-0" style={{display: 'none'}}> {/* Initially hidden */}
+                    {isLoading && (
+                        <div className="flex items-center justify-center text-muted-foreground">
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            <span>Generating summary...</span>
+                        </div>
+                    )}
+                    {error && !isLoading && (
+                        <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
+                            <AlertCircle className="h-5 w-5" />
+                            <AlertTitle className="font-semibold">Generation Failed</AlertTitle>
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+                    {summary && !isLoading && (
+                        <Card className="w-full bg-gradient-to-br from-accent/10 via-background to-accent/5 border border-accent/20 shadow-inner">
+                            <CardHeader>
+                                <CardTitle className="text-xl flex items-center gap-2 text-primary">
+                                    <Sparkles className="h-5 w-5 text-accent" /> AI Generated Summary
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {/* Use whitespace-pre-line to respect newlines from AI */}
+                                <p className="text-base text-foreground leading-relaxed whitespace-pre-line">{summary}</p>
+                            </CardContent>
+                        </Card>
+                    )}
+                 </div>
+            </CardFooter>
           </Card>
         </div>
       </div>

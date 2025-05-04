@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useRef, useLayoutEffect, type ReactNode } from 'react';
+import { createContext, useRef, useLayoutEffect, type ReactNode, useContext } from 'react'; // Added useContext
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,7 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 // Create a context for GSAP
-export const GsapContext = createContext<gsap | null>(null);
+export const GsapContext = createContext<typeof gsap | null>(null); // Use typeof gsap
 
 interface GsapProviderProps {
   children: ReactNode;
@@ -23,7 +23,8 @@ export function GsapProvider({ children }: GsapProviderProps) {
 
     // Enable ScrollTrigger - important for scroll-based animations
     ScrollTrigger.defaults({
-      markers: process.env.NODE_ENV === 'development', // Show markers only in development
+      // markers: process.env.NODE_ENV === 'development', // Show markers only in development
+      markers: false, // Disable markers by default for production builds
       // You can set other global ScrollTrigger defaults here
     });
 
@@ -50,7 +51,7 @@ export function GsapProvider({ children }: GsapProviderProps) {
 
 // Optional: Custom hook to use the GSAP context
 export const useGsap = () => {
-  const context = React.useContext(GsapContext);
+  const context = useContext(GsapContext); // Use useContext from React
   if (!context) {
     throw new Error("useGsap must be used within a GsapProvider");
   }
