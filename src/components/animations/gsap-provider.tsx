@@ -23,7 +23,7 @@ export function GsapProvider({ children }: GsapProviderProps) {
 
     // Enable ScrollTrigger - important for scroll-based animations
     ScrollTrigger.defaults({
-      markers: process.env.NODE_ENV === 'development', // Show markers in development, hide in production
+      markers: false, // Disable markers permanently
       // You can set other global ScrollTrigger defaults here
     });
 
