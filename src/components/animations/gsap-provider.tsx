@@ -23,8 +23,7 @@ export function GsapProvider({ children }: GsapProviderProps) {
 
     // Enable ScrollTrigger - important for scroll-based animations
     ScrollTrigger.defaults({
-      // markers: process.env.NODE_ENV === 'development', // Show markers only in development
-      markers: false, // Disable markers by default for production builds
+      markers: process.env.NODE_ENV === 'development', // Show markers in development, hide in production
       // You can set other global ScrollTrigger defaults here
     });
 
@@ -34,8 +33,15 @@ export function GsapProvider({ children }: GsapProviderProps) {
     };
     window.addEventListener('resize', handleResize);
 
+    // Refresh ScrollTrigger after initial hydration and layout shifts might occur
+    const timeoutId = setTimeout(() => {
+        ScrollTrigger.refresh();
+        console.log("ScrollTrigger refreshed after timeout");
+    }, 100); // Adjust delay as needed
+
     return () => {
       // Cleanup GSAP context and ScrollTriggers
+      clearTimeout(timeoutId); // Clear the timeout
       contextRef.current?.revert();
       window.removeEventListener('resize', handleResize);
       ScrollTrigger.killAll(); // Kill all ScrollTriggers on unmount

@@ -48,30 +48,20 @@ export default function PortfolioSummarizerSection() {
 
    useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate section header
-             gsap.from(sectionRef.current?.querySelector('h2'), {
+             // Animate section header and card
+             gsap.from([sectionRef.current?.querySelector('h2'), cardRef.current], {
                 opacity: 0,
-                y: 50,
-                duration: 0.8,
+                y: 60,
+                duration: 0.9,
+                ease: 'power3.out',
+                stagger: 0.2, // Stagger header and card animation
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 80%",
+                    start: "top 85%", // Adjust trigger point if needed
                     toggleActions: "play none none none",
+                    // markers: process.env.NODE_ENV === 'development', // Add markers for debugging this specific trigger
                 }
             });
-
-            // Animate the main card
-            gsap.from(cardRef.current, {
-                 opacity: 0,
-                 y: 60,
-                 duration: 0.8,
-                 ease: 'power3.out',
-                 scrollTrigger: {
-                    trigger: cardRef.current,
-                    start: "top 85%",
-                    toggleActions: "play none none none",
-                 }
-             });
 
         }, sectionRef);
 
@@ -82,14 +72,14 @@ export default function PortfolioSummarizerSection() {
    useEffect(() => {
     if (summary || error) {
         // Ensure the result container is visible before animating
-        gsap.set(resultRef.current, { display: 'block' });
+        gsap.set(resultRef.current, { autoAlpha: 1, display: 'block' }); // Use autoAlpha for opacity and visibility
         gsap.fromTo(resultRef.current,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+            { y: 20 }, // Start slightly lower
+            { y: 0, duration: 0.5, ease: 'power2.out' }
         );
     } else {
          // Hide result container if no summary or error
-         gsap.set(resultRef.current, { opacity: 0, y: 20, display: 'none' });
+         gsap.set(resultRef.current, { autoAlpha: 0, y: 20, display: 'none' });
     }
    }, [summary, error]);
 
@@ -147,6 +137,7 @@ export default function PortfolioSummarizerSection() {
   }
 
   return (
+    // Ensure section has visibility initially if GSAP handles the fade-in
     <section ref={sectionRef} id="ai-summarizer" className="bg-gradient-to-b from-background to-secondary/10 relative"> {/* Added relative */}
        {/* Animated Blob for subtle background effect */}
        <div className="blob opacity-20 dark:opacity-30 -z-10" style={{ top: '30%', left: '70%', width: '50vw', height: '50vw', animationDuration: '25s, 18s' }} />
@@ -157,9 +148,10 @@ export default function PortfolioSummarizerSection() {
           <Sparkles className="h-8 w-8 opacity-80" /> AI Portfolio Summary
         </h2>
 
+        {/* Removed opacity-0, GSAP handles initial state */}
         <div
           ref={cardRef}
-          className="max-w-3xl mx-auto opacity-0" // Initial state for GSAP
+          className="max-w-3xl mx-auto"
         >
            <Card className="shadow-lg border border-border bg-card/80 backdrop-blur-sm overflow-hidden">
             <CardHeader className="p-6 border-b bg-muted/30">
@@ -183,7 +175,7 @@ export default function PortfolioSummarizerSection() {
                             className="resize-y min-h-[150px] bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                             {...field}
                             data-cursor-interactive
-                            suppressHydrationWarning // Added to textarea
+                            suppressHydrationWarning
                           />
                         </FormControl>
                         <FormMessage />
@@ -203,7 +195,7 @@ export default function PortfolioSummarizerSection() {
                                 className="bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                                 {...field}
                                 data-cursor-interactive
-                                suppressHydrationWarning // Added to input
+                                suppressHydrationWarning
                              />
                             </FormControl>
                             <FormDescription className="text-xs">
@@ -225,7 +217,7 @@ export default function PortfolioSummarizerSection() {
                                 className="bg-background focus:border-accent focus:ring-accent/50 transition-colors"
                                 {...field}
                                 data-cursor-interactive
-                                suppressHydrationWarning // Added to input
+                                suppressHydrationWarning
                             />
                             </FormControl>
                             <FormDescription className="text-xs">
@@ -262,7 +254,8 @@ export default function PortfolioSummarizerSection() {
              {/* Results Area */}
             <CardFooter className="p-6 border-t bg-muted/10">
                 {/* The ref is now on the direct child div */}
-                <div ref={resultRef} className="w-full opacity-0" style={{display: 'none'}}> {/* Initially hidden */}
+                {/* Use autoAlpha for GSAP control, initially hidden */}
+                <div ref={resultRef} className="w-full" style={{ autoAlpha: 0, display: 'none' }}>
                     {isLoading && (
                         <div className="flex items-center justify-center text-muted-foreground">
                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />

@@ -35,7 +35,7 @@ export default function ContactSection() {
                 duration: 0.8,
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 80%",
+                    start: "top 85%", // Trigger a bit later
                     toggleActions: "play none none none",
                 }
             });
@@ -44,15 +44,16 @@ export default function ContactSection() {
              const contactCards = cardsRef.current?.children;
              if (contactCards) {
                  gsap.from(contactCards, {
-                    opacity: 0,
+                    autoAlpha: 0, // Use autoAlpha for opacity and visibility
                     y: 60,
-                    duration: 0.7,
-                    stagger: 0.25,
+                    duration: 0.8, // Slightly longer duration
+                    stagger: 0.2, // Keep stagger
                     ease: 'power3.out',
                     scrollTrigger: {
                         trigger: cardsRef.current,
-                        start: "top 85%",
+                        start: "top 85%", // Start animation when cards container is 85% in view
                         toggleActions: "play none none none",
+                         // markers: process.env.NODE_ENV === 'development', // Add markers for debugging
                     }
                  });
              }
@@ -63,6 +64,7 @@ export default function ContactSection() {
     }, []);
 
   return (
+    // Ensure section has visibility if GSAP handles fade-in
     <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/10 to-background">
       {/* Optional subtle pattern */}
       {/* <div className="absolute inset-0 opacity-[0.02] pattern-diagonal-lines pattern-accent pattern-bg-transparent pattern-size-4"></div> */}
@@ -74,8 +76,8 @@ export default function ContactSection() {
         </h2>
 
         <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
-           {/* Contact Info Card */}
-           <div className="contact-card opacity-0"> {/* Wrapper for GSAP */}
+           {/* Contact Info Card - Removed opacity-0 */}
+           <div className="contact-card"> {/* Wrapper for GSAP targeting */}
                 <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-accent bg-card/80 backdrop-blur-sm flex flex-col">
                 <CardHeader>
                     <CardTitle className="text-2xl text-primary flex items-center gap-2">
@@ -102,8 +104,8 @@ export default function ContactSection() {
                 </Card>
            </div>
 
-          {/* Social Links & Resume Card */}
-           <div className="contact-card opacity-0"> {/* Wrapper for GSAP */}
+          {/* Social Links & Resume Card - Removed opacity-0 */}
+           <div className="contact-card"> {/* Wrapper for GSAP targeting */}
                 <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary bg-card/80 backdrop-blur-sm flex flex-col">
                 <CardHeader>
                     <CardTitle className="text-2xl text-primary flex items-center gap-2">

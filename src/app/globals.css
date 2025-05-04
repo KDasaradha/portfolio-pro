@@ -67,7 +67,7 @@
   html {
     scroll-behavior: smooth;
     /* Consider adding scroll-padding-top if you have a sticky header */
-    /* scroll-padding-top: 4rem; */ /* Adjust value based on header height */
+    scroll-padding-top: 5rem; /* Adjust value based on header height + extra space */
   }
   body {
     @apply bg-background text-foreground;
@@ -85,8 +85,15 @@
       @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
   }
 
+  /* Ensure main content area fills space but allows scrolling */
+  main {
+    /* Adjust min-height based on header (h-16) and footer (py-8 ~ h-28) heights */
+    /* min-h-[calc(100vh-4rem-7rem)] => min-h-[calc(100vh-11rem)] */
+    min-height: calc(100vh - theme(spacing.16) - theme(spacing.28)); /* Adjust if footer height changes */
+  }
+
   section {
-    @apply py-20 md:py-28 relative overflow-hidden; /* Add relative and overflow-hidden for positioning contexts */
+    @apply py-20 md:py-28 relative overflow-visible; /* Change overflow to visible to prevent cutting off animated elements */
   }
 }
 

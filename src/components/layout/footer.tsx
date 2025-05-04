@@ -22,13 +22,14 @@ export default function Footer() {
      const ctx = gsap.context(() => {
          // Simple fade-in animation when footer enters viewport
          gsap.from(footerRef.current, {
-            opacity: 0,
+            autoAlpha: 0, // Use autoAlpha for opacity and visibility
             y: 30,
             duration: 0.8,
             scrollTrigger: {
                 trigger: footerRef.current,
-                start: "top 95%", // Trigger animation when 95% of footer top is visible
+                start: "top 98%", // Trigger animation when bottom of viewport hits near footer top
                 toggleActions: "play none none none",
+                 // markers: process.env.NODE_ENV === 'development', // Add markers for debugging
             }
          });
      }, footerRef);
@@ -37,7 +38,8 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="border-t bg-background py-8 opacity-0"> {/* Start with opacity 0 for GSAP */}
+    // Removed opacity-0, GSAP handles initial state
+    <footer ref={footerRef} className="border-t bg-background py-8">
       <div className="container flex flex-col items-center justify-between gap-6 md:flex-row">
         <p className="text-sm text-muted-foreground">
           &copy; {currentYear} Kesari Dasaradh. All rights reserved.
