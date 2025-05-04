@@ -106,6 +106,15 @@
   section {
     @apply py-20 md:py-32 relative overflow-hidden; /* Slightly increase padding, keep overflow hidden for blob containment */
   }
+  /* Example pattern */
+  .pattern-circuit-board {
+      background-image: linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+  }
+  .dark .pattern-circuit-board {
+      background-image: linear-gradient(hsl(var(--foreground) / 0.05) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
+  }
+
 }
 
 /* Add subtle transition for theme change */

@@ -14,7 +14,7 @@ export default function Home() {
       <ProjectsSection />
       <SkillsSection />
       <PortfolioSummarizerSection />
-      <ContactSection /> {/* Ensure ContactSection is rendered */}
+      <ContactSection />
     </React.Fragment>
   );
 }

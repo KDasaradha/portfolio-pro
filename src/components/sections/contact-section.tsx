@@ -76,7 +76,7 @@ export default function ContactSection() {
         }, sectionRef);
 
         return () => ctx.revert();
-    }, []);
+    }, [sectionRef, headerRef, contactCard1Ref, contactCard2Ref]);
 
   return (
     <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/15 to-background py-24 md:py-36 relative"> {/* Adjusted padding & background */}
@@ -90,10 +90,10 @@ export default function ContactSection() {
         >
           Let&apos;s Build Something Great Together
         </h2>
-
+        
         <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16"> {/* Increased gap */}
            {/* Contact Info Card */}
-           <div ref={contactCard1Ref} className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+           <div ref={contactCard1Ref}> {/* Initial opacity for GSAP */}
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-accent bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
                 <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}
@@ -121,14 +121,14 @@ export default function ContactSection() {
                     </ul>
                 </CardContent>
                 {/* Footer can be added if needed for extra info */}
-                {/* <CardFooter className="p-6 md:p-8 border-t mt-auto">
+                <CardFooter className="p-6 md:p-8 border-t mt-auto">
                     <p className="text-sm text-muted-foreground">Response times may vary.</p>
-                </CardFooter> */}
+                </CardFooter>
                 </Card>
            </div>
 
           {/* Social Links & Resume Card */}
-           <div ref={contactCard2Ref} className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+           <div ref={contactCard2Ref}> {/* Initial opacity for GSAP */}
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-primary bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
                 <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}

@@ -105,7 +105,7 @@ export default function AboutSection() {
 
 
   return (
-    <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/20 py-24 md:py-36"> {/* Increased padding */}
+    <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/20 py-36">
       <div className="container mx-auto px-4 md:px-6"> {/* Standardized padding */}
         <h2
           ref={headerRef}
@@ -119,24 +119,19 @@ export default function AboutSection() {
           <div className="lg:col-span-2">
              <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-accent bg-card/85 backdrop-blur-md"> {/* Enhanced shadow and blur */}
               <CardHeader className="pb-4"> {/* Adjusted padding */}
-                <CardTitle className="text-2xl font-semibold">Evolution & Milestones</CardTitle>
-                 {/* Removed CardDescription as requested elsewhere */}
+                <CardTitle className="text-2xl font-semibold">Evolution & Milestones</CardTitle>                
               </CardHeader>
               <CardContent>
-                {/* Enhanced Timeline */}
-                <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-2 space-y-12"> {/* Reduced ml */}
+                <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-2 space-y-12">
                   {timeline.map((item, index) => (
-                    <li key={index} className="ml-10 group timeline-item"> {/* Added timeline-item class, keep ml-10 here */}
-                       {/* Animated Timeline Dot */}
+                    <li key={index} className="ml-10 group timeline-item">
                        <span className={cn(
-                           "absolute -left-[calc(theme(spacing.5)+1px)]", // Adjusted left positioning: ml-2 on ol + half of width (w-9 -> 4.5) = -10px + 18px = 8px. Need left edge of circle to be at -18px. Circle w-9 = 36px. Ring 8 = 16px border. Total width = 36px + 16px*2 = 68px? No, ring is outside. Circle center needs to be on the line. Line is 2px thick. Circle needs to be centered on the line. -left-[calc(w-9/2 + 1px)]? Needs to account for ml-2 on ol. Line is at ml-2 = 8px. Circle center needs to be at 8px. Circle is 36px wide. Left edge is 8px - 18px = -10px.
-                           "-left-[19px]", // Hardcode based on w-9=36px, ring-8=16px. Center should be over the line. Line at ml-2. Item at ml-10. Dot needs left: -10px - 18px(half width) - 1px(half line width) = -29px? Let's try centering: -left-4 works if line is at 0. Line is at ml-2. Try -left-2.
+                           "absolute -left-2",
                            "flex h-9 w-9 items-center justify-center rounded-full bg-accent ring-8 ring-background text-accent-foreground font-semibold text-sm transition-transform duration-300 group-hover:scale-110 shadow-md"
                        )}>
                          {item.year.substring(2)}
                        </span>
-                       {/* Timeline Item Card */}
-                       <div className="p-5 rounded-lg border border-border bg-background/60 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-lg group-hover:-translate-y-1 transform backdrop-blur-sm"> {/* Enhanced item style */}
+                       <div className="p-5 rounded-lg border border-border bg-background/60 transition-all duration-300 group-hover:border-accent/60 group-hover:shadow-lg group-hover:-translate-y-1 transform backdrop-blur-sm">
                            <h3 className="text-lg font-semibold text-foreground mb-1.5">{item.title}</h3>
                            <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{item.description}</p>
                            <p className="text-xs font-medium text-muted-foreground/90">
@@ -151,7 +146,7 @@ export default function AboutSection() {
           </div>
 
           {/* Cards on the right */}
-          <div ref={cardsRef} className="lg:col-span-3 space-y-10"> {/* Increased spacing */}
+          <div ref={cardsRef} className="lg:col-span-3 space-y-10 p-6"> {/* Increased spacing */}
             {/* Philosophy Card */}
             <Card className="animate-card shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary bg-card/85 backdrop-blur-md"> {/* Enhanced shadow and blur */}
               <CardHeader>

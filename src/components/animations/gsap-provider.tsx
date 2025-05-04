@@ -48,6 +48,33 @@ export function GsapProvider({ children }: GsapProviderProps) {
     };
   }, []);
 
+    // Define a utility function to normalize scrollTo parameters
+    const normalizeScrollTo = (options: gsap.ScrollToTarget | gsap.ScrollToVars | number | string) => {
+        if (typeof options === 'number' || typeof options === 'string') {
+            // If it's a number or string, treat it as a simple 'y' value or selector
+            return {
+                y: options,
+                autoKill: true, // Default behavior
+                ease: 'power1.inOut', // Default ease
+                duration: 1, // Default duration
+                overwrite: true
+            };
+        } else if (typeof options === 'object') {
+            // If it's an object, extend it with default options
+            return {
+                autoKill: true, // Ensure this is set
+                ease: 'power1.inOut', // Ensure this is set
+                duration: 1, // Ensure this is set
+                overwrite: true,
+                ...options
+            };
+        } else {
+            // Handle invalid cases or ignore if needed
+            console.error("Invalid scrollTo options:", options);
+            return {}; // Return a default empty object or throw an error
+        }
+    };
+    gsap.normalizeScrollTo = normalizeScrollTo;
   return (
     <GsapContext.Provider value={gsap}>
         {children}
