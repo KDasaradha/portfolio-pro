@@ -46,7 +46,7 @@ export default function Header() {
       ScrollTrigger.create({
         start: 'top+=30 top',
         end: 99999,
-        markers: false, // Disable markers
+        markers: false, // Ensure markers are disabled
         onToggle: self => {
           if (headerElement) { // Check if headerElement exists
             headerElement.classList.toggle('shadow-lg', self.isActive);
@@ -60,7 +60,7 @@ export default function Header() {
          trigger: "body",
          start: "top top-=-100", // Adjust start point slightly below header
          end: "bottom bottom",
-         markers: false, // Disable markers
+         markers: false, // Ensure markers are disabled
          onUpdate: (self) => {
            let currentSectionId = '';
            let closestDistance = Infinity;
@@ -131,17 +131,24 @@ export default function Header() {
     if (href.startsWith('#')) {
       const targetElement = document.querySelector<HTMLElement>(href); // Ensure it's HTMLElement
       if (targetElement) {
-        const offset = -(headerRef.current?.offsetHeight || 64) - 10; // Dynamic offset + extra padding
-        const targetTop = targetElement.offsetTop + offset; // Calculate target position
+        const offset = -(headerRef.current?.offsetHeight || 64) - 20; // Dynamic offset + more extra padding
+        const targetTop = targetElement.getBoundingClientRect().top + window.scrollY + offset; // Calculate target position relative to document
 
         // Use GSAP for smooth scrolling
         gsap.to(window, {
           scrollTo: { y: targetTop, autoKill: false }, // AutoKill false might be needed if other scroll animations interfere
-          duration: 1, // Duration of the scroll animation
-          ease: 'power2.inOut', // Smooth easing function
+          duration: 1.2, // Slower duration for smoother scroll
+          ease: 'power3.inOut', // Smoother easing function
         });
 
         setActiveHash(href); // Update active hash immediately
+        // Manually update URL hash without causing a jump
+        if (history.pushState) {
+           history.pushState(null, '', href);
+        } else {
+           window.location.hash = href;
+        }
+
       }
     } else if (href.startsWith('/')) {
        window.location.href = href;
@@ -155,21 +162,21 @@ export default function Header() {
       className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60 transition-shadow duration-300 shadow-sm"
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2.5 mr-6 group" aria-label="Portfolio Pro Home">
+        {/* Logo - Remains on the left */}
+        <Link href="/" className="flex items-center space-x-2.5 mr-6 group shrink-0" aria-label="Portfolio Pro Home" onClick={(e) => handleLinkClick(e, '#home')}>
            <Code className="h-7 w-7 text-accent transition-transform duration-500 ease-out group-hover:rotate-[-20deg]" />
           <span className="font-bold text-xl gradient-text transition-opacity duration-300 group-hover:opacity-85">Portfolio Pro</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center relative">
+        {/* Desktop Navigation - Use ml-auto to push towards the center/left */}
+        <nav className="hidden md:flex items-center relative ml-auto mr-6">
           {navItems.map((item, index) => (
             <Link
               key={item.name}
               ref={(el) => navLinksRef.current[index] = el}
               href={item.href}
               onClick={(e) => handleLinkClick(e,item.href)}
-              className={cn("relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-accent", // Increased padding
+              className={cn("relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-accent",
                 activeHash === item.href ? 'text-accent' : 'text-muted-foreground',
               )}
               data-cursor-interactive
@@ -185,8 +192,9 @@ export default function Header() {
           />
         </nav>
 
-        {/* Right side icons & Mobile Menu Trigger */}
-        <div className="flex items-center space-x-3 md:space-x-4">
+        {/* Right side icons & Mobile Menu Trigger - Group together */}
+        <div className="flex items-center space-x-3 md:space-x-4 shrink-0">
+          {/* Theme Toggle Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -216,7 +224,6 @@ export default function Header() {
                        </Link>
                        <SheetClose asChild>
                            <Button variant="ghost" size="icon">
-                               {/* Use the renamed icon here */}
                                <CloseIcon className="h-5 w-5" />
                                <span className="sr-only">Close menu</span>
                            </Button>

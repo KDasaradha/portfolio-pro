@@ -1,10 +1,11 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CheckCircle2, BookOpen, Target, TrendingUp, ShieldCheck, Link as LinkIcon, Cloud, Layers, TestTubeDiagonal } from 'lucide-react'; // Added missing imports
+import { CheckCircle2, BookOpen, Target, TrendingUp, ShieldCheck, Link as LinkIconLucide, Cloud, Layers, TestTubeDiagonal } from 'lucide-react'; // Renamed Link import
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +23,7 @@ const philosophyPoints = [
   { icon: Target, title: "Robust Foundations", description: "Architecting resilient systems with clean abstractions and SOLID principles for longevity and adaptability." },
   { icon: ShieldCheck, title: "Security-First Mindset", description: "Embedding security throughout the development lifecycle, prioritizing least privilege and data protection." },
   { icon: TrendingUp, title: "Pragmatic Performance", description: "Optimizing strategically through algorithmic refinement, efficient data access, and real-world testing." },
-  { icon: LinkIcon, title: "Collaborative APIs", description: "Designing clear, versioned, and documented APIs (OpenAPI) for seamless system integration." },
+  { icon: LinkIconLucide, title: "Collaborative APIs", description: "Designing clear, versioned, and documented APIs (OpenAPI) for seamless system integration." }, // Use renamed import
   { icon: Cloud, title: "Cloud-Native Efficiency", description: "Leveraging cloud services (AWS/GCP) effectively, balancing scalability with cost-consciousness." },
   { icon: BookOpen, title: "Continuous Learning", description: "Actively seeking knowledge, mentoring others, and contributing to a culture of shared understanding." },
 ];
@@ -49,11 +50,12 @@ export default function AboutSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const timelineRef = useRef<HTMLOListElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLHeadingElement>(null); // Ref for header
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Animate section header
-            gsap.from(sectionRef.current?.querySelector('h2'), {
+            gsap.from(headerRef.current, {
                 opacity: 0,
                 y: 50,
                 duration: 0.8,
@@ -65,7 +67,7 @@ export default function AboutSection() {
             });
 
             // Animate timeline items with slight delay and stagger
-            const timelineItems = timelineRef.current?.querySelectorAll('li');
+            const timelineItems = timelineRef.current?.querySelectorAll('.timeline-item');
             if (timelineItems) {
                 gsap.from(timelineItems, {
                     opacity: 0,
@@ -106,6 +108,7 @@ export default function AboutSection() {
     <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/20 py-24 md:py-36"> {/* Increased padding */}
       <div className="container mx-auto px-4 md:px-6"> {/* Standardized padding */}
         <h2
+          ref={headerRef}
           className="text-4xl md:text-5xl font-bold mb-20 text-center gradient-text" /* Increased margin */
         >
           My Developer Journey
@@ -117,15 +120,19 @@ export default function AboutSection() {
              <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-accent bg-card/85 backdrop-blur-md"> {/* Enhanced shadow and blur */}
               <CardHeader className="pb-4"> {/* Adjusted padding */}
                 <CardTitle className="text-2xl font-semibold">Evolution & Milestones</CardTitle>
-                 <CardDescription>Tracing my path from code enthusiast to backend specialist.</CardDescription>
+                 {/* Removed CardDescription as requested elsewhere */}
               </CardHeader>
               <CardContent>
                 {/* Enhanced Timeline */}
-                <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-4 space-y-12"> {/* Increased spacing */}
+                <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-2 space-y-12"> {/* Reduced ml */}
                   {timeline.map((item, index) => (
-                    <li key={index} className="ml-10 group"> {/* Increased margin */}
+                    <li key={index} className="ml-10 group timeline-item"> {/* Added timeline-item class, keep ml-10 here */}
                        {/* Animated Timeline Dot */}
-                       <span className="absolute -left-[1.25rem] flex h-9 w-9 items-center justify-center rounded-full bg-accent ring-8 ring-background text-accent-foreground font-semibold text-sm transition-transform duration-300 group-hover:scale-110 shadow-md"> {/* Enhanced dot style */}
+                       <span className={cn(
+                           "absolute -left-[calc(theme(spacing.5)+1px)]", // Adjusted left positioning: ml-2 on ol + half of width (w-9 -> 4.5) = -10px + 18px = 8px. Need left edge of circle to be at -18px. Circle w-9 = 36px. Ring 8 = 16px border. Total width = 36px + 16px*2 = 68px? No, ring is outside. Circle center needs to be on the line. Line is 2px thick. Circle needs to be centered on the line. -left-[calc(w-9/2 + 1px)]? Needs to account for ml-2 on ol. Line is at ml-2 = 8px. Circle center needs to be at 8px. Circle is 36px wide. Left edge is 8px - 18px = -10px.
+                           "-left-[19px]", // Hardcode based on w-9=36px, ring-8=16px. Center should be over the line. Line at ml-2. Item at ml-10. Dot needs left: -10px - 18px(half width) - 1px(half line width) = -29px? Let's try centering: -left-4 works if line is at 0. Line is at ml-2. Try -left-2.
+                           "flex h-9 w-9 items-center justify-center rounded-full bg-accent ring-8 ring-background text-accent-foreground font-semibold text-sm transition-transform duration-300 group-hover:scale-110 shadow-md"
+                       )}>
                          {item.year.substring(2)}
                        </span>
                        {/* Timeline Item Card */}

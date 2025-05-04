@@ -2,7 +2,7 @@ import HeroSection from '@/components/sections/hero-section';
 import AboutSection from '@/components/sections/about-section';
 import ProjectsSection from '@/components/sections/projects-section';
 import SkillsSection from '@/components/sections/skills-section';
-import ContactSection from '@/components/sections/contact-section';
+import ContactSection from '@/components/sections/contact-section'; // Ensure ContactSection is imported
 import PortfolioSummarizerSection from '@/components/sections/portfolio-summarizer-section';
 import React from 'react'; // Import React for Fragment
 
@@ -14,7 +14,7 @@ export default function Home() {
       <ProjectsSection />
       <SkillsSection />
       <PortfolioSummarizerSection />
-      <ContactSection />
+      <ContactSection /> {/* Ensure ContactSection is rendered */}
     </React.Fragment>
   );
 }
