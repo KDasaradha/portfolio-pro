@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card'; // Added CardDescription
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, Link as LinkIcon } from 'lucide-react'; // Replaced LinkIcon with Send and Added LinkIcon back
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, Link as LinkIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -82,7 +82,8 @@ export default function ContactSection() {
     <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/15 to-background py-24 md:py-36 relative"> {/* Adjusted padding & background */}
       {/* Optional subtle pattern */}
       <div className="absolute inset-0 opacity-[0.025] pattern-circuit-board pattern-accent pattern-bg-transparent pattern-size-8 z-0"></div>
-      <div className="container mx-auto px-4 z-10 relative">
+      {/* Ensure content container is above background elements */}
+      <div className="container mx-auto px-4 md:px-6 z-10 relative">
         <h2
           ref={headerRef} // Attach ref to header
           className="text-4xl md:text-5xl font-bold mb-20 text-center gradient-text" // Increased margin

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CheckCircle2, BookOpen, Target, TrendingUp, ShieldCheck, Link as LinkIcon, Cloud } from 'lucide-react'; // Added missing ShieldCheck, LinkIcon, Cloud
+import { CheckCircle2, BookOpen, Target, TrendingUp, ShieldCheck, Link as LinkIcon, Cloud, Layers, TestTubeDiagonal } from 'lucide-react'; // Added missing imports
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -104,7 +104,7 @@ export default function AboutSection() {
 
   return (
     <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/20 py-24 md:py-36"> {/* Increased padding */}
-      <div className="container mx-auto px-6 lg:px-12">
+      <div className="container mx-auto px-4 md:px-6"> {/* Standardized padding */}
         <h2
           className="text-4xl md:text-5xl font-bold mb-20 text-center gradient-text" /* Increased margin */
         >
