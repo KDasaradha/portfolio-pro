@@ -77,23 +77,34 @@
     /* Be cautious with hiding scrollbars, it can affect usability */
     /* Consider using custom scrollbar styling if needed */
   }
-  /* Custom gradient text class */
+
+  /* Custom animated gradient text class */
+  @keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
   .gradient-text {
-      @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    background-size: 200% 100%; /* Larger background size for animation */
+    animation: gradient-animation 8s ease infinite; /* Adjust duration and timing */
   }
+
   .dark .gradient-text {
-      @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+    background-size: 200% 100%;
+    animation: gradient-animation 8s ease infinite;
   }
+
 
   /* Ensure main content area fills space but allows scrolling */
   main {
-    /* Adjust min-height based on header (h-16) and footer (py-8 ~ h-28) heights */
-    /* min-h-[calc(100vh-4rem-7rem)] => min-h-[calc(100vh-11rem)] */
-    min-height: calc(100vh - theme(spacing.16) - theme(spacing.28)); /* Adjust if footer height changes */
+    min-height: calc(100vh - theme(spacing.16) - theme(spacing.28)); /* Adjust if header/footer height changes */
   }
 
   section {
-    @apply py-20 md:py-28 relative overflow-visible; /* Change overflow to visible to prevent cutting off animated elements */
+    @apply py-20 md:py-32 relative overflow-hidden; /* Slightly increase padding, keep overflow hidden for blob containment */
   }
 }
 
@@ -102,7 +113,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Blob Animation */
+/* Refined Blob Animation */
 @keyframes blob-spin {
   0% {
     transform: translate(-50%, -50%) rotate(0deg);
@@ -114,13 +125,13 @@ body {
 
 @keyframes blob-morph {
   0%, 100% {
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
   }
-  34% {
-     border-radius: 70% 30% 50% 50% / 30% 50% 50% 70%;
+  33% {
+    border-radius: 70% 30% 47% 53% / 30% 30% 70% 70%;
   }
-  67% {
-     border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+  66% {
+    border-radius: 100% 56% 56% 100% / 100% 100% 56% 56%;
   }
 }
 
@@ -129,26 +140,27 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40vw; /* Responsive width */
-  height: 40vw; /* Responsive height */
-  max-width: 500px; /* Max size */
-  max-height: 500px; /* Max size */
-  background: linear-gradient(135deg, hsl(var(--accent) / 0.3), hsl(var(--primary) / 0.2));
-  opacity: 0.5; /* Adjust opacity */
-  filter: blur(80px); /* Significant blur for soft edges */
+  width: 45vw; /* Slightly increased size */
+  height: 45vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--primary) / 0.15)); /* Adjusted opacity */
+  opacity: 0.6; /* Base opacity */
+  filter: blur(100px); /* Increased blur */
   z-index: -1; /* Behind content */
-  animation: blob-spin 20s linear infinite, blob-morph 15s ease-in-out infinite alternate;
-  will-change: transform, border-radius; /* Optimize animation */
+  animation: blob-spin 25s linear infinite, blob-morph 18s ease-in-out infinite alternate; /* Slower, smoother */
+  will-change: transform, border-radius, opacity;
+  transition: opacity 0.5s ease;
 }
 
 .dark .blob {
-   background: linear-gradient(135deg, hsl(var(--accent) / 0.4), hsl(var(--secondary) / 0.3));
-   filter: blur(100px);
-   opacity: 0.6;
+   background: linear-gradient(135deg, hsl(var(--accent) / 0.3), hsl(var(--secondary) / 0.25)); /* Adjusted dark mode opacity */
+   filter: blur(120px); /* Slightly more blur in dark mode */
+   opacity: 0.7;
 }
 
 /* Ensure clickable elements are above the cursor layers */
-a, button, input, textarea, [role="button"], select {
+a, button, input, textarea, [role="button"], select, [data-cursor-interactive] {
   position: relative;
   z-index: 1;
 }

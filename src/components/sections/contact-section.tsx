@@ -3,57 +3,64 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Link as LinkIcon } from 'lucide-react'; // Added FileText, Download
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send } from 'lucide-react'; // Replaced LinkIcon with Send
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Refined contact details
 const contactDetails = [
-  { icon: PhoneCall, text: '+91 9032414439', href: 'tel:+919032414439', label: 'Call me' },
-  { icon: Mail, text: 'kdasaradha525@gmail.com', href: 'mailto:kdasaradha525@gmail.com', label: 'Email me' },
+  { icon: Mail, text: 'kdasaradha525@gmail.com', href: 'mailto:kdasaradha525@gmail.com', label: 'Send an Email', primary: true }, // Mark primary contact
+  { icon: PhoneCall, text: '+91 9032414439', href: 'tel:+919032414439', label: 'Call me', primary: false },
 ];
 
+// Refined social links
 const socialLinks = [
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/dasaradha-rami-reddy-kesari-b8471417b', label: 'LinkedIn profile', name: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com/KDasaradha', label: 'GitHub profile', name: 'GitHub' },
-  { icon: Twitter, href: 'https://twitter.com/k_dasaradh66626', label: 'Twitter profile', name: 'Twitter' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/dasaradha-rami-reddy-kesari-b8471417b', label: 'Connect on LinkedIn', name: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/KDasaradha', label: 'Explore my code on GitHub', name: 'GitHub' },
+  { icon: Twitter, href: 'https://twitter.com/k_dasaradh66626', label: 'Follow me on Twitter', name: 'Twitter' },
 ];
 
 
 export default function ContactSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLHeadingElement>(null); // Ref for header
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             // Animate section header
-             gsap.from(sectionRef.current?.querySelector('h2'), {
+             gsap.from(headerRef.current, { // Target header specifically
                 opacity: 0,
-                y: 50,
-                duration: 0.8,
+                y: 60,
+                duration: 0.9,
                 scrollTrigger: {
                     trigger: sectionRef.current,
-                    start: "top 85%", // Trigger a bit later
+                    start: "top 85%",
                     toggleActions: "play none none none",
                 }
             });
 
-             // Animate contact cards
+             // Animate contact cards with stagger
              const contactCards = cardsRef.current?.children;
              if (contactCards) {
                  gsap.from(contactCards, {
-                    autoAlpha: 0, // Use autoAlpha for opacity and visibility
-                    y: 60,
-                    duration: 0.8, // Slightly longer duration
-                    stagger: 0.2, // Keep stagger
+                    autoAlpha: 0,
+                    y: 70, // Increased offset
+                    scale: 0.95, // Add scale effect
+                    duration: 0.8,
+                    stagger: {
+                        amount: 0.4, // Total stagger duration
+                        from: "start",
+                        ease: "power2.out"
+                    },
                     ease: 'power3.out',
                     scrollTrigger: {
                         trigger: cardsRef.current,
-                        start: "top 85%", // Start animation when cards container is 85% in view
+                        start: "top 88%", // Adjust trigger slightly
                         toggleActions: "play none none none",
-                         // markers: process.env.NODE_ENV === 'development', // Add markers for debugging
                     }
                  });
              }
@@ -64,82 +71,93 @@ export default function ContactSection() {
     }, []);
 
   return (
-    // Ensure section has visibility if GSAP handles fade-in
-    <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/10 to-background">
+    <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/15 to-background py-24 md:py-36 relative"> {/* Adjusted padding & background */}
       {/* Optional subtle pattern */}
-      {/* <div className="absolute inset-0 opacity-[0.02] pattern-diagonal-lines pattern-accent pattern-bg-transparent pattern-size-4"></div> */}
+      <div className="absolute inset-0 opacity-[0.025] pattern-circuit-board pattern-accent pattern-bg-transparent pattern-size-8 z-0"></div>
       <div className="container mx-auto px-4 z-10 relative">
         <h2
-          className="text-4xl font-bold mb-16 text-center gradient-text"
+          ref={headerRef} // Attach ref to header
+          className="text-4xl md:text-5xl font-bold mb-20 text-center gradient-text" // Increased margin
         >
-          Let&apos;s Connect!
+          Let&apos;s Build Something Great Together
         </h2>
 
-        <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
-           {/* Contact Info Card - Removed opacity-0 */}
-           <div className="contact-card"> {/* Wrapper for GSAP targeting */}
-                <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-accent bg-card/80 backdrop-blur-sm flex flex-col">
-                <CardHeader>
-                    <CardTitle className="text-2xl text-primary flex items-center gap-2">
-                       <PhoneCall className="h-6 w-6 text-accent"/> Contact Information
+        <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16"> {/* Increased gap */}
+           {/* Contact Info Card */}
+           <div className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+                <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-accent bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
+                <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
+                    <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}
+                       <Send className="h-7 w-7 text-accent"/> Get In Touch
                     </CardTitle>
+                    <CardDescription className="text-base mt-2">
+                        Open to collaborations, opportunities, or just a chat about tech.
+                    </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow">
-                    <ul className="space-y-6">
+                <CardContent className="flex-grow p-6 md:p-8"> {/* Consistent padding */}
+                    <ul className="space-y-8"> {/* Increased spacing */}
                     {contactDetails.map((detail, index) => (
                         <li key={index} className="flex items-center space-x-4 group">
-                        <detail.icon className="h-6 w-6 text-accent flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                        <Link
-                            href={detail.href}
-                            className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-accent underline-offset-4 hover:underline"
-                            aria-label={detail.label}
-                             data-cursor-interactive
-                        >
-                            {detail.text}
-                        </Link>
+                            <detail.icon className={`h-7 w-7 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${detail.primary ? 'text-accent' : 'text-muted-foreground group-hover:text-accent'}`} strokeWidth={1.5} /> {/* Conditional coloring */}
+                            <Link
+                                href={detail.href}
+                                className={`text-lg md:text-xl font-medium transition-colors duration-300 underline-offset-4 ${detail.primary ? 'text-foreground hover:text-accent hover:underline' : 'text-muted-foreground hover:text-accent hover:underline'}`} // Conditional styling
+                                aria-label={detail.label}
+                                data-cursor-interactive
+                            >
+                                {detail.text}
+                            </Link>
                         </li>
                     ))}
                     </ul>
                 </CardContent>
+                {/* Footer can be added if needed for extra info */}
+                {/* <CardFooter className="p-6 md:p-8 border-t mt-auto">
+                    <p className="text-sm text-muted-foreground">Response times may vary.</p>
+                </CardFooter> */}
                 </Card>
            </div>
 
-          {/* Social Links & Resume Card - Removed opacity-0 */}
-           <div className="contact-card"> {/* Wrapper for GSAP targeting */}
-                <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary bg-card/80 backdrop-blur-sm flex flex-col">
-                <CardHeader>
-                    <CardTitle className="text-2xl text-primary flex items-center gap-2">
-                       <LinkIcon className="h-6 w-6 text-primary/80"/> Find Me Online
+          {/* Social Links & Resume Card */}
+           <div className="contact-card opacity-0"> {/* Initial opacity for GSAP */}
+                <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-primary bg-card/90 backdrop-blur-lg flex flex-col"> {/* Enhanced styles */}
+                <CardHeader className="p-6 md:p-8"> {/* Consistent padding */}
+                    <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3"> {/* Adjusted size */}
+                       <LinkIcon className="h-7 w-7 text-primary/90"/> Connect & Download
                     </CardTitle>
+                     <CardDescription className="text-base mt-2">
+                         Find me on social platforms and access my resume.
+                    </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow">
-                    <ul className="space-y-6">
+                <CardContent className="flex-grow p-6 md:p-8"> {/* Consistent padding */}
+                    <ul className="space-y-8 mb-10"> {/* Increased spacing & bottom margin */}
                     {socialLinks.map((link, index) => (
                         <li key={index} className="flex items-center space-x-4 group">
-                        <link.icon className="h-6 w-6 text-foreground/80 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:text-accent" />
-                        <Link
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-accent underline-offset-4 hover:underline"
-                            aria-label={link.label}
-                             data-cursor-interactive
-                        >
-                            {link.name}
-                        </Link>
+                            <link.icon className="h-7 w-7 text-muted-foreground flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:text-accent" strokeWidth={1.5}/>
+                            <Link
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-lg md:text-xl font-medium text-muted-foreground transition-colors duration-300 group-hover:text-accent underline-offset-4 hover:underline"
+                                aria-label={link.label}
+                                data-cursor-interactive
+                            >
+                                {link.name}
+                            </Link>
                         </li>
                     ))}
                     </ul>
                 </CardContent>
-                <CardFooter className="flex flex-col sm:flex-row gap-4 pt-6 border-t mt-auto"> {/* Added border and margin */}
-                    <Button asChild variant="default" className="flex-1 group bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5" data-cursor-interactive>
+                 {/* Refined Footer Buttons */}
+                <CardFooter className="flex flex-col sm:flex-row gap-4 p-6 md:p-8 pt-6 border-t mt-auto bg-muted/20">
+                    <Button asChild variant="default" className="flex-1 group bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 transform hover:scale-105 text-base" data-cursor-interactive>
                         <a href="/Kesari_Dasaradh_Resume.pdf" target="_blank" rel="noopener noreferrer">
-                            <FileText className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-[-5deg]" /> View Resume
+                            <FileText className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-[-6deg]" /> View Resume
                         </a>
                     </Button>
-                    <Button asChild variant="outline" className="flex-1 group shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 border-primary/50 hover:border-accent hover:text-accent" data-cursor-interactive>
+                    <Button asChild variant="outline" className="flex-1 group shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 transform hover:scale-105 border-primary/50 hover:border-accent hover:text-accent bg-background/70 text-base" data-cursor-interactive>
                         <a href="/Kesari_Dasaradh_Resume.pdf" download="Kesari_Dasaradh_Resume.pdf">
-                            <Download className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:translate-y-[-2px]" /> Download Resume
+                            <Download className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:translate-y-[-3px]" /> Download Resume
                         </a>
                     </Button>
                 </CardFooter>
@@ -147,6 +165,16 @@ export default function ContactSection() {
             </div>
         </div>
       </div>
+      {/* Add pattern styles if needed */}
+       <style jsx>{`
+        .pattern-circuit-board { /* Example pattern */
+            background-image: linear-gradient(rgba(var(--foreground-rgb), 0.03) 1px, transparent 1px), linear-gradient(to right, rgba(var(--foreground-rgb), 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .dark .pattern-circuit-board {
+            background-image: linear-gradient(rgba(var(--foreground-rgb), 0.05) 1px, transparent 1px), linear-gradient(to right, rgba(var(--foreground-rgb), 0.05) 1px, transparent 1px);
+        }
+       `}</style>
     </section>
   );
 }
