@@ -63,10 +63,19 @@
   * {
     @apply border-border;
   }
+  /* Enable smooth scrolling on the root */
+  html {
+    scroll-behavior: smooth;
+    /* Consider adding scroll-padding-top if you have a sticky header */
+    /* scroll-padding-top: 4rem; */ /* Adjust value based on header height */
+  }
   body {
     @apply bg-background text-foreground;
-    /* Enable smooth scrolling */
-    scroll-behavior: smooth;
+    /* Remove default smooth scrolling from body if applied on html */
+    /* scroll-behavior: smooth; */
+    /* Hide scrollbar for a cleaner look, but ensure accessibility */
+    /* Be cautious with hiding scrollbars, it can affect usability */
+    /* Consider using custom scrollbar styling if needed */
   }
   /* Custom gradient text class */
   .gradient-text {
@@ -77,11 +86,62 @@
   }
 
   section {
-    @apply py-16 md:py-24;
+    @apply py-20 md:py-28 relative overflow-hidden; /* Add relative and overflow-hidden for positioning contexts */
   }
 }
 
 /* Add subtle transition for theme change */
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Blob Animation */
+@keyframes blob-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes blob-morph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  34% {
+     border-radius: 70% 30% 50% 50% / 30% 50% 50% 70%;
+  }
+  67% {
+     border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+  }
+}
+
+.blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40vw; /* Responsive width */
+  height: 40vw; /* Responsive height */
+  max-width: 500px; /* Max size */
+  max-height: 500px; /* Max size */
+  background: linear-gradient(135deg, hsl(var(--accent) / 0.3), hsl(var(--primary) / 0.2));
+  opacity: 0.5; /* Adjust opacity */
+  filter: blur(80px); /* Significant blur for soft edges */
+  z-index: -1; /* Behind content */
+  animation: blob-spin 20s linear infinite, blob-morph 15s ease-in-out infinite alternate;
+  will-change: transform, border-radius; /* Optimize animation */
+}
+
+.dark .blob {
+   background: linear-gradient(135deg, hsl(var(--accent) / 0.4), hsl(var(--secondary) / 0.3));
+   filter: blur(100px);
+   opacity: 0.6;
+}
+
+/* Ensure clickable elements are above the cursor layers */
+a, button, input, textarea, [role="button"], select {
+  position: relative;
+  z-index: 1;
 }

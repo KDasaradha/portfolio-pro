@@ -1,7 +1,12 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CheckCircle2 } from 'lucide-react'; // Use a different check icon
+
+gsap.registerPlugin(ScrollTrigger);
 
 const timeline = [
   { year: "2021", title: "🚀 Embarked on Python Journey", description: "Initiated my coding career by mastering Python fundamentals, igniting a passion for problem-solving and innovation.", technologies: "Python" },
@@ -12,12 +17,12 @@ const timeline = [
 ];
 
 const philosophyPoints = [
-  { title: "Foundations Over Frameworks", description: "I architect systems to outlast technology trends. While proficient with modern tools like FastAPI, React, and AWS, I prioritize clean abstractions and SOLID principles that enable painless technology migration. Every line of code is written with future maintainers in mind." },
-  { title: "Security as Default State", description: "From parameterized queries to automated vulnerability scanning, I bake security into the SDLC—never treat it as an afterthought. My implementations enforce least-privilege access, encrypted data flows, and zero-trust architectures, even in rapid development cycles." },
-  { title: "Performance with Purpose", description: "I optimize judiciously—70% of speed gains typically come from algorithmic improvements, not language nuances. My approach combines Big O analysis during design, strategic indexing for databases, and load testing against real-world scenarios rather than synthetic benchmarks." },
-  { title: "APIs as Collaboration Contracts", description: "Whether building microservices or REST endpoints, I design interfaces as collaborative agreements between systems. Versioning, comprehensive documentation (OpenAPI/Swagger), and backward compatibility are non-negotiable for sustainable integration." },
-  { title: "Cloud-Native, Cost-Conscious", description: "Serverless functions aren’t just buzzwords—they’re tools for balancing scalability with operational costs. I architect AWS/GCP solutions where infrastructure costs scale linearly with business growth, using reserved instances and auto-scaling groups to eliminate waste." },
-  { title: "Learning Through Teaching", description: "My mastery of technologies like Docker or Kafka solidifies when I document processes or mentor team members. I maintain personal knowledge repositories and actively contribute to internal wikis—because understanding something well enough to explain it reveals hidden complexities." },
+  { title: "Foundations Over Frameworks", description: "Architecting systems to outlast technology trends, prioritizing clean abstractions and SOLID principles for maintainability and future migration." },
+  { title: "Security as Default State", description: "Integrating security throughout the SDLC, enforcing least-privilege, encrypted data flows, and zero-trust architectures." },
+  { title: "Performance with Purpose", description: "Optimizing judiciously through algorithmic improvements, strategic indexing, and real-world load testing." },
+  { title: "APIs as Collaboration Contracts", description: "Designing clear, versioned, and well-documented interfaces (OpenAPI/Swagger) for sustainable system integration." },
+  { title: "Cloud-Native, Cost-Conscious", description: "Leveraging serverless and cloud services (AWS/GCP) to balance scalability with operational costs effectively." },
+  { title: "Learning Through Teaching", description: "Solidifying knowledge by documenting processes, mentoring, and contributing to shared knowledge repositories." },
 ];
 
 const learningGoals = [
@@ -32,76 +37,128 @@ const whyWorkWithMe = [
     "Expertise in designing and implementing scalable, secure, and maintainable architectures.",
     "A steadfast commitment to delivering high-quality, clean code and embracing continuous improvement.",
     "Proven ability to excel in collaborative, Agile environments with cross-functional teams.",
-]
+];
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
 
 export default function AboutSection() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const timelineRef = useRef<HTMLOListElement>(null);
+    const cardsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            // Animate section header
+            gsap.from(sectionRef.current?.querySelector('h2'), {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: sectionRef.current,
+                    start: "top 80%", // Trigger when 80% of the section top enters viewport
+                    toggleActions: "play none none none",
+                }
+            });
+
+            // Animate timeline items
+            const timelineItems = timelineRef.current?.querySelectorAll('li');
+            if (timelineItems) {
+                gsap.from(timelineItems, {
+                    opacity: 0,
+                    x: -50,
+                    duration: 0.6,
+                    stagger: 0.2,
+                    scrollTrigger: {
+                        trigger: timelineRef.current,
+                        start: "top 70%",
+                        toggleActions: "play none none none",
+                    }
+                });
+                 // Pin the timeline while scrolling through its items (optional, can be complex)
+                // ScrollTrigger.create({
+                //     trigger: timelineRef.current,
+                //     start: "top 20%",
+                //     end: "bottom 80%", // Adjust as needed
+                //     pin: true,
+                //     pinSpacing: false,
+                // });
+            }
+
+
+            // Animate cards on the right
+            const rightCards = cardsRef.current?.querySelectorAll('.animate-card');
+             if (rightCards) {
+                gsap.from(rightCards, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.7,
+                    stagger: 0.25,
+                    scrollTrigger: {
+                        trigger: cardsRef.current,
+                        start: "top 75%",
+                        toggleActions: "play none none none",
+                    }
+                });
+             }
+
+        }, sectionRef); // Scope animations
+
+        return () => ctx.revert(); // Cleanup
+    }, []);
+
+
   return (
-    <section id="about" className="bg-background">
+    <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/10">
+      {/* Optional decorative SVG background */}
+      {/* <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full opacity-5" style={{zIndex: -1}}>...</svg> */}
       <div className="container mx-auto px-6 lg:px-12">
-        <motion.h2
-          className="text-4xl font-bold mb-12 text-center gradient-text"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
+        <h2
+          className="text-4xl font-bold mb-16 text-center gradient-text"
         >
           About Me
-        </motion.h2>
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={sectionVariants}
-          >
-            <Card className="h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12"> {/* Adjusted grid columns */}
+          {/* Timeline on the left (takes 2 cols on large screens) */}
+          <div className="lg:col-span-2">
+             <Card className="h-full shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-accent bg-card/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>My Journey</CardTitle>
-                 <CardDescription>A progressive evolution from a Python enthusiast to a seasoned backend specialist.</CardDescription>
+                <CardTitle className="text-2xl">My Journey</CardTitle>
+                 <CardDescription>From Python enthusiast to backend specialist.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ol className="relative border-l border-muted-foreground/20 dark:border-muted-foreground/30 ml-4">
+                {/* Enhanced Timeline */}
+                <ol ref={timelineRef} className="relative border-l-2 border-accent/50 ml-4 space-y-10">
                   {timeline.map((item, index) => (
-                    <li key={index} className="mb-10 ml-6">
-                      <span className="absolute -left-[0.6rem] flex h-3 w-3 items-center justify-center rounded-full bg-accent ring-8 ring-background" />
-                      <time className="mb-1 block text-sm font-normal leading-none text-muted-foreground">
-                        {item.year}
-                      </time>
-                      <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-                      <p className="mb-2 text-base font-normal text-muted-foreground">{item.description}</p>
-                      <p className="text-sm text-muted-foreground"><strong>Technologies:</strong> {item.technologies}</p>
+                    <li key={index} className="ml-8 group"> {/* Increased margin */}
+                       <span className="absolute -left-[1.1rem] flex h-8 w-8 items-center justify-center rounded-full bg-accent ring-4 ring-background text-accent-foreground font-semibold text-xs transition-transform duration-300 group-hover:scale-110">
+                         {item.year.substring(2)} {/* Show last 2 digits */}
+                       </span>
+                       <div className="p-4 rounded-lg border border-border bg-background/50 transition-all duration-300 group-hover:border-accent/50 group-hover:shadow-sm">
+                           <h3 className="text-lg font-semibold text-foreground mb-1">{item.title}</h3>
+                           <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
+                           <p className="text-xs text-muted-foreground/80"><strong>Tech:</strong> {item.technologies}</p>
+                       </div>
                     </li>
                   ))}
                 </ol>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={sectionVariants}
-            className="space-y-8"
-          >
-            <Card>
+          {/* Cards on the right (takes 3 cols on large screens) */}
+          <div ref={cardsRef} className="lg:col-span-3 space-y-8">
+            <Card className="animate-card shadow-md hover:shadow-lg transition-shadow duration-300 border-t-4 border-primary bg-card/80 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>🚀 My Development Philosophy</CardTitle>
+                <CardTitle className="text-2xl">🚀 My Development Philosophy</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-6">
+                <ul className="space-y-5">
                   {philosophyPoints.map((point, index) => (
                     <li key={index} className="flex items-start gap-3">
-                       <span className="text-xl text-accent mt-1">✅</span>
+                       <CheckCircle2 className="h-5 w-5 text-accent mt-1 flex-shrink-0" />
                        <div>
-                        <h3 className="font-semibold text-lg text-primary">{point.title}</h3>
-                        <p className="text-muted-foreground leading-relaxed">{point.description}</p>
+                        <h3 className="font-semibold text-lg text-primary mb-1">{point.title}</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{point.description}</p>
                        </div>
                     </li>
                   ))}
@@ -109,32 +166,37 @@ export default function AboutSection() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="animate-card shadow-md hover:shadow-lg transition-shadow duration-300 bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle>What I&apos;m Currently Learning</CardTitle>
+                    <CardTitle className="text-xl">💡 What I&apos;m Currently Learning</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                    <ul className="space-y-2">
                     {learningGoals.map((goal, index) => (
-                        <li key={index}>{goal}</li>
+                         <li key={index} className="flex items-center gap-2 text-muted-foreground">
+                           <span className="text-accent font-bold">&rarr;</span> {goal}
+                         </li>
                     ))}
                     </ul>
                 </CardContent>
             </Card>
 
-             <Card>
+             <Card className="animate-card shadow-md hover:shadow-lg transition-shadow duration-300 bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle>Why Work With Me?</CardTitle>
+                    <CardTitle className="text-xl">🤝 Why Work With Me?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                    <ul className="space-y-2">
                     {whyWorkWithMe.map((reason, index) => (
-                        <li key={index}>{reason}</li>
+                         <li key={index} className="flex items-start gap-2 text-muted-foreground">
+                            <CheckCircle2 className="h-4 w-4 text-accent mt-1 flex-shrink-0"/>
+                            <span>{reason}</span>
+                         </li>
                     ))}
                     </ul>
                 </CardContent>
              </Card>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
