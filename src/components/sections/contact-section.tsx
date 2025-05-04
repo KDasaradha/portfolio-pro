@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download } from 'lucide-react'; // Added FileText, Download
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Link as LinkIcon } from 'lucide-react'; // Added FileText, Download
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
