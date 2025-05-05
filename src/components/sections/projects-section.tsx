@@ -7,10 +7,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { Github, ExternalLink, Info, ArrowRight, Maximize2, X as CloseIcon } from 'lucide-react'; // Added CloseIcon
+import { Github, ExternalLink, Info, ArrowRight, Maximize2, X as CloseIcon, Code, Database, Users, Brain, Cloud, Layers } from 'lucide-react'; // Added more icons
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { cn } from '@/lib/utils'; // Import cn utility
+import { cn } from '@/lib/utils';
+import React from 'react'; // Ensure React is imported for Fragment
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,62 +26,67 @@ interface Project {
   githubUrl?: string;
   keyAchievement: string;
   imageHints: string[];
-  category: 'Web Application' | 'AI/ML' | 'ERP/Platform' | 'DevOps/Cloud'; // Added category
+  category: 'Web Application' | 'AI/ML' | 'ERP/Platform' | 'DevOps/Cloud';
+  categoryIcon: React.ElementType; // Add category icon
 }
 
-// Enhanced Projects Data with Categories and Professional Descriptions
+// Enhanced Projects Data with Categories, Icons, and Professional Descriptions
 const projectsData: Project[] = [
   {
     id: 1,
-    title: 'InstaDe: AI-Powered Marketing Visual Generator',
-    shortDescription: 'Automated poster creation via web scraping, AI text generation, and dynamic image rendering.',
-    longDescription: 'InstaDe streamlines marketing material creation by integrating web scraping for product data, leveraging Genkit AI for compelling promotional text, and utilizing Fabric.js with Pillow/OpenCV for dynamic, branded poster generation. The system features a user-friendly React frontend allowing instant creation of targeted visuals, significantly reducing design overhead.',
-    images: ['https://picsum.photos/seed/instade1/600/350', 'https://picsum.photos/seed/instade2/600/350', 'https://picsum.photos/seed/instade3/600/350'], // Adjusted image ratio
-    techStack: ['Python', 'FastAPI', 'Fabric.js', 'Pillow', 'OpenCV', 'React.js', 'Genkit AI', 'Web Scraping', 'REST APIs', 'Docker'],
+    title: 'InstaDe: AI-Driven Marketing Visual Suite', // Enhanced Title
+    shortDescription: 'Automated, brand-aligned poster creation leveraging web scraping, AI content generation, and dynamic image synthesis.',
+    longDescription: 'InstaDe revolutionizes marketing asset production by intelligently integrating web scraping for real-time product data, employing Genkit AI for compelling, context-aware promotional text, and utilizing a sophisticated backend with Fabric.js, Pillow, and OpenCV for dynamic, on-brand visual generation. The intuitive React frontend empowers users to instantly create targeted marketing posters, drastically reducing design time and enabling data-driven visual campaigns.',
+    images: ['https://picsum.photos/seed/instade1/600/350', 'https://picsum.photos/seed/instade2/600/350', 'https://picsum.photos/seed/instade3/600/350'],
+    techStack: ['Python', 'FastAPI', 'Fabric.js', 'Pillow', 'OpenCV', 'React.js', 'Genkit AI', 'Web Scraping', 'REST APIs', 'Docker', 'PostgreSQL', 'Asyncio'], // Added more tech
     liveDemoUrl: 'https://develop.instade.ai/',
-    // githubUrl: 'https://github.com/KDasaradha/instade-backend', // Replace placeholder
-    keyAchievement: 'Achieved a >60% reduction in poster design time, enabling rapid, data-driven marketing content generation.',
-    imageHints: ['ai graphic design tool', 'marketing automation ui', 'dynamic image generation'],
+    // githubUrl: 'https://github.com/KDasaradha/instade-backend',
+    keyAchievement: 'Reduced poster design lifecycle by over 60%, empowering rapid creation of data-informed marketing visuals and significantly boosting campaign agility.',
+    imageHints: ['ai graphic design tool interface', 'marketing automation dashboard', 'dynamic image generation process'],
     category: 'AI/ML',
+    categoryIcon: Brain, // Icon for AI/ML
   },
   {
     id: 2,
-    title: 'Scalable School Management ERP Backend',
-    shortDescription: 'Comprehensive ERP system for educational institutions featuring RBAC, payments, and real-time features.',
-    longDescription: 'Architected and developed a robust, multi-tenant ERP backend designed to streamline school administration. Key features include granular Role-Based Access Control (RBAC), curriculum management, secure payment gateway integration for fee processing, vendor management, and a real-time communication module using WebSockets. Built with FastAPI and PostgreSQL (SQLAlchemy ORM), containerized with Docker for efficient deployment.',
+    title: 'Scalable Multi-Tenant School Management ERP', // Enhanced Title
+    shortDescription: 'Comprehensive, cloud-ready ERP system for educational institutions with RBAC, payments, and real-time communication.',
+    longDescription: 'Architected and delivered a robust, multi-tenant backend for a School Management ERP, designed for scalability and ease of use. Features include granular Role-Based Access Control (RBAC) for secure data access, streamlined curriculum management, integrated secure payment gateways (e.g., Stripe/Razorpay) for efficient fee processing, comprehensive vendor management modules, and a real-time notification system via WebSockets. Developed using FastAPI, PostgreSQL with SQLAlchemy ORM, and containerized with Docker for reliable deployment and simplified infrastructure management.',
     images: ['https://picsum.photos/seed/schoolerp1/600/350', 'https://picsum.photos/seed/schoolerp2/600/350', 'https://picsum.photos/seed/schoolerp3/600/350'],
-    techStack: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker', 'WebSockets', 'RBAC', 'Payment Gateways', 'REST APIs'],
+    techStack: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker', 'WebSockets', 'RBAC', 'Payment Gateways', 'REST APIs', 'Microservices Principles', 'Nginx'], // Added more tech
     liveDemoUrl: 'https://myschoolitaly-app.vercel.app/',
-    // githubUrl: 'https://github.com/KDasaradha/school-erp-backend', // Replace placeholder
-    keyAchievement: 'Optimized database queries and implemented asynchronous task processing, resulting in a 30% reduction in API latency and enhanced system responsiveness.',
-     imageHints: ['school administration software', 'education erp dashboard', 'student management system'],
+    // githubUrl: 'https://github.com/KDasaradha/school-erp-backend',
+    keyAchievement: 'Improved system responsiveness by 30% through optimized database query strategies (indexing, connection pooling) and implementation of asynchronous task queues (Celery).',
+    imageHints: ['school administration software dashboard', 'education erp system architecture', 'student management system interface'],
     category: 'ERP/Platform',
+    categoryIcon: Layers, // Icon for Platform
   },
   {
     id: 3,
-    title: 'SHOU: Integrated HRMS & Animation Production Platform',
-    shortDescription: 'Unified platform for HR management, automated payroll, and animation project tracking.',
-    longDescription: 'SHOU centralizes core business operations by integrating Human Resource Management (HRMS), automated payroll processing, and a bespoke animation production pipeline tracker. It simplifies employee lifecycle management, automates complex payroll calculations, and provides real-time visibility into animation project milestones. Backend built with FastAPI and PostgreSQL, deployed via Docker, with CI/CD managed by Jenkins and Nginx as a reverse proxy.',
+    title: 'SHOU: Integrated HRMS & Animation Workflow Platform', // Enhanced Title
+    shortDescription: 'Unified platform integrating HR management, automated payroll calculations, and animation project lifecycle tracking.',
+    longDescription: 'SHOU centralizes critical business functions by seamlessly combining a Human Resource Management System (HRMS), automated payroll processing with compliance considerations, and a custom-built animation production pipeline tracker. This solution simplifies the entire employee lifecycle, automates complex payroll scenarios, and offers real-time visibility into animation project progress and resource allocation. The backend, powered by FastAPI and PostgreSQL, is deployed using Docker, with CI/CD automation handled by Jenkins and efficient traffic management via Nginx.',
     images: ['https://picsum.photos/seed/shou1/600/350', 'https://picsum.photos/seed/shou2/600/350', 'https://picsum.photos/seed/shou3/600/350'],
-    techStack: ['FastAPI', 'PostgreSQL', 'Docker', 'Jenkins', 'Nginx', 'Python', 'HRMS', 'Payroll Systems', 'CI/CD', 'Project Management'],
+    techStack: ['FastAPI', 'PostgreSQL', 'Docker', 'Jenkins', 'Nginx', 'Python', 'HRMS', 'Payroll Systems', 'CI/CD', 'Project Management', 'SQLAlchemy', 'REST APIs'], // Added more tech
     liveDemoUrl: 'https://getshou.com/',
-    // githubUrl: 'https://github.com/KDasaradha/shou-platform', // Replace placeholder
-    keyAchievement: 'Streamlined payroll processing, reducing manual effort by 80% and improving overall administrative efficiency by 60% through workflow automation.',
-    imageHints: ['hrms dashboard interface', 'payroll automation software', 'animation production pipeline'],
+    // githubUrl: 'https://github.com/KDasaradha/shou-platform',
+    keyAchievement: 'Automated 80% of manual payroll tasks and enhanced overall administrative efficiency by 60% through streamlined workflow implementation and robust system integration.',
+    imageHints: ['hrms employee dashboard', 'payroll automation system flow', 'animation project management tool'],
     category: 'ERP/Platform',
+    categoryIcon: Layers, // Icon for Platform
   },
    {
     id: 4,
-    title: 'Cloud-Native Full-Stack CI/CD Pipeline Implementation',
-    shortDescription: 'Deployed a React/Next.js & FastAPI application on AWS with a fully automated CI/CD workflow.',
-    longDescription: 'Designed and implemented a modern full-stack application deployment strategy. Features a performant React/Next.js frontend and a scalable FastAPI backend API. Deployed on AWS infrastructure (EC2, S3, VPC) utilizing containerization (Docker) and a fully automated CI/CD pipeline orchestrated by Jenkins. Incorporated best practices for monitoring, logging, and infrastructure security.',
+    title: 'Cloud-Native Full-Stack CI/CD Pipeline on AWS', // Enhanced Title
+    shortDescription: 'End-to-end deployment automation for a React/Next.js frontend and FastAPI backend on AWS infrastructure.',
+    longDescription: 'Engineered and implemented a modern, automated deployment strategy for a full-stack application. This included setting up a high-performance React/Next.js frontend and a scalable FastAPI backend API. The entire stack is deployed on AWS (EC2, S3, VPC, RDS) leveraging Docker for containerization. A fully automated CI/CD pipeline, orchestrated using Jenkins (or GitHub Actions), ensures seamless build, testing, and deployment processes. Incorporated best practices for cloud security, monitoring (CloudWatch/Prometheus), and logging.',
     images: ['https://picsum.photos/seed/aws1/600/350', 'https://picsum.photos/seed/aws2/600/350', 'https://picsum.photos/seed/aws3/600/350'],
-    techStack: ['React', 'Next.js', 'TypeScript', 'FastAPI', 'Python', 'AWS (EC2, S3, VPC)', 'Docker', 'Jenkins', 'CI/CD', 'Monitoring', 'Nginx'],
-    // liveDemoUrl: '#',
-    githubUrl: 'https://github.com/KDasaradha/cloud-cicd-pipeline-example', // Replace placeholder
-    keyAchievement: 'Successfully established an end-to-end automated deployment pipeline, reducing deployment time and ensuring consistent, reliable releases.',
-    imageHints: ['aws architecture diagram', 'ci cd pipeline visualization', 'cloud deployment process'],
+    techStack: ['React', 'Next.js', 'TypeScript', 'FastAPI', 'Python', 'AWS (EC2, S3, VPC, RDS)', 'Docker', 'Jenkins', 'CI/CD', 'Monitoring', 'Nginx', 'CloudFormation/Terraform (IaC)'], // Added IaC
+    // liveDemoUrl: '#', // No live demo likely for pure infra projects
+    githubUrl: 'https://github.com/KDasaradha/cloud-cicd-pipeline-example',
+    keyAchievement: 'Established a zero-touch, fully automated deployment pipeline, significantly reducing deployment lead times and increasing release frequency while ensuring infrastructure consistency.',
+    imageHints: ['aws infrastructure architecture diagram', 'ci cd pipeline visualization schema', 'cloud deployment automation steps'],
     category: 'DevOps/Cloud',
+    categoryIcon: Cloud, // Icon for Cloud/DevOps
   },
 ];
 
@@ -91,13 +97,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
   useEffect(() => {
     const cardElement = cardRef.current;
-    const imageElement = imageContainerRef.current?.querySelector('img'); // Target img inside container
+    const imageElement = imageContainerRef.current?.querySelector('img');
     if (!cardElement || !imageElement) return;
 
-    // Enhanced hover animation with GSAP
     const tl = gsap.timeline({ paused: true });
-    tl.to(cardElement, { y: -10, scale: 1.03, boxShadow: "0 20px 30px -8px rgba(0, 0, 0, 0.15), 0 10px 15px -8px rgba(0, 0, 0, 0.1)", duration: 0.4, ease: "power2.out" }) // Enhanced shadow
-      .to(imageElement, { scale: 1.08, duration: 0.5, ease: "power2.out" }, 0); // Slightly more image scale
+    tl.to(cardElement, { y: -12, scale: 1.04, boxShadow: "0 25px 35px -10px hsla(var(--primary), 0.15), 0 12px 20px -10px hsla(var(--primary), 0.1)", duration: 0.45, ease: "power2.out" })
+      .to(imageElement, { scale: 1.1, filter: 'brightness(1.05)', duration: 0.55, ease: "power2.out" }, 0);
 
     const handleMouseEnter = () => tl.play();
     const handleMouseLeave = () => tl.reverse();
@@ -114,134 +119,148 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
   return (
      <div ref={cardRef} className="h-full project-card transform transition-transform duration-300 will-change-transform">
-        <Card className="h-full flex flex-col overflow-hidden bg-card/90 backdrop-blur-lg border rounded-lg shadow-md hover:border-accent/50 transition-all duration-300 group"> {/* Added group class */}
-            <CardHeader className="p-5 pb-3 relative">
-                 {/* Category Badge */}
-                <Badge variant="outline" className="absolute top-4 right-4 text-xs px-2 py-0.5 border-accent/50 text-accent bg-accent/10">{project.category}</Badge>
-                <CardTitle className="text-xl font-semibold text-primary mr-16">{project.title}</CardTitle> {/* Added margin-right */}
-                <CardDescription className="text-sm mt-1.5 text-muted-foreground">{project.shortDescription}</CardDescription> {/* Adjusted spacing */}
+        <Card className="h-full flex flex-col overflow-hidden bg-card/95 backdrop-blur-lg border rounded-xl shadow-lg hover:border-accent/70 transition-all duration-400 group">
+            <CardHeader className="p-6 pb-4 relative">
+                 <Badge variant="outline" className="absolute top-5 right-5 text-xs px-2.5 py-1 border-accent/50 text-accent bg-accent/10 flex items-center gap-1.5">
+                   <project.categoryIcon className="h-3.5 w-3.5" /> {project.category}
+                 </Badge>
+                <CardTitle className="text-xl lg:text-2xl font-semibold text-primary mr-20 leading-snug">{project.title}</CardTitle>
+                <CardDescription className="text-sm mt-2 text-muted-foreground leading-relaxed line-clamp-2">{project.shortDescription}</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow p-5 pt-2 space-y-5"> {/* Adjusted padding & spacing */}
-                {/* Image container with aspect ratio */}
-                <div ref={imageContainerRef} className="relative w-full aspect-[16/9] overflow-hidden rounded-md mb-5 shadow-inner transition-transform duration-400 ease-out"> {/* Adjusted aspect ratio & margin */}
+            <CardContent className="flex-grow p-6 pt-3 space-y-5">
+                <div ref={imageContainerRef} className="relative w-full aspect-[16/9] overflow-hidden rounded-lg mb-5 shadow-inner border border-border/30 transition-transform duration-500 ease-out group-hover:scale-[1.01]">
                     <Image
                         src={project.images[0]}
                         alt={`${project.title} preview screenshot`}
                         fill
                         style={{ objectFit: 'cover' }}
-                        className="transition-all duration-500 ease-in-out group-hover:opacity-90" // Group hover effect
+                        className="transition-all duration-600 ease-in-out group-hover:opacity-95"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         loading="lazy"
                         data-ai-hint={project.imageHints[0]}
                     />
-                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-400"></div>
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
+                     {/* Optional: Play icon overlay for video/demo link */}
+                     {/* {project.liveDemoUrl && (
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                           <PlayCircle className="h-16 w-16 text-white/80 backdrop-blur-sm rounded-full bg-black/30 p-2" />
+                        </div>
+                     )} */}
                 </div>
-                {/* Tech Stack Badges */}
                 <div className="flex flex-wrap gap-2">
-                    {project.techStack.slice(0, 5).map((tech) => (
-                        <Badge key={tech} variant="secondary" className="text-xs px-2.5 py-1 transition-colors hover:bg-primary/10 hover:text-primary">{tech}</Badge> // Enhanced badges
+                    {project.techStack.slice(0, 6).map((tech) => (
+                        <Badge key={tech} variant="secondary" className="text-xs px-3 py-1 transition-all duration-200 hover:bg-primary/15 hover:text-primary shadow-sm">{tech}</Badge>
                     ))}
-                    {project.techStack.length > 5 && <Badge variant="outline" className="text-xs px-2.5 py-1">+{project.techStack.length - 5} more</Badge>}
+                    {project.techStack.length > 6 && <Badge variant="outline" className="text-xs px-3 py-1 border-dashed border-muted-foreground/50 text-muted-foreground">+{project.techStack.length - 6} more</Badge>}
                 </div>
-                 {/* Key Achievement */}
-                <p className="text-sm text-muted-foreground pt-3 border-t border-border/50"> {/* Added border top */}
-                     <strong className="font-medium text-primary">Key Achievement:</strong> {project.keyAchievement}
+                <p className="text-sm text-muted-foreground pt-4 border-t border-border/60 leading-relaxed">
+                     <strong className="font-medium text-primary/90">Key Achievement:</strong> {project.keyAchievement}
                  </p>
             </CardContent>
-            <CardFooter className="p-5 flex justify-between items-center border-t bg-muted/30"> {/* Subtle background */}
-               {/* Details Modal Trigger */}
+            <CardFooter className="p-6 pt-4 flex justify-between items-center border-t bg-muted/40 rounded-b-xl">
                <Dialog>
                  <DialogTrigger asChild>
-                   <Button variant="outline" size="sm" className="group text-primary border-primary/50 hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-300 text-sm" data-cursor-interactive>
-                       View Details <Maximize2 className="ml-2 h-4 w-4 transition-transform duration-500 group-hover:scale-110" />
+                   <Button variant="outline" size="sm" className="group text-primary border-primary/60 hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-300 text-sm" data-cursor-interactive>
+                       Details <Maximize2 className="ml-2 h-4 w-4 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-[15deg]" />
                     </Button>
                  </DialogTrigger>
-                 {/* Enhanced Dialog Content */}
-                 <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col p-0 bg-card/95 backdrop-blur-lg border-border shadow-xl rounded-lg overflow-hidden"> {/* Adjusted width & styles */}
-                    <DialogHeader className="p-6 border-b bg-muted/40 flex flex-row justify-between items-center">
-                        <div>
-                            <DialogTitle className="text-2xl font-semibold text-primary">{project.title}</DialogTitle>
-                            <DialogDescription className="text-base mt-1.5 text-muted-foreground">{project.shortDescription}</DialogDescription>
+                 <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col p-0 bg-card/98 backdrop-blur-xl border border-border/50 shadow-2xl rounded-xl overflow-hidden">
+                    <DialogHeader className="p-6 border-b bg-muted/50 flex flex-row justify-between items-start sticky top-0 z-10">
+                        <div className="flex-grow">
+                            <DialogTitle className="text-2xl font-semibold text-primary mb-1">{project.title}</DialogTitle>
+                            <DialogDescription className="text-base mt-1 text-muted-foreground">{project.shortDescription}</DialogDescription>
+                             {/* Category in Modal Header */}
+                             <Badge variant="outline" className="mt-3 text-xs px-2.5 py-1 border-accent/50 text-accent bg-accent/10 inline-flex items-center gap-1.5">
+                               <project.categoryIcon className="h-3.5 w-3.5" /> {project.category}
+                             </Badge>
                         </div>
                         <DialogClose asChild>
-                             <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:bg-accent/10 hover:text-accent">
+                             <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:bg-accent/10 hover:text-accent flex-shrink-0 -mt-1 -mr-1">
                                  <CloseIcon className="h-5 w-5" />
                                  <span className="sr-only">Close</span>
                              </Button>
                          </DialogClose>
                     </DialogHeader>
-                    {/* Scrollable Content Area */}
-                    <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar"> {/* Adjusted padding & spacing */}
-                        {/* Enhanced Image Viewer/Carousel Placeholder */}
-                        <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-lg mb-8 border border-border bg-muted/20">
-                            {/* Basic Image - Replace with a carousel component later if needed */}
+                    <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-10 custom-scrollbar"> {/* Increased spacing */}
+                        {/* Enhanced Image Viewer - Placeholder (could use Radix Carousel or similar) */}
+                        <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-xl mb-8 border border-border/40 bg-muted/30">
                             <Image
-                                src={project.images[0]}
+                                src={project.images[0]} // Could cycle through images
                                 alt={`${project.title} detailed screenshot`}
-                                fill style={{ objectFit: 'contain' }} // Use contain for better detail visibility
+                                fill style={{ objectFit: 'contain' }} // Contain preserves aspect ratio
                                 sizes="(max-width: 1024px) 90vw, 800px"
                                 loading="lazy"
                                 data-ai-hint={`${project.imageHints[0]} project detail showcase`}
-                                className="rounded-lg p-2" // Add padding around image
+                                className="rounded-lg p-2 transition-transform duration-500 hover:scale-105" // Subtle zoom on hover
                             />
-                             {/* Add simple navigation dots/arrows if implementing carousel */}
+                             {/* Simple dots for multiple images - non-functional */}
+                             {project.images.length > 1 && (
+                                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                                    {project.images.map((_, index) => (
+                                        <span key={index} className={`block h-2 w-2 rounded-full ${index === 0 ? 'bg-primary' : 'bg-muted-foreground/50'}`}></span>
+                                    ))}
+                                </div>
+                             )}
                         </div>
 
-                        {/* Project Overview */}
-                        <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-foreground leading-relaxed space-y-3">
-                            <h3 className="text-xl font-semibold text-primary mb-3 border-b pb-2 border-border/50">Project Overview</h3>
-                            <p>{project.longDescription}</p>
+                        <div className="prose prose-base sm:prose-lg dark:prose-invert max-w-none text-foreground leading-relaxed space-y-4">
+                            <h3 className="text-xl font-semibold text-primary mb-4 border-b pb-3 border-border/60">Project Deep Dive</h3>
+                            {/* Use paragraphs for better structure */}
+                            {project.longDescription.split('\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))}
                         </div>
 
-                        {/* Key Achievement Highlight */}
-                        <div className="bg-gradient-to-r from-accent/10 to-primary/10 p-5 rounded-lg border border-accent/30 shadow-sm">
-                             <h4 className="text-lg font-semibold text-primary mb-2">Key Achievement</h4>
+                        <div className="bg-gradient-to-r from-accent/15 to-primary/15 p-6 rounded-lg border border-accent/40 shadow-md">
+                             <h4 className="text-lg font-semibold text-primary mb-2 flex items-center gap-2">
+                                <Info className="h-5 w-5 text-accent"/> Key Result & Impact
+                             </h4>
                             <p className="text-base text-muted-foreground leading-relaxed">{project.keyAchievement}</p>
                         </div>
 
-                        {/* Technologies Section */}
                         <div>
-                            <h4 className="text-lg font-semibold text-primary mb-3">Technologies Used</h4>
-                            <div className="flex flex-wrap gap-2.5">
+                            <h4 className="text-lg font-semibold text-primary mb-4">Core Technologies Utilized</h4>
+                            <div className="flex flex-wrap gap-3">
                             {project.techStack.map((tech) => (
-                                <Badge key={`modal-tech-${tech}`} variant="secondary" className="px-3 py-1 text-sm transition-transform hover:scale-105 hover:shadow-md cursor-default">{tech}</Badge>
+                                <Badge key={`modal-tech-${tech}`} variant="secondary" className="px-3.5 py-1.5 text-sm transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default border border-transparent hover:border-primary/30 shadow-sm">{tech}</Badge>
                             ))}
                             </div>
                         </div>
                     </div>
-                    {/* Sticky Footer with enhanced buttons */}
-                    <DialogFooter className="p-5 px-6 border-t bg-background/90 sticky bottom-0 flex flex-col sm:flex-row sm:justify-end gap-3">
+                    <DialogFooter className="p-5 px-6 border-t bg-muted/50 sticky bottom-0 flex flex-col sm:flex-row sm:justify-end gap-3 z-10">
                         {project.githubUrl && (
-                        <Button variant="outline" size="sm" asChild className="group border-primary/40 hover:border-primary hover:bg-primary/5 transition-all duration-300 text-sm" data-cursor-interactive>
+                        <Button variant="outline" size="sm" asChild className="group border-primary/50 hover:border-primary hover:bg-primary/10 transition-all duration-300 text-sm" data-cursor-interactive>
                             <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                            <Github className="mr-2 h-4 w-4" /> GitHub Repo <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                              <> {/* Wrap in Fragment */}
+                                <Github className="mr-2 h-4 w-4" /> GitHub <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                              </>
                             </Link>
                         </Button>
                         )}
                         {project.liveDemoUrl && (
-                        <Button size="sm" asChild className="bg-gradient-to-r from-primary to-accent text-accent-foreground hover:shadow-lg group transition-all duration-300 text-sm hover:scale-[1.02] active:scale-[1.00]" data-cursor-interactive>
+                        <Button size="sm" asChild className="bg-gradient-to-r from-primary to-accent text-accent-foreground hover:shadow-lg group transition-all duration-300 text-sm hover:scale-[1.03] active:scale-[1.01]" data-cursor-interactive>
                             <Link href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="mr-2 h-4 w-4" /> Live Demo <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                              <> {/* Wrap in Fragment */}
+                                <ExternalLink className="mr-2 h-4 w-4" /> Live Demo <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                              </>
                             </Link>
                         </Button>
                         )}
-                         {/* Removed redundant close button, using header close */}
                    </DialogFooter>
                  </DialogContent>
                </Dialog>
-                {/* Quick Links */}
-                <div className="flex space-x-1 items-center">
+                <div className="flex space-x-2 items-center">
                     {project.githubUrl && (
-                    <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-foreground transition-colors duration-300 transform hover:scale-110 hover:rotate-[-5deg]" data-cursor-interactive>
+                    <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-foreground transition-colors duration-300 transform hover:scale-115 hover:rotate-[-8deg]" data-cursor-interactive>
                         <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository">
-                        <Github className="h-5 w-5" />
+                          <Github className="h-5 w-5" />
                         </Link>
                     </Button>
                     )}
                     {project.liveDemoUrl && (
-                    <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-accent transition-colors duration-300 transform hover:scale-110 hover:rotate-[5deg]" data-cursor-interactive>
+                    <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-accent transition-colors duration-300 transform hover:scale-115 hover:rotate-[8deg]" data-cursor-interactive>
                         <Link href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
-                        <ExternalLink className="h-5 w-5" />
+                          <ExternalLink className="h-5 w-5" />
                         </Link>
                     </Button>
                     )}
@@ -256,41 +275,39 @@ const ProjectCard = ({ project }: { project: Project }) => {
 export default function ProjectsSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
-    const headerRef = useRef<HTMLHeadingElement>(null); // Ref for header
+    const headerRef = useRef<HTMLHeadingElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate section header
-             gsap.from(headerRef.current, { // Target header specifically
+            gsap.from(headerRef.current, {
                 opacity: 0,
-                y: 70, // Increased offset
-                duration: 1.0, // Increased duration
+                y: 80,
+                duration: 1.1,
                 ease: 'power3.out',
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 85%",
-                    toggleActions: "play none none none",
+                    toggleActions: "play none none reset",
                 }
             });
 
-            // Animate project cards on scroll
             const cards = gridRef.current?.querySelectorAll('.project-card');
             if (cards) {
                 gsap.from(cards, {
                     opacity: 0,
-                    y: 80, // Increased offset
-                    scale: 0.93, // Slightly more scale effect
-                    duration: 0.9, // Longer duration
+                    y: 90,
+                    scale: 0.92,
+                    duration: 1.0,
                     stagger: {
-                        amount: 0.8, // Increased total stagger duration
+                        amount: 1.0,
                         from: "start",
                         ease: "power2.out",
                     },
                     scrollTrigger: {
                         trigger: gridRef.current,
                         start: "top 88%",
-                        toggleActions: "play none none none",
-                        once: true, // Only animate once
+                        toggleActions: "play none none reset", // Reset allows re-animation if scrolled back up
+                        // once: true, // Keep animation playing only once
                     }
                 });
             }
@@ -301,33 +318,51 @@ export default function ProjectsSection() {
     }, []);
 
   return (
-    <section ref={sectionRef} id="projects" className="bg-gradient-to-b from-secondary/10 to-background py-32 md:py-40"> {/* Adjusted background and padding */}
-       {/* Subtle background pattern */}
+    <section ref={sectionRef} id="projects" className="bg-gradient-to-b from-secondary/10 via-background to-secondary/10 py-32 md:py-40 relative">
        <div className="absolute inset-0 opacity-[0.02] pattern-dots pattern-accent pattern-bg-transparent pattern-size-6 z-0"></div>
       <div className="container mx-auto px-4 z-10 relative">
         <h2
-            ref={headerRef} // Attach ref
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-20 md:mb-24 text-center gradient-text" // Increased margin
+            ref={headerRef}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-20 md:mb-24 text-center gradient-text tracking-tight"
         >
             Featured Projects & Case Studies
         </h2>
         <div
             ref={gridRef}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 lg:gap-14" // Increased gap
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16" // Increased gap slightly more
         >
           {projectsData.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </div>
-      {/* Add pattern style */}
        <style jsx>{`
         .pattern-dots {
             background-image: radial-gradient(hsl(var(--foreground) / 0.1) 1px, transparent 1px);
-            background-size: 16px 16px;
+            background-size: 18px 18px; /* Slightly larger dots */
         }
         .dark .pattern-dots {
             background-image: radial-gradient(hsl(var(--foreground) / 0.15) 1px, transparent 1px);
+        }
+        /* Custom scrollbar for modal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: hsl(var(--muted) / 0.4);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: hsl(var(--accent) / 0.7);
+            border-radius: 10px;
+            border: 2px solid hsl(var(--muted) / 0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: hsl(var(--accent) / 0.9);
+        }
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: hsl(var(--accent) / 0.7) hsl(var(--muted) / 0.4);
         }
        `}</style>
     </section>

@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card'; // Added CardDescription
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, ArrowUpRight, Link2 as LinkIcon } from 'lucide-react'; // Renamed Link to Link2 to avoid naming conflict
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, ArrowUpRight, Link2 as LinkIconLucide } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { cn } from "@/lib/utils"; // Import cn utility
+import { cn } from "@/lib/utils";
+import React from 'react'; // Ensure React is imported for Fragment
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,7 +128,7 @@ export default function ContactSection() {
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-all duration-400 border-t-4 border-primary bg-card/90 backdrop-blur-lg flex flex-col rounded-xl group hover:-translate-y-2"> {/* Enhanced styles & group */}
                 <CardHeader className="p-7 md:p-9"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3.5"> {/* Adjusted size & gap */}
-                       <LinkIcon className="h-7 w-7 text-primary/90 transition-transform duration-500 group-hover:rotate-[8deg]"/> Connect Online & Resources {/* Hover effect */}
+                       <LinkIconLucide className="h-7 w-7 text-primary/90 transition-transform duration-500 group-hover:rotate-[8deg]"/> Connect Online & Resources {/* Hover effect */}
                     </CardTitle>
                      <CardDescription className="text-base md:text-lg mt-2.5 text-muted-foreground leading-relaxed"> {/* Adjusted size & spacing */}
                          Explore my professional presence online and download my resume for a detailed overview of my experience.
@@ -155,14 +156,18 @@ export default function ContactSection() {
                 </CardContent>
                  {/* Refined Footer Buttons */}
                 <CardFooter className="flex flex-col sm:flex-row gap-5 p-7 md:p-9 pt-7 border-t mt-auto bg-muted/30 rounded-b-xl"> {/* Adjusted padding & gap, rounded bottom */}
-                    <Button asChild variant="default" className="flex-1 group bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 transform hover:scale-[1.02] active:scale-[1.00] text-base py-3" data-cursor-interactive> {/* Enhanced style */}
+                    <Button asChild variant="default" className="flex-1 group bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 transform hover:scale-[1.02] active:scale-[1.00] text-base py-3" data-cursor-interactive>
                         <a href="/Kesari_Dasaradh_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                          <> {/* Wrap children in React Fragment */}
                             <FileText className="mr-2.5 h-5 w-5 transition-transform duration-400 group-hover:rotate-[-8deg]" /> View Resume (PDF)
+                          </>
                         </a>
                     </Button>
-                    <Button asChild variant="outline" className="flex-1 group shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1.5 transform hover:scale-[1.02] active:scale-[1.00] border-primary/50 hover:border-accent hover:text-accent bg-background/80 backdrop-blur-sm text-base py-3" data-cursor-interactive> {/* Enhanced style */}
+                    <Button asChild variant="outline" className="flex-1 group shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1.5 transform hover:scale-[1.02] active:scale-[1.00] border-primary/50 hover:border-accent hover:text-accent bg-background/80 backdrop-blur-sm text-base py-3" data-cursor-interactive>
                         <a href="/Kesari_Dasaradh_Resume.pdf" download="Kesari_Dasaradh_Resume.pdf">
+                          <> {/* Wrap children in React Fragment */}
                             <Download className="mr-2.5 h-5 w-5 transition-transform duration-400 group-hover:translate-y-[-4px]" /> Download Resume
+                          </>
                         </a>
                     </Button>
                 </CardFooter>
