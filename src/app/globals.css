@@ -28,28 +28,28 @@
     --chart-3: 212 20% 50%;
     --chart-4: 212 15% 60%;
     --chart-5: 216 30% 80%;
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly larger radius for softer corners */
   }
 
   .dark {
-    --background: 212 13% 16%; /* Dark Navy Blue */
+    --background: 212 13% 10%; /* Darker Navy Blue for more contrast */
     --foreground: 216 28% 95%; /* Light Gray */
-    --card: 212 13% 20%; /* Slightly lighter Dark Navy */
+    --card: 212 13% 16%; /* Dark Navy Blue (slightly lighter than background) */
     --card-foreground: 216 28% 95%; /* Light Gray */
-    --popover: 212 13% 12%; /* Darker Navy */
+    --popover: 212 13% 8%; /* Even Darker Navy */
     --popover-foreground: 216 28% 95%; /* Light Gray */
     --primary: 216 28% 95%; /* Light Gray */
     --primary-foreground: 212 13% 16%; /* Dark Navy Blue */
-    --secondary: 212 13% 25%; /* Lighter Navy */
+    --secondary: 212 13% 22%; /* Lighter Navy */
     --secondary-foreground: 216 28% 95%; /* Light Gray */
-    --muted: 212 13% 25%; /* Lighter Navy */
+    --muted: 212 13% 22%; /* Lighter Navy */
     --muted-foreground: 216 28% 70%; /* Muted Light Gray */
     --accent: 180 100% 35%; /* Lighter Teal */
     --accent-foreground: 212 13% 10%; /* Very Dark Navy */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 212 13% 28%;
-    --input: 212 13% 28%;
+    --border: 212 13% 25%; /* Adjusted border */
+    --input: 212 13% 25%; /* Adjusted input */
     --ring: 180 100% 35%; /* Lighter Teal */
     --chart-1: 180 100% 35%;
     --chart-2: 180 80% 45%;
@@ -63,22 +63,41 @@
   * {
     @apply border-border;
   }
-  /* Enable smooth scrolling on the root */
+  /* Smooth Scrolling & Scroll Padding */
   html {
     scroll-behavior: smooth;
-    /* Consider adding scroll-padding-top if you have a sticky header */
-    scroll-padding-top: 5rem; /* Adjust value based on header height + extra space */
+    scroll-padding-top: 6rem; /* Adjust based on sticky header height + buffer */
+    @apply selection:bg-accent/90 selection:text-accent-foreground; /* Custom selection style */
   }
   body {
     @apply bg-background text-foreground;
-    /* Remove default smooth scrolling from body if applied on html */
-    /* scroll-behavior: smooth; */
-    /* Hide scrollbar for a cleaner look, but ensure accessibility */
-    /* Be cautious with hiding scrollbars, it can affect usability */
-    /* Consider using custom scrollbar styling if needed */
+    font-feature-settings: "rlig" 1, "calt" 1; /* Enable common ligatures */
   }
 
-  /* Custom animated gradient text class */
+  /* Custom Scrollbar (Webkit) */
+  ::-webkit-scrollbar {
+      width: 10px; /* Adjust width */
+  }
+  ::-webkit-scrollbar-track {
+      background: hsl(var(--background) / 0.5); /* Track background */
+      border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+      background: hsl(var(--accent) / 0.6); /* Thumb color */
+      border-radius: 10px;
+      border: 2px solid hsl(var(--background) / 0.5); /* Creates padding around thumb */
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background: hsl(var(--accent) / 0.8); /* Thumb hover color */
+  }
+  /* Custom Scrollbar (Firefox) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--accent) / 0.6) hsl(var(--background) / 0.5);
+  }
+
+
+  /* Animated Gradient Text */
   @keyframes gradient-animation {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -87,61 +106,75 @@
 
   .gradient-text {
     @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
-    background-size: 200% 100%; /* Larger background size for animation */
-    animation: gradient-animation 8s ease infinite; /* Adjust duration and timing */
+    background-size: 250% 100%; /* Larger size for smoother effect */
+    animation: gradient-animation 10s ease infinite; /* Slower animation */
+    will-change: background-position;
   }
 
   .dark .gradient-text {
-    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
-    background-size: 200% 100%;
-    animation: gradient-animation 8s ease infinite;
+    @apply bg-gradient-to-r from-primary via-accent to-primary;
+    /* Re-apply other properties if needed, though Tailwind handles this */
+    background-clip: text;
+    -webkit-background-clip: text; /* Ensure compatibility */
+    color: transparent;
+    background-size: 250% 100%;
+    animation: gradient-animation 10s ease infinite;
   }
 
 
-  /* Ensure main content area fills space but allows scrolling */
+  /* Main Content Area */
   main {
-    min-height: calc(100vh - theme(spacing.16) - theme(spacing.28)); /* Adjust if header/footer height changes */
+    min-height: calc(100vh - theme(spacing.16) - theme(spacing.20)); /* Header + Footer height */
+    /* Consider adding overflow-x-hidden if horizontal scroll becomes an issue */
   }
 
+  /* Section Styling */
   section {
-    @apply py-20 md:py-32 relative overflow-hidden; /* Slightly increase padding, keep overflow hidden for blob containment */
+    @apply py-24 md:py-32 lg:py-40 relative overflow-hidden; /* Increased padding */
   }
-  /* Example pattern */
+
+  /* Background Patterns */
   .pattern-circuit-board {
-      background-image: linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
-      background-size: 20px 20px;
+      background-image: linear-gradient(hsl(var(--foreground) / 0.025) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.025) 1px, transparent 1px);
+      background-size: 24px 24px; /* Slightly larger */
   }
   .dark .pattern-circuit-board {
+      background-image: linear-gradient(hsl(var(--foreground) / 0.04) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.04) 1px, transparent 1px);
+  }
+  .pattern-dots {
+      background-image: radial-gradient(hsl(var(--foreground) / 0.05) 1px, transparent 1px);
+      background-size: 18px 18px; /* Adjusted size */
+  }
+  .dark .pattern-dots {
+      background-image: radial-gradient(hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+  }
+   .pattern-grid {
+      background-image: linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+  }
+  .dark .pattern-grid {
       background-image: linear-gradient(hsl(var(--foreground) / 0.05) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
   }
+  /* Add more patterns as needed */
 
 }
 
-/* Add subtle transition for theme change */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* Global Transitions */
+body, .bg-background, .bg-card, .bg-popover, .text-foreground, .text-muted-foreground, .border-border {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Refined Blob Animation */
 @keyframes blob-spin {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @keyframes blob-morph {
-  0%, 100% {
-    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-  }
-  33% {
-    border-radius: 70% 30% 47% 53% / 30% 30% 70% 70%;
-  }
-  66% {
-    border-radius: 100% 56% 56% 100% / 100% 100% 56% 56%;
-  }
+  0%, 100% { border-radius: 40% 60% 70% 30% / 45% 55% 45% 55%; }
+  25% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+  50% { border-radius: 50% 50% 35% 65% / 55% 45% 55% 45%; }
+  75% { border-radius: 30% 70% 70% 30% / 70% 70% 30% 30%; }
 }
 
 .blob {
@@ -149,27 +182,28 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 45vw; /* Slightly increased size */
-  height: 45vw;
-  max-width: 600px;
-  max-height: 600px;
-  background: linear-gradient(135deg, hsl(var(--accent) / 0.2), hsl(var(--primary) / 0.15)); /* Adjusted opacity */
-  opacity: 0.6; /* Base opacity */
-  filter: blur(100px); /* Increased blur */
-  z-index: -1; /* Behind content */
-  animation: blob-spin 25s linear infinite, blob-morph 18s ease-in-out infinite alternate; /* Slower, smoother */
-  will-change: transform, border-radius, opacity;
-  transition: opacity 0.5s ease;
+  width: 50vw; /* Responsive width */
+  height: 50vw; /* Responsive height */
+  max-width: 700px; /* Max size */
+  max-height: 700px; /* Max size */
+  background: linear-gradient(145deg, hsl(var(--accent) / 0.15), hsl(var(--primary) / 0.1)); /* Subtle gradient */
+  opacity: 0.5; /* Base opacity */
+  filter: blur(120px); /* Increased blur */
+  z-index: -1; /* Ensure it's behind content */
+  animation: blob-spin 35s linear infinite, blob-morph 25s ease-in-out infinite alternate; /* Slower, smoother */
+  will-change: transform, border-radius, opacity, background; /* Optimize animation */
+  transition: opacity 0.5s ease, background 0.5s ease;
 }
 
 .dark .blob {
-   background: linear-gradient(135deg, hsl(var(--accent) / 0.3), hsl(var(--secondary) / 0.25)); /* Adjusted dark mode opacity */
-   filter: blur(120px); /* Slightly more blur in dark mode */
-   opacity: 0.7;
+   background: linear-gradient(145deg, hsl(var(--accent) / 0.25), hsl(var(--secondary) / 0.2)); /* Adjusted dark mode opacity */
+   filter: blur(140px); /* Slightly more blur in dark mode */
+   opacity: 0.6;
 }
 
-/* Ensure clickable elements are above the cursor layers */
+/* Ensure interactive elements are above background/cursor layers */
 a, button, input, textarea, [role="button"], select, [data-cursor-interactive] {
   position: relative;
   z-index: 1;
+  isolation: isolate; /* Prevent z-index issues with children */
 }

@@ -1,22 +1,48 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans'; // Import from geist/font/sans
-import { GeistMono } from 'geist/font/mono'; // Import from geist/font/mono
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster";
-import { GsapProvider } from '@/components/animations/gsap-provider'; // Import GSAP Provider
-import { SmoothScrollProvider } from '@/components/layout/smooth-scroll-provider'; // Import Smooth Scroll Provider
-import CustomCursor from '@/components/custom-cursor'; // Import Custom Cursor
+import { GsapProvider } from '@/components/animations/gsap-provider';
+import { SmoothScrollProvider } from '@/components/layout/smooth-scroll-provider';
+import CustomCursor from '@/components/custom-cursor';
+
+// Correct way to initialize Geist fonts - directly use the imported objects' class names
+
 
 export const metadata: Metadata = {
   title: 'Portfolio Pro - Kesari Dasaradh',
-  description: 'Modern portfolio website for Kesari Dasaradh, showcasing backend development skills and modern UI/UX.',
-  icons: { // Add favicon link
-    icon: '/favicon.ico',
+  description: 'Modern portfolio website for Kesari Dasaradh, showcasing advanced backend architecture and UI/UX design skills.', // Enhanced description
+  icons: {
+    icon: '/favicon.ico', // Ensure favicon exists in /public
   },
-  // Add Open Graph and Twitter Card metadata later if needed
+  // Consider adding Open Graph and Twitter Card metadata for social sharing
+  openGraph: {
+      title: 'Kesari Dasaradh - Backend Architect',
+      description: 'Explore the portfolio of Kesari Dasaradh, featuring scalable backend solutions and modern UI implementations.',
+      // url: 'YOUR_DEPLOYED_URL', // Add your deployed URL
+      // images: [
+      //   {
+      //     url: '/og-image.png', // Add an Open Graph image to /public
+      //     width: 1200,
+      //     height: 630,
+      //     alt: 'Kesari Dasaradh Portfolio Preview',
+      //   },
+      // ],
+      locale: 'en_US',
+      type: 'website',
+  },
+  twitter: {
+      card: 'summary_large_image',
+      title: 'Kesari Dasaradh - Backend Architect Portfolio',
+      description: 'Showcasing expertise in Python, FastAPI, AWS, and modern frontend technologies.',
+      // site: '@yourTwitterHandle', // Add your Twitter handle
+      // creator: '@yourTwitterHandle',
+      // images: ['/twitter-image.png'], // Add a Twitter card image to /public
+  },
 };
 
 export default function RootLayout({
@@ -27,23 +53,23 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* Apply font variables directly from the imported objects */}
-      {/* Add suppressHydrationWarning to body to mitigate extension-related hydration errors */}
-      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`} suppressHydrationWarning>
+      {/* Removed suppressHydrationWarning from body as underlying issues should be fixed */}
+      <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
+            disableTransitionOnChange={false} // Allow smooth theme transitions
         >
-          <SmoothScrollProvider> {/* Wrap with SmoothScrollProvider */}
-            <GsapProvider> {/* Wrap with GsapProvider */}
+          <SmoothScrollProvider>
+            <GsapProvider>
               <div className="flex flex-col min-h-screen">
                   <Header />
-                  <main className="flex-grow">{children}</main>
+                  <main className="flex-grow pt-16">{children}</main> {/* Added padding-top equal to header height */}
                   <Footer />
               </div>
               <Toaster />
-              <CustomCursor /> {/* Add Custom Cursor */}
+              <CustomCursor />
             </GsapProvider>
           </SmoothScrollProvider>
         </ThemeProvider>
