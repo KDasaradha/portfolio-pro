@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card'; // Correctly import CardDescription
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, ArrowUpRight, Link as LinkIcon } from 'lucide-react'; // Added ArrowUpRight
+import { PhoneCall, Mail, Linkedin, Github, Twitter, FileText, Download, Send, ArrowUpRight, Link2 as LinkIcon } from 'lucide-react'; // Renamed Link to Link2 to avoid naming conflict
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { cn } from "@/lib/utils"; // Import cn utility
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,7 +43,7 @@ export default function ContactSection() {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 85%",
-                    toggleActions: "play none none none",
+                    toggleActions: "play none none reset", // Play once, reset on leave back
                 }
             });
 
@@ -56,8 +57,8 @@ export default function ContactSection() {
                 stagger: 0.25, // Stagger the cards
                 scrollTrigger: {
                     trigger: cardsRef.current, // Trigger based on the container
-                    start: "top 85%", // Adjust trigger slightly
-                    toggleActions: "play none none none",
+                    start: "top 88%", // Adjust trigger slightly
+                    toggleActions: "play none none reset", // Play once, reset on leave back
                 }
              });
 
@@ -67,11 +68,11 @@ export default function ContactSection() {
     }, []); // Removed refs from dependencies as they don't change
 
   return (
-    <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-background via-secondary/10 to-background py-32 md:py-40 relative overflow-hidden"> {/* Adjusted padding & background, added overflow hidden */}
+    <section ref={sectionRef} id="contact" className="bg-gradient-to-b from-secondary/15 via-background to-secondary/15 py-32 md:py-40 relative overflow-hidden"> {/* Adjusted padding & background, added overflow hidden */}
       {/* Optional subtle pattern */}
-      <div className="absolute inset-0 opacity-[0.02] pattern-grid pattern-accent pattern-bg-transparent pattern-size-10 z-0"></div>
+      <div className="absolute inset-0 opacity-[0.025] pattern-grid pattern-accent pattern-bg-transparent pattern-size-10 z-0"></div>
       {/* Content container */}
-      <div className="container mx-auto px-4 md:px-6 z-10 relative">
+      <div className="container mx-auto px-4 z-10 relative">
         <h2
           ref={headerRef} // Attach ref
           className="text-4xl md:text-5xl lg:text-6xl font-bold mb-20 md:mb-24 text-center gradient-text" // Increased margin
@@ -88,7 +89,7 @@ export default function ContactSection() {
                        <Send className="h-7 w-7 text-accent transition-transform duration-500 group-hover:rotate-[15deg]" /> Get In Touch {/* Hover effect */}
                     </CardTitle>
                     <CardDescription className="text-base md:text-lg mt-2.5 text-muted-foreground leading-relaxed"> {/* Adjusted size & spacing */}
-                        I'm open to discussing new projects, opportunities, or sharing insights about technology.
+                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Let's build something amazing together!
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow p-7 md:p-9 pt-0"> {/* Consistent padding, removed top padding */}
@@ -116,7 +117,7 @@ export default function ContactSection() {
                     </ul>
                 </CardContent>
                 <CardFooter className="p-7 md:p-9 border-t mt-auto bg-muted/20">
-                    <p className="text-sm text-muted-foreground">I aim to respond within 24-48 hours.</p>
+                    <p className="text-sm text-muted-foreground">Response Time: Typically within 24-48 hours.</p>
                 </CardFooter>
                 </Card>
            </div>
@@ -126,10 +127,10 @@ export default function ContactSection() {
                 <Card className="h-full shadow-xl hover:shadow-2xl transition-all duration-400 border-t-4 border-primary bg-card/90 backdrop-blur-lg flex flex-col rounded-xl group hover:-translate-y-2"> {/* Enhanced styles & group */}
                 <CardHeader className="p-7 md:p-9"> {/* Consistent padding */}
                     <CardTitle className="text-2xl md:text-3xl font-semibold text-primary flex items-center gap-3.5"> {/* Adjusted size & gap */}
-                       <LinkIcon className="h-7 w-7 text-primary/90 transition-transform duration-500 group-hover:rotate-[8deg]"/> Connect Online {/* Hover effect */}
+                       <LinkIcon className="h-7 w-7 text-primary/90 transition-transform duration-500 group-hover:rotate-[8deg]"/> Connect Online & Resources {/* Hover effect */}
                     </CardTitle>
                      <CardDescription className="text-base md:text-lg mt-2.5 text-muted-foreground leading-relaxed"> {/* Adjusted size & spacing */}
-                         Find me across various platforms and download my professional resume.
+                         Explore my professional presence online and download my resume for a detailed overview of my experience.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow p-7 md:p-9 pt-0"> {/* Consistent padding, removed top padding */}

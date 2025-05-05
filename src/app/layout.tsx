@@ -9,8 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { GsapProvider } from '@/components/animations/gsap-provider';
 import { SmoothScrollProvider } from '@/components/layout/smooth-scroll-provider';
 import CustomCursor from '@/components/custom-cursor';
-
-// Correct way to initialize Geist fonts - directly use the imported objects' class names
+import React from 'react'; // Import React
 
 
 export const metadata: Metadata = {
@@ -51,9 +50,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // Added suppressHydrationWarning back to html tag
     <html lang="en" suppressHydrationWarning>
       {/* Apply font variables directly from the imported objects */}
-      {/* Removed suppressHydrationWarning from body as underlying issues should be fixed */}
       <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider
             attribute="class"
@@ -65,7 +64,11 @@ export default function RootLayout({
             <GsapProvider>
               <div className="flex flex-col min-h-screen">
                   <Header />
-                  <main className="flex-grow pt-16">{children}</main> {/* Added padding-top equal to header height */}
+                  {/* Ensure main has enough top padding to clear the sticky header */}
+                  <main className="flex-grow pt-16">
+                    {children}
+                  </main>
+                  {/* Add space before the footer if needed, or adjust footer margin */}
                   <Footer />
               </div>
               <Toaster />

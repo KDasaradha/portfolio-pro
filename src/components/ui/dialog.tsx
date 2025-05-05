@@ -33,10 +33,7 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  
-  <DialogTitle className="sr-only">
-   Dialog
-  </DialogTitle>,
+  // Removed the misplaced DialogTitle from here
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
