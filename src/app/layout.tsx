@@ -50,8 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // Added suppressHydrationWarning back to html tag
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       {/* Apply font variables directly from the imported objects */}
       <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider

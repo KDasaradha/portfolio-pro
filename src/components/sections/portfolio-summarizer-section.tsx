@@ -242,7 +242,6 @@ export default function PortfolioSummarizerSection() {
                             placeholder="Paste the full job description, company information, or describe the networking opportunity (e.g., 'Senior Backend Engineer role at TechCorp focusing on Python and AWS'). More context yields a better summary."
                             className="resize-y min-h-[200px] bg-background/85 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-300 text-base shadow-inner" // Enhanced styles
                             {...field}
-                            data-cursor-interactive
                             aria-label="Job Description or Context Input"
                           />
                         </FormControl>
@@ -265,7 +264,6 @@ export default function PortfolioSummarizerSection() {
                                 placeholder="e.g., Python, FastAPI, AWS, Microservices, Docker..."
                                 className="bg-background/85 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-300 text-base shadow-inner" // Enhanced styles
                                 {...field}
-                                data-cursor-interactive
                                 aria-label="Your Key Skills Input"
                              />
                             </FormControl>
@@ -289,7 +287,6 @@ export default function PortfolioSummarizerSection() {
                                 placeholder="Your GitHub Handle"
                                 className="bg-background/85 focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-300 text-base shadow-inner" // Enhanced styles
                                 {...field}
-                                data-cursor-interactive
                                 aria-label="GitHub Username Input"
                             />
                             </FormControl>
@@ -308,7 +305,6 @@ export default function PortfolioSummarizerSection() {
                         className="w-full max-w-sm transition-all duration-300 bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-xl hover:-translate-y-1.5 transform hover:scale-[1.03] active:scale-[1.01] text-base font-semibold py-3" // Enhanced button style & padding
                         size="lg"
                         data-cursor-interactive
-                        aria-live="polite" // Indicate loading state changes
                       >
                         {isLoading ? (
                           <>
