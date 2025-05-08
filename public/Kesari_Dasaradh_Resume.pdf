@@ -1,66 +1,74 @@
-%PDF-1.4
-%
-1 0 obj
-<<
-/Title (Placeholder Resume)
-/Creator (Placeholder Creator)
-/Producer (Placeholder Producer)
-/CreationDate (D:20230101000000)
->>
-endobj
-2 0 obj
-<<
-/Type /Catalog
-/Pages 3 0 R
->>
-endobj
-3 0 obj
-<<
-/Type /Pages
-/Kids [4 0 R]
-/Count 1
->>
-endobj
-4 0 obj
-<<
-/Type /Page
-/Parent 3 0 R
-/Resources << /Font << /F1 5 0 R >> >>
-/MediaBox [0 0 612 792]
-/Contents 6 0 R
->>
-endobj
-5 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
->>
-endobj
-6 0 obj
-<< /Length 55 >>
-stream
-BT
-/F1 24 Tf
-72 720 Td
-(Placeholder Resume Content) Tj
-ET
-endstream
-endobj
-xref
-0 7
-0000000000 65535 f
-0000000018 00000 n
-0000000121 00000 n
-0000000178 00000 n
-0000000235 00000 n
-0000000372 00000 n
-0000000430 00000 n
-trailer
-<<
-/Size 7
-/Root 2 0 R
->>
-startxref
-526
-%%EOF
+**KESARI DASARADHA RAMI REDDY**
+Prakasam, India
+📞 +91-90324-14439 · ✉️ kdasaradha525@gmail.com
+🌐 Portfolio: https://kdasaradha525.vercel.app · 🐙 GitHub: https://github.com/KDasaradha
+
+---
+
+**SUMMARY**
+
+Junior Backend Developer with 2 years of experience designing, building, and maintaining high-performance RESTful APIs using Python, FastAPI, and PostgreSQL. Skilled in microservices architecture, asynchronous programming, CI/CD automation, and API security. Proven ability to optimize database performance, enforce coding standards, and accelerate delivery pipelines.
+
+---
+
+**TECHNICAL SKILLS**
+
+*   **Languages & Frameworks:** Python, FastAPI, SQLAlchemy ORM, Pydantic
+*   **Databases & Migrations:** PostgreSQL, SQL, Alembic
+*   **DevOps & CI/CD:** Docker, Nginx, Git, GitHub Actions, Jenkins
+*   **Testing & Quality:** Postman, Apidog, Pytest (fundamentals), SonarQube, Snyk
+*   **Security & Authentication:** JWT (RS256), OAuth 2.0, input validation, rate limiting
+*   **Documentation:** OpenAPI/Swagger, MkDocs
+*   **Tools & IDE:** VS Code, Fabric.js, Pillow, OpenCV
+
+---
+
+**PROFESSIONAL EXPERIENCE**
+
+**Junior Backend Developer**
+KaryaHub Solutions, Hyderabad
+*August 2023 – Present*
+
+*   Engineered scalable RESTful APIs with FastAPI and SQLAlchemy, reducing average response times by 40% through async endpoints and optimized queries.
+*   Designed and containerized microservices using Docker and Nginx, improving modularity and fault isolation.
+*   Implemented JWT-based authentication and OAuth 2.0 authorization to strengthen API security posture.
+*   Established database migration workflows with Alembic, ensuring consistent schema updates across environments.
+*   Automated CI/CD pipelines via GitHub Actions and Jenkins, accelerating release cadence by 25%.
+*   Integrated static analysis tools (SonarQube, Snyk) into the build process, decreasing critical vulnerabilities by 30%.
+*   Enhanced API documentation with OpenAPI/Swagger and MkDocs, streamlining developer onboarding.
+*   Developed image-generation utilities (Pillow, Fabric.js, OpenCV) and automated asset retrieval from Pixabay/Unsplash.
+
+---
+
+**KEY PROJECTS**
+
+**EFANISH | School Management System**
+
+*   Built backend modules for user management, roles (RBAC), curriculum, fee processing, vendor integrations, and real-time chat.
+*   Cut API latency by 40% via asynchronous FastAPI routes and query tuning.
+*   Secured endpoints with Pydantic validation and JWT authentication.
+*   Managed Docker deployments and configured CI/CD using GitHub Actions.
+
+**SHOU | HRMS, Payroll & Animation Pipeline**
+
+*   Developed payroll APIs for salary calculation, tax breakdown, and payslip generation, boosting processing efficiency by 35%.
+*   Implemented HR features including employee records, attendance tracking, leave management, and holiday scheduling.
+*   Designed a production-tracking service to optimize animation workflows, improving throughput by 25%.
+*   Orchestrated CI/CD workflows with Jenkins and GitHub Actions for reliable, automated releases.
+
+---
+
+**EDUCATION**
+
+**B.Tech in Electrical & Electronics Engineering**
+Vasireddy Venkatadri Institute of Technology, Guntur, India
+2018 – 2022 | CGPA: 7.64
+
+---
+
+**ADDITIONAL CAPABILITIES**
+
+*   Proficient in debugging FastAPI applications with custom exception handlers and structured logging.
+*   Experience integrating REST APIs into React front-ends and resolving client-server issues.
+*   Familiar with basic CI/CD pipelines and version control best practices.
+*   Strong communicator and collaborative team member, quick to adopt new tools and methodologies.
