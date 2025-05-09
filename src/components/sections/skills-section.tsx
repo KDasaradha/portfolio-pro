@@ -5,7 +5,7 @@ import {
   Server, Database, CodeXml, GitBranch, Wrench, PanelsTopLeft, Search,
   ChevronDown, ChevronUp, Cog, Cloud, BookOpen, Cpu, Paintbrush,
   DatabaseZap, ImageIcon, TerminalSquare, Palette, BrainCircuit, Layers,
-  TestTubeDiagonal, Package, Gauge, Link as LinkIconLucide, Users as UsersIcon 
+  TestTubeDiagonal, Package, Gauge, Link as LinkIconLucide, Users as UsersIcon, ShieldCheck, Filter, Star, TrendingUpIcon, Lightbulb
 } from 'lucide-react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from "@/lib/utils";
 import { Flip } from "gsap/Flip"; 
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 gsap.registerPlugin(ScrollTrigger, Flip); 
 
@@ -119,7 +121,8 @@ export default function SkillsSection() {
   const filteredSkills = useMemo(() => {
     return allSkills.filter(skill =>
       (selectedCategory === 'All' || skill.category === selectedCategory) &&
-      skill.name.toLowerCase().includes(searchTerm.toLowerCase())
+      (skill.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+       (skill.description && skill.description.toLowerCase().includes(searchTerm.toLowerCase())))
     );
   }, [selectedCategory, searchTerm]);
 
@@ -172,27 +175,37 @@ export default function SkillsSection() {
         if (!gridRef.current) return;
 
         const cards = Array.from(gridRef.current.querySelectorAll<HTMLDivElement>('.skill-card'));
-        const state = Flip.getState(cards); 
+        
+        // Capture the state of all cards, including those that might be hidden by filtering/pagination
+        const state = Flip.getState(cards, {props: "opacity, transform, display, order"}); 
 
         cards.forEach(card => {
             const skillName = card.dataset.skillName;
-            const skillIndex = filteredSkills.findIndex(s => s.name === skillName);
-            const isVisible = skillIndex !== -1 && skillIndex < visibleCount;
-
-            gsap.set(card, { display: isVisible ? 'flex' : 'none' });
-             if (isVisible) {
-                 gsap.set(card, { order: skillIndex }); 
-             }
+            const skillIndexInFiltered = filteredSkills.findIndex(s => s.name === skillName);
+            const isVisible = skillIndexInFiltered !== -1 && skillIndexInFiltered < visibleCount;
+            
+            // Set display and order. If not visible, ensure it's hidden.
+            // If it was visible and now isn't, Flip will handle the animation out.
+            // If it wasn't visible and now is, Flip will handle animation in.
+            gsap.set(card, { 
+              display: isVisible ? 'flex' : 'none', 
+              order: isVisible ? skillIndexInFiltered : (parseInt(card.style.order) || 0) // Keep old order if hiding
+            });
         });
-
+        
         Flip.from(state, {
             duration: 0.6,
             scale: true,
             ease: "power2.out",
-            stagger: 0.05,
-            absolute: true,
-             onEnter: elements => gsap.fromTo(elements, {opacity: 0, scale: 0.9, y: 20}, {opacity: 1, scale: 1, y: 0, duration: 0.5, stagger: 0.04}),
-             onLeave: elements => gsap.to(elements, {opacity: 0, scale: 0.9, y: -20, duration: 0.4})
+            stagger: 0.05, // Apply stagger to all affected elements
+            absolute: true, // Use absolute positioning for smoother transitions of surrounding elements
+            onEnter: elements => gsap.fromTo(elements, 
+                { opacity: 0, scale: 0.9, y: 20, filter: 'blur(2px)' }, 
+                { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 0.5, stagger: 0.04, ease: 'power2.out' }
+            ),
+            onLeave: elements => gsap.to(elements, 
+                { opacity: 0, scale: 0.9, y: -20, filter: 'blur(2px)', duration: 0.4, ease: 'power1.in' }
+            )
         });
 
     }, [filteredSkills, visibleCount]); 
@@ -208,8 +221,8 @@ export default function SkillsSection() {
         >
           Technical Proficiency & Toolkit
         </h2>
-        <div ref={filtersRef} className="mb-14 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
-             <div className="relative w-full md:w-96">
+        <div ref={filtersRef} className="mb-14 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8 p-3 md:p-4 bg-card/70 backdrop-blur-md rounded-lg border border-border/50 shadow-lg">
+             <div className="relative w-full md:flex-grow max-w-xs"> {/* Constrained width */}
                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none z-10" />
                  <Input
                     type="text"
@@ -217,15 +230,15 @@ export default function SkillsSection() {
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setVisibleCount(ITEMS_PER_PAGE);
+                        setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on search
                     }}
-                    className="pl-12 pr-4 py-3 text-base border-border bg-background/80 backdrop-blur-sm focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-300 shadow-sm rounded-full"
+                    className="pl-12 pr-4 py-3 text-base border-border bg-background/85 backdrop-blur-sm focus:border-accent focus:ring-2 focus:ring-accent/50 transition-all duration-300 shadow-sm rounded-md h-11"
                     aria-label="Search skills"
                     data-cursor-interactive
                  />
              </div>
              <div className="w-full md:w-auto overflow-x-auto pb-2.5 custom-scrollbar-horizontal">
-                 <div className="flex flex-nowrap justify-start md:justify-center gap-3 min-w-max px-1">
+                 <div className="flex flex-nowrap justify-start md:justify-center gap-2.5 sm:gap-3 min-w-max px-1">
                     {(categories || []).map(category => (
                     <Button
                         key={category}
@@ -233,54 +246,79 @@ export default function SkillsSection() {
                         size="sm"
                         onClick={() => {
                             setSelectedCategory(category);
-                            setVisibleCount(ITEMS_PER_PAGE);
-                            setSearchTerm('');
+                            setVisibleCount(ITEMS_PER_PAGE); // Reset pagination on category change
+                            setSearchTerm(''); // Clear search on category change
                         }}
                         className={cn(
-                            "capitalize transition-all duration-300 whitespace-nowrap px-4 py-2 rounded-full text-sm",
+                            "capitalize transition-all duration-300 whitespace-nowrap px-3.5 py-2 sm:px-4 rounded-md text-xs sm:text-sm",
                             selectedCategory === category
-                                ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md scale-105 transform ring-2 ring-accent/50'
-                                : 'border-border bg-background/70 hover:bg-accent/10 hover:border-accent/70 hover:text-accent backdrop-blur-sm'
+                                ? 'bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-md scale-105 transform ring-1 ring-accent/40'
+                                : 'border-border bg-background/80 hover:bg-accent/10 hover:border-accent/70 hover:text-accent backdrop-blur-sm'
                         )}
                          data-cursor-interactive
                     >
-                        {category}
+                        {category === 'All' ? <Star className="mr-2 h-4 w-4"/> : <Filter className="mr-2 h-4 w-4"/>} {category}
                     </Button>
                     ))}
                  </div>
              </div>
         </div>
-        <div
-            ref={gridRef}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-7"
-        >
-          {(allSkills || []).map((skill) => (
-              <div key={skill.name} className="skill-card flex" data-skill-name={skill.name}>
-                  <Card className={cn(
-                          "flex flex-col items-center justify-center p-5 text-center transition-all duration-300 ease-out border bg-card/85 backdrop-blur-lg rounded-xl shadow-sm cursor-pointer w-full aspect-square group", 
-                          "hover:shadow-xl hover:-translate-y-2 hover:scale-[1.04]",
-                          "border-transparent hover:border-accent/60",
-                          skill.colorClass 
-                      )}
-                      data-cursor-interactive
-                      title={`${skill.name} - ${skill.level}${skill.years ? ` (${skill.years} yrs)` : ''}${skill.description ? `\n${skill.description}` : ''}`} 
-                  >
-                      <CardContent className="flex flex-col items-center justify-center p-0 flex-grow">
-                           <skill.icon className={cn("h-10 w-10 sm:h-11 w-11 mb-3 flex-shrink-0 transition-transform duration-300 group-hover:scale-110", skill.colorClass.split(' ')[0])} strokeWidth={1.5} />
-                          <span className="text-sm sm:text-[0.95rem] font-medium text-card-foreground leading-tight line-clamp-2">{skill.name}</span> 
-                           <span className={cn(
-                               "text-xs mt-1.5 px-1.5 py-0.5 rounded opacity-90",
-                               skill.level === 'Proficient' ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' :
-                               skill.level === 'Experienced' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' :
-                               'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300'
-                           )}>
-                               {skill.level}
-                           </span>
-                      </CardContent>
-                  </Card>
-              </div>
-          ))}
-        </div>
+        
+        <TooltipProvider delayDuration={150}>
+            <div
+                ref={gridRef}
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 md:gap-6" // Adjusted gap
+            >
+              {/* Render all skill cards initially, Flip.js will handle visibility */}
+              {(allSkills || []).map((skill) => {
+                const levelInfo = 
+                    skill.level === 'Proficient' ? { icon: Star, color: 'text-yellow-500 dark:text-yellow-400', bgColor: 'bg-yellow-100 dark:bg-yellow-900/60' } :
+                    skill.level === 'Experienced' ? { icon: TrendingUpIcon, color: 'text-green-500 dark:text-green-400', bgColor: 'bg-green-100 dark:bg-green-900/60' } :
+                    { icon: Lightbulb, color: 'text-sky-500 dark:text-sky-400', bgColor: 'bg-sky-100 dark:bg-sky-900/60' };
+
+                return (
+                  <div key={skill.name} className="skill-card flex" data-skill-name={skill.name} style={{display: 'none'}}> {/* Initially hidden, Flip will manage */}
+                      <Tooltip>
+                          <TooltipTrigger asChild>
+                              <Card className={cn(
+                                      "flex flex-col items-center justify-center p-4 sm:p-5 text-center transition-all duration-300 ease-out border bg-card/90 backdrop-blur-lg rounded-lg shadow-md cursor-pointer w-full aspect-square group", 
+                                      "hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.03]",
+                                      "border-border/70 hover:border-accent/60",
+                                      skill.colorClass // Base color class for border/bg accents on hover
+                                  )}
+                                  data-cursor-interactive
+                              >
+                                  <CardContent className="flex flex-col items-center justify-center p-0 flex-grow">
+                                      <skill.icon className={cn("h-9 w-9 sm:h-10 w-10 mb-2.5 sm:mb-3 flex-shrink-0 transition-transform duration-300 group-hover:scale-110", skill.colorClass.split(' ')[0])} strokeWidth={1.5} />
+                                      <span className="text-xs sm:text-sm font-medium text-card-foreground leading-tight line-clamp-2">{skill.name}</span> 
+                                      <span className={cn(
+                                          "flex items-center text-[0.65rem] sm:text-xs mt-1.5 px-2 py-0.5 rounded-full font-medium", // Added flex and items-center
+                                          levelInfo.bgColor, 
+                                          levelInfo.color.replace('text-','text-') // Ensure text color is applied
+                                      )}>
+                                          <levelInfo.icon className="h-3 w-3 mr-1" /> {/* Icon for level */}
+                                          {skill.level}
+                                      </span>
+                                  </CardContent>
+                              </Card>
+                          </TooltipTrigger>
+                          <TooltipContent 
+                            side="bottom" 
+                            align="center"
+                            className={cn("bg-popover/95 text-popover-foreground border-border shadow-xl max-w-[280px] p-3 rounded-md text-xs leading-normal backdrop-blur-sm", skill.colorClass.replace('text-', 'border-t-2 border-t-'))}
+                          >
+                            <div className="flex items-center mb-1.5">
+                                <skill.icon className={cn("h-4 w-4 mr-1.5", skill.colorClass.split(' ')[0])} />
+                                <p className="font-semibold text-sm">{skill.name} <span className="text-xs font-normal opacity-80">({skill.level}{skill.years ? `, ${skill.years} yrs` : ''})</span></p>
+                            </div>
+                            {skill.description && <p className="text-muted-foreground">{skill.description}</p>}
+                          </TooltipContent>
+                      </Tooltip>
+                  </div>
+              )})}
+            </div>
+        </TooltipProvider>
+
         {filteredSkills.length === 0 && (
              <div className="text-center text-muted-foreground mt-20 py-10 border border-dashed border-border/50 rounded-lg bg-muted/20">
                  <p className="text-lg mb-2">No skills found matching your criteria.</p>
@@ -290,12 +328,12 @@ export default function SkillsSection() {
         )}
         <div className="mt-20 text-center space-x-5">
             {filteredSkills.length > visibleCount && (
-                <Button onClick={loadMore} variant="outline" className="group border-primary/60 hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-300 px-6 py-3 text-base" data-cursor-interactive>
+                <Button onClick={loadMore} variant="outline" className="group border-primary/60 hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-300 px-6 py-3 text-base rounded-md shadow-sm hover:shadow-lg" data-cursor-interactive>
                     Load More <ChevronDown className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" />
                 </Button>
             )}
             {visibleCount > ITEMS_PER_PAGE && filteredSkills.length > 0 && (
-                <Button onClick={showLess} variant="ghost" size="sm" className="text-muted-foreground hover:text-accent group transition-colors duration-300 text-base px-4 py-2" data-cursor-interactive>
+                <Button onClick={showLess} variant="ghost" size="sm" className="text-muted-foreground hover:text-accent group transition-colors duration-300 text-base px-4 py-2 rounded-md hover:bg-accent/5" data-cursor-interactive>
                     <ChevronUp className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5"/> Show Less
                 </Button>
             )}
