@@ -1,12 +1,14 @@
+
 "use client";
 
 import Link from 'next/link';
-import { Github, Linkedin, Twitter, Code, ArrowUpCircle } from 'lucide-react'; // Changed ArrowUp to ArrowUpCircle
+import { Github, Linkedin, Twitter, Code, ArrowUpCircle } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useVersion } from '@/context/version-context'; // Import useVersion
+import { useVersion } from '@/context/version-context';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button'; // Added import for Button
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,19 +21,19 @@ const socialLinks = [
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
-  const { version } = useVersion(); // Get current version
+  const { version } = useVersion();
 
   useEffect(() => {
      const ctx = gsap.context(() => {
          gsap.from(footerRef.current, {
             autoAlpha: 0,
-            y: 80, // Slightly more offset
-            duration: 1.5, // Smoother duration
-            ease: 'power3.out',
+            y: 100, // Slightly more dramatic entrance
+            duration: 1.8, // Slower, smoother animation
+            ease: 'expo.out', // More expressive ease
             scrollTrigger: {
                 trigger: footerRef.current,
-                start: "top bottom-=80px", // Trigger when footer is 80px from bottom
-                toggleActions: "play none none reset", // Reset allows re-animation
+                start: "top bottom-=100px", // Trigger when footer is 100px from bottom
+                toggleActions: "play none none reset", 
             }
          });
      }, footerRef);
@@ -41,45 +43,44 @@ export default function Footer() {
 
   const scrollToTop = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      // Determine target based on version for home section
       const homeTarget = version === 'v2' ? '#home-v2' : '#home';
       const targetElement = document.querySelector(homeTarget);
 
       if (targetElement) {
-          gsap.to(window, { duration: 1.8, scrollTo: { y: targetElement, autoKill: false }, ease: 'power4.inOut' });
+          gsap.to(window, { duration: 2, scrollTo: { y: targetElement, autoKill: false }, ease: 'power4.inOut' }); // Slower scroll
       } else {
-          gsap.to(window, { duration: 1.8, scrollTo: { y: 0, autoKill: false }, ease: 'power4.inOut' });
+          gsap.to(window, { duration: 2, scrollTo: { y: 0, autoKill: false }, ease: 'power4.inOut' });
       }
   };
 
   const footerClasses = version === 'v2' 
-    ? "border-t border-neutral-700/70 bg-neutral-900/70 backdrop-blur-lg text-neutral-400 py-12 md:py-16 mt-24"
-    : "border-t border-border bg-background/95 py-10 md:py-12 mt-20 text-muted-foreground";
+    ? "border-t border-neutral-700/70 bg-gradient-to-b from-neutral-900/80 to-black/90 backdrop-blur-xl text-neutral-400 py-12 md:py-16 mt-24 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.2)]" // V2: Darker, gradient, more shadow
+    : "border-t border-border bg-background/95 backdrop-blur-md py-10 md:py-12 mt-20 text-muted-foreground shadow-lg"; // V1: Standard
   
   const linkClasses = version === 'v2'
-    ? "text-neutral-400 transition-all duration-300 ease-in-out hover:text-purple-400 hover:scale-125 transform hover:-translate-y-1 group"
-    : "text-muted-foreground transition-all duration-300 ease-in-out hover:text-accent hover:scale-125 transform hover:-translate-y-1.5 group";
+    ? "text-neutral-400 transition-all duration-300 ease-in-out hover:text-purple-400 hover:scale-125 transform hover:-translate-y-1 group relative" // V2: Purple accent
+    : "text-muted-foreground transition-all duration-300 ease-in-out hover:text-accent hover:scale-125 transform hover:-translate-y-1.5 group relative"; // V1: Teal accent
 
   const nameTextClasses = version === 'v2' 
-    ? "text-base font-medium text-neutral-300"
+    ? "text-base font-semibold text-neutral-200 tracking-wide" // V2: Brighter, wider tracking
     : "text-base font-medium";
 
   const copyrightTextClasses = version === 'v2'
-    ? "text-sm text-neutral-500 text-center md:text-left order-last md:order-none"
+    ? "text-xs text-neutral-500 text-center md:text-left order-last md:order-none tracking-wider" // V2: Smaller, wider
     : "text-sm text-muted-foreground text-center md:text-left order-last md:order-none";
 
 
   return (
-    <footer ref={footerRef} className={cn("opacity-0", footerClasses)}> {/* Start with opacity-0 for GSAP */}
+    <footer ref={footerRef} className={cn("opacity-0", footerClasses)}>
       <div className="container flex flex-col items-center justify-between gap-8 md:flex-row px-4 md:px-6 relative">
-         <div className="flex items-center gap-2.5">
-             <Code className={cn("h-5 w-5", version === 'v2' ? "text-purple-400" : "text-accent")}/>
+         <div className="flex items-center gap-3"> {/* Increased gap */}
+             <Code className={cn("h-6 w-6", version === 'v2' ? "text-purple-400 animate-pulse" : "text-accent")} /> {/* V2: Pulse animation */}
              <span className={nameTextClasses}>Kesari Dasaradh</span>
          </div>
         <p className={copyrightTextClasses}>
-          &copy; {currentYear} Kesari Dasaradh. {version === 'v2' ? "Crafted with Next.js & Tailwind." : "Built with Next.js & Tailwind CSS."}
+          &copy; {currentYear} Kesari Dasaradh. {version === 'v2' ? "Forged with Next.js & Tailwind." : "Built with Next.js & Tailwind CSS."}
         </p>
-        <div className="flex gap-5 md:gap-6"> {/* Slightly increased gap for V2 */}
+        <div className="flex gap-6 md:gap-7"> {/* Slightly increased gap for V2 */}
           {socialLinks.map((link) => (
             <Link
               key={link.name}
@@ -90,7 +91,9 @@ export default function Footer() {
               className={linkClasses}
               data-cursor-interactive
             >
-              <link.icon className={cn("h-6 w-6 transition-transform duration-300", version === 'v2' ? "group-hover:rotate-[10deg]" : "group-hover:rotate-[-5deg]")} />
+              <link.icon className={cn("h-6 w-6 transition-transform duration-300", version === 'v2' ? "group-hover:rotate-[12deg]" : "group-hover:rotate-[-8deg]")} />
+              {/* V2: Subtle underline effect on hover */}
+              {version === 'v2' && <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-300"></span>}
             </Link>
           ))}
         </div>
@@ -98,18 +101,19 @@ export default function Footer() {
              variant="ghost"
              size="icon"
              className={cn(
-                "absolute bottom-6 right-6 md:bottom-8 md:right-8 opacity-70 hover:opacity-100 transition-opacity duration-300 rounded-full p-2",
+                "absolute bottom-6 right-6 md:bottom-8 md:right-8 opacity-60 hover:opacity-100 transition-all duration-300 rounded-full p-2.5", // Larger padding
                 version === 'v2' 
-                  ? "text-neutral-400 hover:text-purple-300 hover:bg-purple-500/10" 
-                  : "text-muted-foreground hover:text-accent hover:bg-accent/10"
+                  ? "text-neutral-400 hover:text-purple-300 hover:bg-purple-500/15 hover:scale-110 active:scale-100" // V2: More interactive hover
+                  : "text-muted-foreground hover:text-accent hover:bg-accent/10 hover:scale-110 active:scale-100"
              )}
              onClick={scrollToTop}
              aria-label="Scroll to top"
              data-cursor-interactive
          >
-             <ArrowUpCircle className="h-7 w-7" /> {/* Larger icon */}
+             <ArrowUpCircle className="h-7 w-7" />
          </Button>
       </div>
     </footer>
   );
 }
+
