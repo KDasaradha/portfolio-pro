@@ -7,11 +7,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { Github, ExternalLink, Info, ArrowRight, Maximize2, X as CloseIcon, Code, Database, Users, Brain, Cloud, Layers } from 'lucide-react'; // Added more icons
+import { Github, ExternalLink, Info, ArrowRight, Maximize2, X as CloseIcon, Code, Database, Users, Brain, Cloud, Layers } from 'lucide-react'; 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from '@/lib/utils';
-import React from 'react'; // Ensure React is imported for Fragment
+import React from 'react'; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,70 +27,64 @@ interface Project {
   keyAchievement: string;
   imageHints: string[];
   category: 'Web Application' | 'AI/ML' | 'ERP/Platform' | 'DevOps/Cloud';
-  categoryIcon: React.ElementType; // Add category icon
+  categoryIcon: React.ElementType; 
 }
 
-// Enhanced Projects Data with Categories, Icons, and Professional Descriptions
 const projectsData: Project[] = [
   {
     id: 1,
-    title: 'InstaDe: AI-Driven Marketing Visual Suite', // Enhanced Title
+    title: 'InstaDe: AI-Driven Marketing Visual Suite', 
     shortDescription: 'Automated, brand-aligned poster creation leveraging web scraping, AI content generation, and dynamic image synthesis.',
     longDescription: 'InstaDe revolutionizes marketing asset production by intelligently integrating web scraping for real-time product data, employing Genkit AI for compelling, context-aware promotional text, and utilizing a sophisticated backend with Fabric.js, Pillow, and OpenCV for dynamic, on-brand visual generation. The intuitive React frontend empowers users to instantly create targeted marketing posters, drastically reducing design time and enabling data-driven visual campaigns.',
     images: ['https://picsum.photos/seed/instade1/600/350', 'https://picsum.photos/seed/instade2/600/350', 'https://picsum.photos/seed/instade3/600/350'],
-    techStack: ['Python', 'FastAPI', 'Fabric.js', 'Pillow', 'OpenCV', 'React.js', 'Genkit AI', 'Web Scraping', 'REST APIs', 'Docker', 'PostgreSQL', 'Asyncio'], // Added more tech
+    techStack: ['Python', 'FastAPI', 'Fabric.js', 'Pillow', 'OpenCV', 'React.js', 'Genkit AI', 'Web Scraping', 'REST APIs', 'Docker', 'PostgreSQL', 'Asyncio'], 
     liveDemoUrl: 'https://develop.instade.ai/',
-    // githubUrl: 'https://github.com/KDasaradha/instade-backend',
     keyAchievement: 'Reduced poster design lifecycle by over 60%, empowering rapid creation of data-informed marketing visuals and significantly boosting campaign agility.',
     imageHints: ['ai graphic design tool interface', 'marketing automation dashboard', 'dynamic image generation process'],
     category: 'AI/ML',
-    categoryIcon: Brain, // Icon for AI/ML
+    categoryIcon: Brain, 
   },
   {
     id: 2,
-    title: 'Scalable Multi-Tenant School Management ERP', // Enhanced Title
+    title: 'Scalable Multi-Tenant School Management ERP', 
     shortDescription: 'Comprehensive, cloud-ready ERP system for educational institutions with RBAC, payments, and real-time communication.',
     longDescription: 'Architected and delivered a robust, multi-tenant backend for a School Management ERP, designed for scalability and ease of use. Features include granular Role-Based Access Control (RBAC) for secure data access, streamlined curriculum management, integrated secure payment gateways (e.g., Stripe/Razorpay) for efficient fee processing, comprehensive vendor management modules, and a real-time notification system via WebSockets. Developed using FastAPI, PostgreSQL with SQLAlchemy ORM, and containerized with Docker for reliable deployment and simplified infrastructure management.',
     images: ['https://picsum.photos/seed/schoolerp1/600/350', 'https://picsum.photos/seed/schoolerp2/600/350', 'https://picsum.photos/seed/schoolerp3/600/350'],
-    techStack: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker', 'WebSockets', 'RBAC', 'Payment Gateways', 'REST APIs', 'Microservices Principles', 'Nginx'], // Added more tech
+    techStack: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Docker', 'WebSockets', 'RBAC', 'Payment Gateways', 'REST APIs', 'Microservices Principles', 'Nginx'], 
     liveDemoUrl: 'https://myschoolitaly-app.vercel.app/',
-    // githubUrl: 'https://github.com/KDasaradha/school-erp-backend',
     keyAchievement: 'Improved system responsiveness by 30% through optimized database query strategies (indexing, connection pooling) and implementation of asynchronous task queues (Celery).',
     imageHints: ['school administration software dashboard', 'education erp system architecture', 'student management system interface'],
     category: 'ERP/Platform',
-    categoryIcon: Layers, // Icon for Platform
+    categoryIcon: Layers, 
   },
   {
     id: 3,
-    title: 'SHOU: Integrated HRMS & Animation Workflow Platform', // Enhanced Title
+    title: 'SHOU: Integrated HRMS & Animation Workflow Platform', 
     shortDescription: 'Unified platform integrating HR management, automated payroll calculations, and animation project lifecycle tracking.',
     longDescription: 'SHOU centralizes critical business functions by seamlessly combining a Human Resource Management System (HRMS), automated payroll processing with compliance considerations, and a custom-built animation production pipeline tracker. This solution simplifies the entire employee lifecycle, automates complex payroll scenarios, and offers real-time visibility into animation project progress and resource allocation. The backend, powered by FastAPI and PostgreSQL, is deployed using Docker, with CI/CD automation handled by Jenkins and efficient traffic management via Nginx.',
     images: ['https://picsum.photos/seed/shou1/600/350', 'https://picsum.photos/seed/shou2/600/350', 'https://picsum.photos/seed/shou3/600/350'],
-    techStack: ['FastAPI', 'PostgreSQL', 'Docker', 'Jenkins', 'Nginx', 'Python', 'HRMS', 'Payroll Systems', 'CI/CD', 'Project Management', 'SQLAlchemy', 'REST APIs'], // Added more tech
+    techStack: ['FastAPI', 'PostgreSQL', 'Docker', 'Jenkins', 'Nginx', 'Python', 'HRMS', 'Payroll Systems', 'CI/CD', 'Project Management', 'SQLAlchemy', 'REST APIs'], 
     liveDemoUrl: 'https://getshou.com/',
-    // githubUrl: 'https://github.com/KDasaradha/shou-platform',
     keyAchievement: 'Automated 80% of manual payroll tasks and enhanced overall administrative efficiency by 60% through streamlined workflow implementation and robust system integration.',
     imageHints: ['hrms employee dashboard', 'payroll automation system flow', 'animation project management tool'],
     category: 'ERP/Platform',
-    categoryIcon: Layers, // Icon for Platform
+    categoryIcon: Layers, 
   },
    {
     id: 4,
-    title: 'Cloud-Native Full-Stack CI/CD Pipeline on AWS', // Enhanced Title
+    title: 'Cloud-Native Full-Stack CI/CD Pipeline on AWS', 
     shortDescription: 'End-to-end deployment automation for a React/Next.js frontend and FastAPI backend on AWS infrastructure.',
     longDescription: 'Engineered and implemented a modern, automated deployment strategy for a full-stack application. This included setting up a high-performance React/Next.js frontend and a scalable FastAPI backend API. The entire stack is deployed on AWS (EC2, S3, VPC, RDS) leveraging Docker for containerization. A fully automated CI/CD pipeline, orchestrated using Jenkins (or GitHub Actions), ensures seamless build, testing, and deployment processes. Incorporated best practices for cloud security, monitoring (CloudWatch/Prometheus), and logging.',
     images: ['https://picsum.photos/seed/aws1/600/350', 'https://picsum.photos/seed/aws2/600/350', 'https://picsum.photos/seed/aws3/600/350'],
-    techStack: ['React', 'Next.js', 'TypeScript', 'FastAPI', 'Python', 'AWS (EC2, S3, VPC, RDS)', 'Docker', 'Jenkins', 'CI/CD', 'Monitoring', 'Nginx', 'CloudFormation/Terraform (IaC)'], // Added IaC
-    // liveDemoUrl: '#', // No live demo likely for pure infra projects
+    techStack: ['React', 'Next.js', 'TypeScript', 'FastAPI', 'Python', 'AWS (EC2, S3, VPC, RDS)', 'Docker', 'Jenkins', 'CI/CD', 'Monitoring', 'Nginx', 'CloudFormation/Terraform (IaC)'], 
     githubUrl: 'https://github.com/KDasaradha/cloud-cicd-pipeline-example',
     keyAchievement: 'Established a zero-touch, fully automated deployment pipeline, significantly reducing deployment lead times and increasing release frequency while ensuring infrastructure consistency.',
     imageHints: ['aws infrastructure architecture diagram', 'ci cd pipeline visualization schema', 'cloud deployment automation steps'],
     category: 'DevOps/Cloud',
-    categoryIcon: Cloud, // Icon for Cloud/DevOps
+    categoryIcon: Cloud, 
   },
 ];
 
-// Enhanced Project Card Component
 const ProjectCard = ({ project }: { project: Project }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
@@ -140,18 +134,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
                         data-ai-hint={project.imageHints[0]}
                     />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 opacity-70 group-hover:opacity-40 transition-opacity duration-500"></div>
-                     {/* Optional: Play icon overlay for video/demo link */}
-                     {/* {project.liveDemoUrl && (
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
-                           <PlayCircle className="h-16 w-16 text-white/80 backdrop-blur-sm rounded-full bg-black/30 p-2" />
-                        </div>
-                     )} */}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    {project.techStack.slice(0, 6).map((tech) => (
+                    {(project.techStack || []).slice(0, 6).map((tech) => (
                         <Badge key={tech} variant="secondary" className="text-xs px-3 py-1 transition-all duration-200 hover:bg-primary/15 hover:text-primary shadow-sm">{tech}</Badge>
                     ))}
-                    {project.techStack.length > 6 && <Badge variant="outline" className="text-xs px-3 py-1 border-dashed border-muted-foreground/50 text-muted-foreground">+{project.techStack.length - 6} more</Badge>}
+                    {project.techStack && project.techStack.length > 6 && <Badge variant="outline" className="text-xs px-3 py-1 border-dashed border-muted-foreground/50 text-muted-foreground">+{project.techStack.length - 6} more</Badge>}
                 </div>
                 <p className="text-sm text-muted-foreground pt-4 border-t border-border/60 leading-relaxed">
                      <strong className="font-medium text-primary/90">Key Achievement:</strong> {project.keyAchievement}
@@ -169,7 +157,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
                         <div className="flex-grow">
                             <DialogTitle className="text-2xl font-semibold text-primary mb-1">{project.title}</DialogTitle>
                             <DialogDescription className="text-base mt-1 text-muted-foreground">{project.shortDescription}</DialogDescription>
-                             {/* Category in Modal Header */}
                              <Badge variant="outline" className="mt-3 text-xs px-2.5 py-1 border-accent/50 text-accent bg-accent/10 inline-flex items-center gap-1.5">
                                <project.categoryIcon className="h-3.5 w-3.5" /> {project.category}
                              </Badge>
@@ -181,20 +168,18 @@ const ProjectCard = ({ project }: { project: Project }) => {
                              </Button>
                          </DialogClose>
                     </DialogHeader>
-                    <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-10 custom-scrollbar"> {/* Increased spacing */}
-                        {/* Enhanced Image Viewer - Placeholder (could use Radix Carousel or similar) */}
+                    <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-10 custom-scrollbar"> 
                         <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-xl mb-8 border border-border/40 bg-muted/30">
                             <Image
-                                src={project.images[0]} // Could cycle through images
+                                src={project.images[0]} 
                                 alt={`${project.title} detailed screenshot`}
-                                fill style={{ objectFit: 'contain' }} // Contain preserves aspect ratio
+                                fill style={{ objectFit: 'contain' }} 
                                 sizes="(max-width: 1024px) 90vw, 800px"
                                 loading="lazy"
                                 data-ai-hint={`${project.imageHints[0]} project detail showcase`}
-                                className="rounded-lg p-2 transition-transform duration-500 hover:scale-105" // Subtle zoom on hover
+                                className="rounded-lg p-2 transition-transform duration-500 hover:scale-105" 
                             />
-                             {/* Simple dots for multiple images - non-functional */}
-                             {project.images.length > 1 && (
+                             {project.images && project.images.length > 1 && (
                                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                                     {project.images.map((_, index) => (
                                         <span key={index} className={`block h-2 w-2 rounded-full ${index === 0 ? 'bg-primary' : 'bg-muted-foreground/50'}`}></span>
@@ -205,8 +190,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
                         <div className="prose prose-base sm:prose-lg dark:prose-invert max-w-none text-foreground leading-relaxed space-y-4">
                             <h3 className="text-xl font-semibold text-primary mb-4 border-b pb-3 border-border/60">Project Deep Dive</h3>
-                            {/* Use paragraphs for better structure */}
-                            {project.longDescription.split('\n').map((paragraph, index) => (
+                            {(project.longDescription || '').split('\n').map((paragraph, index) => (
                                 <p key={index}>{paragraph}</p>
                             ))}
                         </div>
@@ -221,7 +205,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                         <div>
                             <h4 className="text-lg font-semibold text-primary mb-4">Core Technologies Utilized</h4>
                             <div className="flex flex-wrap gap-3">
-                            {project.techStack.map((tech) => (
+                            {(project.techStack || []).map((tech) => (
                                 <Badge key={`modal-tech-${tech}`} variant="secondary" className="px-3.5 py-1.5 text-sm transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default border border-transparent hover:border-primary/30 shadow-sm">{tech}</Badge>
                             ))}
                             </div>
@@ -230,20 +214,16 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     <DialogFooter className="p-5 px-6 border-t bg-muted/50 sticky bottom-0 flex flex-col sm:flex-row sm:justify-end gap-3 z-10">
                         {project.githubUrl && (
                         <Button variant="outline" size="sm" asChild className="group border-primary/50 hover:border-primary hover:bg-primary/10 transition-all duration-300 text-sm" data-cursor-interactive>
-                            <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                              <> {/* Wrap in Fragment */}
-                                <Github className="mr-2 h-4 w-4" /> GitHub <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
-                              </>
-                            </Link>
+                           <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                            <Github className="mr-2 h-4 w-4" /> GitHub <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                           </Link>
                         </Button>
                         )}
                         {project.liveDemoUrl && (
                         <Button size="sm" asChild className="bg-gradient-to-r from-primary to-accent text-accent-foreground hover:shadow-lg group transition-all duration-300 text-sm hover:scale-[1.03] active:scale-[1.01]" data-cursor-interactive>
-                            <Link href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
-                              <> {/* Wrap in Fragment */}
-                                <ExternalLink className="mr-2 h-4 w-4" /> Live Demo <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
-                              </>
-                            </Link>
+                           <Link href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-2 h-4 w-4" /> Live Demo <ArrowRight className="ml-auto h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1" />
+                           </Link>
                         </Button>
                         )}
                    </DialogFooter>
@@ -306,8 +286,7 @@ export default function ProjectsSection() {
                     scrollTrigger: {
                         trigger: gridRef.current,
                         start: "top 88%",
-                        toggleActions: "play none none reset", // Reset allows re-animation if scrolled back up
-                        // once: true, // Keep animation playing only once
+                        toggleActions: "play none none reset", 
                     }
                 });
             }
@@ -329,9 +308,9 @@ export default function ProjectsSection() {
         </h2>
         <div
             ref={gridRef}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16" // Increased gap slightly more
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 lg:gap-16" 
         >
-          {projectsData.map((project) => (
+          {(projectsData || []).map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
@@ -339,12 +318,11 @@ export default function ProjectsSection() {
        <style jsx>{`
         .pattern-dots {
             background-image: radial-gradient(hsl(var(--foreground) / 0.1) 1px, transparent 1px);
-            background-size: 18px 18px; /* Slightly larger dots */
+            background-size: 18px 18px; 
         }
         .dark .pattern-dots {
             background-image: radial-gradient(hsl(var(--foreground) / 0.15) 1px, transparent 1px);
         }
-        /* Custom scrollbar for modal */
         .custom-scrollbar::-webkit-scrollbar {
             width: 8px;
         }

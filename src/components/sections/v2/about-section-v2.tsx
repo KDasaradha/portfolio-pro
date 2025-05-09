@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// V1 Data (can be imported or redefined if V2 needs different structuring)
 const timelineV2 = [
   { year: "2021", title: "Genesis: Python & Algorithmic Thinking", description: "Forged a robust Python foundation, mastering data structures and algorithms, igniting a passion for elegant, high-performance code.", technologies: "Python Core, Data Structures, Problem Solving" },
   { year: "2022", title: "Catalyst: Java, OOP & Web Fundamentals", description: "Internship at Wipro: Applied Java and OOP in an enterprise context, gaining hands-on experience with large-scale codebases and foundational web tech.", technologies: "Java, OOP, HTML, CSS, JavaScript Basics" },
@@ -55,13 +54,11 @@ export default function AboutSectionV2() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Intro Animation
             gsap.from(introContainerRef.current, {
                 opacity: 0, y: 50, duration: 1, ease: 'power3.out',
                 scrollTrigger: { trigger: introContainerRef.current, start: "top 85%", toggleActions: "play none none none" }
             });
 
-            // Timeline Horizontal Scroll Animation
             const timelineItems = timelineContainerRef.current?.querySelectorAll(".timeline-item-v2");
             if (timelineItems && timelineItems.length > 0) {
                 gsap.from(timelineItems, {
@@ -69,25 +66,22 @@ export default function AboutSectionV2() {
                     scrollTrigger: {
                         trigger: timelineContainerRef.current,
                         start: "top 75%",
-                        // scrub: 1, // Optional: makes it scrub with scroll
                         toggleActions: "play none none none"
                     }
                 });
-                 // Optional: Parallax scroll effect for the horizontal timeline container itself
                 gsap.to(timelineContainerRef.current, {
-                    xPercent: -30 * (timelineItems.length > 3 ? (timelineItems.length-3) : 0), // Adjust multiplier based on item width and count
+                    xPercent: -30 * (timelineItems.length > 3 ? (timelineItems.length-3) : 0), 
                     ease: "none",
                     scrollTrigger: {
                         trigger: timelineContainerRef.current,
                         start: "top center",
                         end: "bottom top+=100",
                         scrub: 1.5,
-                        invalidateOnRefresh: true, // Important for responsive
+                        invalidateOnRefresh: true, 
                     },
                 });
             }
 
-            // Staggered Card Animations for Philosophy, Goals, Why Work
             const cardContainers = [philosophyContainerRef.current, goalsContainerRef.current, whyWorkContainerRef.current];
             cardContainers.forEach((container, index) => {
                 if (container) {
@@ -97,7 +91,7 @@ export default function AboutSectionV2() {
                             trigger: container,
                             start: "top 80%",
                             toggleActions: "play none none none",
-                            delay: index * 0.1 // Slight delay between sections
+                            delay: index * 0.1 
                         }
                     });
                 }
@@ -121,11 +115,10 @@ export default function AboutSectionV2() {
           </p>
         </div>
 
-        {/* V2 Timeline - Horizontal Scroll Concept */}
         <div className="mb-24 md:mb-32">
             <h3 className="text-3xl md:text-4xl font-bold text-center mb-12 text-neutral-100 tracking-tight">Chronicles of Innovation</h3>
             <div ref={timelineContainerRef} className="flex overflow-x-auto space-x-8 pb-8 custom-scrollbar-horizontal snaps-inline">
-                {timelineV2.map((item, index) => (
+                {(timelineV2 || []).map((item, index) => (
                     <div key={index} className="timeline-item-v2 flex-shrink-0 w-[320px] md:w-[380px] snap-center">
                         <Card className="h-full bg-white/5 border border-purple-400/30 backdrop-blur-md shadow-xl hover:shadow-purple-500/30 transition-all duration-400 group rounded-xl overflow-hidden hover:-translate-y-2">
                             <CardHeader className="p-6 border-b border-purple-400/20">
@@ -148,7 +141,6 @@ export default function AboutSectionV2() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-12 items-start">
-          {/* Philosophy Card */}
           <div ref={philosophyContainerRef}>
             <Card className="animate-card-v2 h-full bg-white/5 border border-pink-400/30 backdrop-blur-md shadow-xl hover:shadow-pink-500/30 transition-all duration-400 rounded-xl group hover:-translate-y-2">
               <CardHeader className="p-7">
@@ -159,7 +151,7 @@ export default function AboutSectionV2() {
               </CardHeader>
               <CardContent className="p-7">
                 <ul className="space-y-5">
-                  {philosophyPointsV2.map((point, index) => (
+                  {(philosophyPointsV2 || []).map((point, index) => (
                     <li key={index} className="flex items-start gap-4">
                        <point.icon className="h-6 w-6 text-pink-400 mt-0.5 flex-shrink-0" strokeWidth={1.75} />
                        <div>
@@ -173,9 +165,7 @@ export default function AboutSectionV2() {
             </Card>
           </div>
 
-          {/* Goals & Why Work With Me in a 2-column layout on medium up */}
           <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
-            {/* Learning Goals Card */}
             <div ref={goalsContainerRef}>
                 <Card className="animate-card-v2 h-full bg-white/5 border border-orange-400/30 backdrop-blur-md shadow-xl hover:shadow-orange-500/30 transition-all duration-400 rounded-xl group hover:-translate-y-2">
                     <CardHeader className="p-7">
@@ -186,7 +176,7 @@ export default function AboutSectionV2() {
                     </CardHeader>
                     <CardContent className="p-7">
                         <ul className="space-y-4">
-                        {learningGoalsV2.map((goal, index) => (
+                        {(learningGoalsV2 || []).map((goal, index) => (
                              <li key={index} className="flex items-start gap-3 text-sm text-neutral-300">
                                <span className="text-orange-400 font-bold">&bull;</span> <span className="flex-1 leading-relaxed">{goal}</span>
                              </li>
@@ -195,8 +185,6 @@ export default function AboutSectionV2() {
                     </CardContent>
                 </Card>
             </div>
-
-            {/* Why Work With Me Card */}
             <div ref={whyWorkContainerRef}>
                  <Card className="animate-card-v2 h-full bg-white/5 border border-teal-400/30 backdrop-blur-md shadow-xl hover:shadow-teal-500/30 transition-all duration-400 rounded-xl group hover:-translate-y-2">
                     <CardHeader className="p-7">
@@ -207,7 +195,7 @@ export default function AboutSectionV2() {
                     </CardHeader>
                     <CardContent className="p-7">
                         <ul className="space-y-4">
-                        {whyWorkWithMeV2.map((reason, index) => (
+                        {(whyWorkWithMeV2 || []).map((reason, index) => (
                              <li key={index} className="flex items-start gap-3.5 text-sm text-neutral-300">
                                 <CheckCircle2 className="h-5 w-5 text-teal-400 mt-0.5 flex-shrink-0" strokeWidth={2}/>
                                 <span className="leading-relaxed">{reason}</span>

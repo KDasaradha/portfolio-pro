@@ -178,7 +178,7 @@ export default function SkillsSectionV2() {
           </div>
           <div className="w-full md:w-auto overflow-x-auto pb-2 custom-scrollbar-horizontal">
             <div className="flex flex-nowrap gap-3 min-w-max">
-              {categoriesV2.map(category => (
+              {(categoriesV2 || []).map(category => (
                 <Button
                   key={category} variant={selectedCategory === category ? "default" : "outline"}
                   size="sm" onClick={() => { setSelectedCategory(category); setVisibleCount(ITEMS_PER_PAGE_V2); setSearchTerm(''); }}
@@ -198,10 +198,10 @@ export default function SkillsSectionV2() {
         
         <TooltipProvider delayDuration={100}>
             <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10">
-              {allSkillsV2.map((skill) => {
+              {(allSkillsV2 || []).map((skill) => {
                 const levelInfo = getLevelIndicator(skill.level);
                 return (
-                <div key={skill.name} className="skill-card-v2" data-skill-name={skill.name} style={{ display: 'none' }}> {/* Initially hidden, GSAP controls */}
+                <div key={skill.name} className="skill-card-v2" data-skill-name={skill.name} style={{ display: 'none' }}> 
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Card className={cn(
@@ -295,5 +295,3 @@ export default function SkillsSectionV2() {
     </section>
   );
 }
-
-    

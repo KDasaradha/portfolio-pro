@@ -12,7 +12,6 @@ import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// V1 Data (can be imported or redefined if V2 needs different structuring)
 const contactDetailsV2 = [
   { icon: Mail, text: 'kdasaradha525@gmail.com', href: 'mailto:kdasaradha525@gmail.com', label: 'Email Me', type: 'Primary Contact' },
   { icon: PhoneCall, text: '+91 9032414439', href: 'tel:+919032414439', label: 'Call (India)', type: 'Secondary Contact' },
@@ -60,7 +59,6 @@ export default function ContactSectionV2() {
         </h2>
 
         <div ref={contentRef} className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-12">
-          {/* Contact Details Card */}
           <div className="lg:col-span-2 animate-contact-item">
             <Card className="h-full bg-neutral-800/50 border border-neutral-700 backdrop-blur-xl shadow-2xl rounded-2xl p-8 md:p-10 group hover:border-teal-500/60 transition-all duration-400 hover:shadow-teal-500/20">
               <CardHeader className="p-0 mb-8">
@@ -73,7 +71,7 @@ export default function ContactSectionV2() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0 space-y-8">
-                {contactDetailsV2.map((detail) => (
+                {(contactDetailsV2 || []).map((detail) => (
                   <div key={detail.text} className="flex items-start space-x-5 group/item">
                     <div className="mt-1 p-3 bg-teal-500/10 border border-teal-500/30 rounded-lg group-hover/item:scale-105 group-hover/item:shadow-lg group-hover/item:bg-teal-500/20 transition-all duration-300">
                          <detail.icon className="h-6 w-6 text-teal-400 flex-shrink-0" strokeWidth={1.75} />
@@ -99,7 +97,6 @@ export default function ContactSectionV2() {
             </Card>
           </div>
 
-          {/* Social & Resume Card */}
           <div className="animate-contact-item">
             <Card className="h-full bg-neutral-800/50 border border-neutral-700 backdrop-blur-xl shadow-2xl rounded-2xl p-8 md:p-10 group hover:border-purple-500/60 transition-all duration-400 hover:shadow-purple-500/20">
               <CardHeader className="p-0 mb-8">
@@ -115,7 +112,7 @@ export default function ContactSectionV2() {
                 <div>
                   <h3 className="text-lg font-semibold text-neutral-300 mb-5">Social Profiles:</h3>
                   <div className="flex flex-wrap gap-5">
-                    {socialLinksV2.map((link) => (
+                    {(socialLinksV2 || []).map((link) => (
                       <Link
                         key={link.name} href={link.href} target="_blank" rel="noopener noreferrer"
                         aria-label={`My ${link.name} profile`} data-cursor-interactive

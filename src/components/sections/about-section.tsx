@@ -96,10 +96,10 @@ export default function AboutSection() {
               </CardHeader>
               <CardContent>
                 <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-2 md:ml-3 space-y-12 md:space-y-16">
-                  {timeline.map((item, index) => (
+                  {(timeline || []).map((item, index) => (
                     <li key={index} className="ml-8 md:ml-10 lg:ml-12 group timeline-item">
                        <span className={cn(
-                           "absolute -left-[1.1rem] md:-left-5 -top-1.5", // Adjusted for new li margin
+                           "absolute -left-[1.1rem] md:-left-5 -top-1.5", 
                            "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent to-primary/80 ring-4 md:ring-[6px] ring-background text-accent-foreground font-bold text-xs md:text-sm transition-all duration-400 group-hover:scale-110 group-hover:shadow-lg shadow-md"
                        )}>
                          '{item.year.substring(2)}
@@ -126,7 +126,7 @@ export default function AboutSection() {
               </CardHeader>
               <CardContent className="p-5 md:p-7">
                 <ul className="space-y-6">
-                  {philosophyPoints.map((point, index) => (
+                  {(philosophyPoints || []).map((point, index) => (
                     <li key={index} className="flex items-start gap-4 md:gap-5">
                        <point.icon className="h-7 w-7 md:h-8 md:w-8 text-accent mt-0.5 flex-shrink-0" strokeWidth={1.75} />
                        <div>
@@ -146,7 +146,7 @@ export default function AboutSection() {
                 </CardHeader>
                 <CardContent className="p-5 md:p-7">
                     <ul className="space-y-3.5 md:space-y-4">
-                    {learningGoals.map((goal, index) => (
+                    {(learningGoals || []).map((goal, index) => (
                          <li key={index} className="flex items-center gap-2.5 md:gap-3 text-muted-foreground">
                            <span className="text-accent font-bold text-md md:text-lg">&rarr;</span> <span className="flex-1 text-sm md:text-base leading-relaxed">{goal}</span>
                          </li>
@@ -162,7 +162,7 @@ export default function AboutSection() {
                 </CardHeader>
                 <CardContent className="p-5 md:p-7">
                     <ul className="space-y-3.5 md:space-y-4">
-                    {whyWorkWithMe.map((reason, index) => (
+                    {(whyWorkWithMe || []).map((reason, index) => (
                          <li key={index} className="flex items-start gap-3 md:gap-3.5 text-muted-foreground">
                             <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-accent mt-0.5 md:mt-1 flex-shrink-0" strokeWidth={2}/>
                             <span className="text-sm md:text-base leading-relaxed">{reason}</span>
@@ -177,5 +177,3 @@ export default function AboutSection() {
     </section>
   );
 }
-
-    

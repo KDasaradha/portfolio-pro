@@ -15,7 +15,6 @@ import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// V1 Data (can be imported or redefined if V2 needs different structuring)
 interface ProjectV2 {
   id: number;
   title: string;
@@ -29,7 +28,7 @@ interface ProjectV2 {
   imageHints: string[];
   category: 'Web Application' | 'AI/ML' | 'ERP/Platform' | 'DevOps/Cloud';
   categoryIcon: React.ElementType;
-  mainImageColor?: string; // For gradient overlay
+  mainImageColor?: string; 
 }
 
 const projectsDataV2: ProjectV2[] = [
@@ -111,7 +110,6 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
         }
     );
     
-    // Parallax effect for image on card hover
     const imageElement = imageWrapperRef.current?.querySelector('img');
     if (imageElement) {
       const parallaxTl = gsap.timeline({ paused: true });
@@ -130,24 +128,24 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
   }, []);
 
   return (
-     <div ref={cardRef} className="project-card-v2 h-full opacity-0"> {/* Start with opacity 0 for GSAP */}
+     <div ref={cardRef} className="project-card-v2 h-full opacity-0"> 
         <Card className={cn(
             "h-full flex flex-col overflow-hidden bg-neutral-800/50 border border-neutral-700 backdrop-blur-xl shadow-2xl rounded-2xl transition-all duration-400 group",
             `hover:border-${project.mainImageColor?.replace('from-','')}/70 hover:shadow-[0_0_30px_-10px_var(--tw-shadow-color)]`,
-            project.mainImageColor?.replace('from-','shadow-') // For hover shadow color
+            project.mainImageColor?.replace('from-','shadow-') 
           )}
           style={{'--tw-shadow-color': project.mainImageColor ? `hsl(var(--${project.mainImageColor.split('-')[1]}-500))` : 'hsl(var(--primary))'} as React.CSSProperties}
         >
             <div ref={imageWrapperRef} className="relative w-full aspect-[16/9] overflow-hidden cursor-pointer">
                 <Image
-                    src={project.images[0]}
+                    src={(project.images && project.images.length > 0) ? project.images[0] : 'https://picsum.photos/800/450'}
                     alt={`${project.title} primary showcase`}
                     fill
                     style={{ objectFit: 'cover' }}
                     className="transition-all duration-500 ease-in-out group-hover:opacity-90"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     loading="lazy"
-                    data-ai-hint={project.imageHints[0]}
+                    data-ai-hint={(project.imageHints && project.imageHints.length > 0) ? project.imageHints[0] : 'project image'}
                 />
                 <div className={cn(
                     "absolute inset-0 bg-gradient-to-t to-transparent opacity-50 group-hover:opacity-30 transition-opacity duration-500",
@@ -165,7 +163,6 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
                                  <Eye className="mr-2 h-3.5 w-3.5 transition-transform duration-300 group-hover/button:scale-110" /> Quick View
                              </Button>
                          </DialogTrigger>
-                         {/* DialogContent identical to V1 for brevity, can be customized for V2 */}
                          <DialogContent className="sm:max-w-4xl max-h-[90vh] flex flex-col p-0 bg-neutral-900/95 backdrop-blur-2xl border border-neutral-700 shadow-2xl rounded-xl overflow-hidden text-neutral-200">
                             <DialogHeader className="p-6 border-b border-neutral-700/80 flex flex-row justify-between items-start sticky top-0 z-10 bg-neutral-900/80">
                                 <div>
@@ -183,9 +180,9 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
                             </DialogHeader>
                             <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-8 custom-scrollbar-v2">
                                 <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-xl mb-6 border border-neutral-700 bg-neutral-800/50">
-                                    <Image src={project.images[0]} alt={`${project.title} detail`} fill style={{ objectFit: 'contain' }} className="rounded-lg p-1" data-ai-hint={`${project.imageHints[0]} detail modal`} />
+                                    <Image src={(project.images && project.images.length > 0) ? project.images[0] : 'https://picsum.photos/800/450'} alt={`${project.title} detail`} fill style={{ objectFit: 'contain' }} className="rounded-lg p-1" data-ai-hint={`${(project.imageHints && project.imageHints.length > 0) ? project.imageHints[0] : 'project image'} detail modal`} />
                                 </div>
-                                <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-neutral-300 leading-relaxed space-y-3" dangerouslySetInnerHTML={{ __html: project.longDescription.replace(/\n/g, '<br />') }} />
+                                <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none text-neutral-300 leading-relaxed space-y-3" dangerouslySetInnerHTML={{ __html: (project.longDescription || '').replace(/\n/g, '<br />') }} />
                                 <div className={cn("bg-gradient-to-r p-5 rounded-lg border shadow-md", project.mainImageColor, "to-transparent border-neutral-700")}>
                                      <h4 className="text-lg font-semibold text-neutral-100 mb-1.5 flex items-center gap-2">
                                         <Info className="h-5 w-5"/> Key Result & Impact
@@ -195,7 +192,7 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
                                 <div>
                                     <h4 className="text-lg font-semibold text-neutral-100 mb-3">Core Technologies</h4>
                                     <div className="flex flex-wrap gap-2.5">
-                                    {project.techStack.map((tech) => (
+                                    {(project.techStack || []).map((tech) => (
                                         <Badge key={`modal-tech-v2-${tech}`} variant="secondary" className="bg-neutral-700/60 text-neutral-300 border-neutral-600 hover:bg-neutral-600/80 px-3 py-1 text-xs">{tech}</Badge>
                                     ))}
                                     </div>
@@ -226,10 +223,10 @@ const ProjectCardV2 = ({ project }: { project: ProjectV2 }) => {
                 <CardDescription className="text-sm text-neutral-300/80 leading-relaxed line-clamp-3">{project.shortDescription}</CardDescription>
                 
                 <div className="flex flex-wrap gap-2 pt-2">
-                    {project.techStack.slice(0, 5).map((tech) => ( // Show fewer initially
+                    {(project.techStack || []).slice(0, 5).map((tech) => ( 
                         <Badge key={tech} variant="secondary" className="bg-neutral-700/50 text-neutral-300 border-neutral-600/70 text-[0.7rem] px-2.5 py-1 transition-all duration-200 hover:bg-neutral-600/70">{tech}</Badge>
                     ))}
-                    {project.techStack.length > 5 && <Badge variant="outline" className="text-[0.7rem] px-2.5 py-1 border-dashed border-neutral-600 text-neutral-400">+{project.techStack.length - 5} more</Badge>}
+                    {project.techStack && project.techStack.length > 5 && <Badge variant="outline" className="text-[0.7rem] px-2.5 py-1 border-dashed border-neutral-600 text-neutral-400">+{project.techStack.length - 5} more</Badge>}
                 </div>
             </CardContent>
             <CardFooter className="p-6 pt-4 flex justify-end items-center border-t border-neutral-700/70">
@@ -266,7 +263,6 @@ export default function ProjectsSectionV2() {
                 opacity: 0, y: 100, skewY: 3, duration: 1.2, ease: 'power4.out',
                 scrollTrigger: { trigger: sectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
             });
-            // Individual card animations are handled within ProjectCardV2
         }, sectionRef);
         return () => ctx.revert();
     }, []);
@@ -284,7 +280,7 @@ export default function ProjectsSectionV2() {
         <div
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-12"
         >
-          {projectsDataV2.map((project) => (
+          {(projectsDataV2 || []).map((project) => (
             <ProjectCardV2 key={project.id} project={project} />
           ))}
         </div>

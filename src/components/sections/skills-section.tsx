@@ -1,11 +1,11 @@
 'use client';
 
-import { Card, CardContent } from "@/components/ui/card"; // Only need Card and CardContent
+import { Card, CardContent } from "@/components/ui/card"; 
 import {
   Server, Database, CodeXml, GitBranch, Wrench, PanelsTopLeft, Search,
   ChevronDown, ChevronUp, Cog, Cloud, BookOpen, Cpu, Paintbrush,
   DatabaseZap, ImageIcon, TerminalSquare, Palette, BrainCircuit, Layers,
-  TestTubeDiagonal, Package, Gauge, Link as LinkIcon, ShieldCheck, Users2 as Users // Renamed Users to Users2 to avoid conflict if needed, or check lucide-react docs
+  TestTubeDiagonal, Package, Gauge, Link as LinkIconLucide, Users as UsersIcon 
 } from 'lucide-react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
@@ -13,23 +13,21 @@ import { Input } from '@/components/ui/input';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from "@/lib/utils";
-import { Flip } from "gsap/Flip"; // Import Flip plugin
+import { Flip } from "gsap/Flip"; 
 
-gsap.registerPlugin(ScrollTrigger, Flip); // Register Flip plugin
+gsap.registerPlugin(ScrollTrigger, Flip); 
 
 interface Skill {
   name: string;
   icon: React.ElementType;
   category: string;
-  colorClass: string; // Tailwind color class for icon/hover hint
-  level: 'Proficient' | 'Experienced' | 'Familiar'; // Skill proficiency level
-  years?: number; // Optional: Years of experience
-  description?: string; // Optional: Short description
+  colorClass: string; 
+  level: 'Proficient' | 'Experienced' | 'Familiar'; 
+  years?: number; 
+  description?: string; 
 }
 
-// Enhanced and Re-categorized Skills List with refined descriptions
 const allSkills: Skill[] = [
-    // Core Languages & Paradigms
     { name: 'Python', icon: TerminalSquare, category: 'Languages & Core', colorClass: 'text-blue-500 border-blue-500/30 hover:bg-blue-500/10', level: 'Proficient', years: 4, description: 'Primary language for backend development, scripting, and automation.' },
     { name: 'SQL', icon: Database, category: 'Languages & Core', colorClass: 'text-indigo-500 border-indigo-500/30 hover:bg-indigo-500/10', level: 'Proficient', years: 3, description: 'Designing schemas, writing complex queries, and optimizing database performance.' },
     { name: 'JavaScript (ES6+)', icon: TerminalSquare, category: 'Languages & Core', colorClass: 'text-yellow-500 border-yellow-500/30 hover:bg-yellow-500/10', level: 'Experienced', years: 3, description: 'Frontend interactivity and asynchronous operations.' },
@@ -37,7 +35,6 @@ const allSkills: Skill[] = [
     { name: 'OOP Principles', icon: Layers, category: 'Languages & Core', colorClass: 'text-purple-500 border-purple-500/30 hover:bg-purple-500/10', level: 'Proficient', description: 'Applying object-oriented concepts for modular and maintainable code.'},
     { name: 'Java', icon: TerminalSquare, category: 'Languages & Core', colorClass: 'text-orange-500 border-orange-500/30 hover:bg-orange-500/10', level: 'Familiar', years: 1, description: 'Foundation in enterprise-level development from internship experience.' },
 
-    // Backend Frameworks & Libraries
     { name: 'FastAPI', icon: Server, category: 'Backend', colorClass: 'text-teal-500 border-teal-500/30 hover:bg-teal-500/10', level: 'Proficient', years: 3, description: 'Building high-performance, asynchronous APIs with modern Python features.' },
     { name: 'SQLAlchemy (ORM)', icon: DatabaseZap, category: 'Backend', colorClass: 'text-red-500 border-red-500/30 hover:bg-red-500/10', level: 'Proficient', years: 3, description: 'Efficient database interaction and object-relational mapping.' },
     { name: 'Pydantic', icon: ShieldCheck, category: 'Backend', colorClass: 'text-rose-500 border-rose-500/30 hover:bg-rose-500/10', level: 'Proficient', description: 'Data validation and settings management in Python applications.' },
@@ -45,7 +42,6 @@ const allSkills: Skill[] = [
     { name: 'Celery', icon: Cpu, category: 'Backend', colorClass: 'text-green-600 border-green-600/30 hover:bg-green-600/10', level: 'Experienced', description: 'Implementing distributed task queues for background processing.' },
     { name: 'Asyncio', icon: Cpu, category: 'Backend', colorClass: 'text-indigo-600 border-indigo-600/30 hover:bg-indigo-600/10', level: 'Experienced', description: 'Writing concurrent code using async/await syntax in Python.' },
 
-    // Frontend Technologies
     { name: 'React', icon: PanelsTopLeft, category: 'Frontend', colorClass: 'text-sky-500 border-sky-500/30 hover:bg-sky-500/10', level: 'Experienced', years: 2, description: 'Building dynamic and interactive user interfaces.' },
     { name: 'Next.js', icon: PanelsTopLeft, category: 'Frontend', colorClass: 'text-black dark:text-white border-gray-500/30 hover:bg-gray-500/10', level: 'Experienced', years: 2, description: 'Developing server-rendered React applications with enhanced performance.' },
     { name: 'HTML5', icon: CodeXml, category: 'Frontend', colorClass: 'text-orange-600 border-orange-600/30 hover:bg-orange-600/10', level: 'Proficient', description: 'Structuring web content semantically.' },
@@ -55,13 +51,11 @@ const allSkills: Skill[] = [
     { name: 'Fabric.js', icon: Paintbrush, category: 'Frontend', colorClass: 'text-green-600 border-green-600/30 hover:bg-green-600/10', level: 'Experienced', description: 'Interactive object model on top of HTML5 canvas.' },
     { name: 'GSAP', icon: Cpu, category: 'Frontend', colorClass: 'text-green-500 border-green-500/30 hover:bg-green-500/10', level: 'Experienced', description: 'Creating high-performance animations for the web.' },
 
-    // Databases & Data Management
     { name: 'PostgreSQL', icon: Database, category: 'Databases', colorClass: 'text-blue-700 border-blue-700/30 hover:bg-blue-700/10', level: 'Proficient', years: 3, description: 'Robust relational database management for complex applications.' },
     { name: 'MySQL', icon: Database, category: 'Databases', colorClass: 'text-orange-700 border-orange-700/30 hover:bg-orange-700/10', level: 'Experienced', years: 2, description: 'Widely-used relational database for various web applications.' },
     { name: 'Alembic', icon: DatabaseZap, category: 'Databases', colorClass: 'text-lime-500 border-lime-500/30 hover:bg-lime-500/10', level: 'Experienced', description: 'Handling database schema migrations in SQLAlchemy.' },
     { name: 'Redis', icon: DatabaseZap, category: 'Databases', colorClass: 'text-red-600 border-red-600/30 hover:bg-red-600/10', level: 'Familiar', description: 'In-memory data structure store for caching and message brokering.' },
 
-    // DevOps, Cloud & Infrastructure
     { name: 'Docker', icon: Package, category: 'DevOps & Cloud', colorClass: 'text-blue-400 border-blue-400/30 hover:bg-blue-400/10', level: 'Proficient', years: 2, description: 'Containerizing applications for consistent deployment environments.' },
     { name: 'AWS (EC2, S3, VPC, RDS, Lambda)', icon: Cloud, category: 'DevOps & Cloud', colorClass: 'text-orange-400 border-orange-400/30 hover:bg-orange-400/10', level: 'Experienced', years: 2, description: 'Utilizing core AWS services for scalable cloud infrastructure.' },
     { name: 'CI/CD Pipelines', icon: Wrench, category: 'DevOps & Cloud', colorClass: 'text-purple-500 border-purple-500/30 hover:bg-purple-500/10', level: 'Proficient', description: 'Automating build, test, and deployment processes.' },
@@ -70,38 +64,32 @@ const allSkills: Skill[] = [
     { name: 'GitHub Actions', icon: Cog, category: 'DevOps & Cloud', colorClass: 'text-black dark:text-white border-gray-700/30 hover:bg-gray-700/10', level: 'Experienced', description: 'Automating workflows directly within GitHub repositories.' },
     { name: 'Terraform', icon: Layers, category: 'DevOps & Cloud', colorClass: 'text-purple-600 border-purple-600/30 hover:bg-purple-600/10', level: 'Familiar', description: 'Infrastructure as Code tool for managing cloud resources.' },
 
-    // APIs, Architecture & Design Patterns
-    { name: 'RESTful APIs', icon: LinkIcon, category: 'Architecture & APIs', colorClass: 'text-indigo-500 border-indigo-500/30 hover:bg-indigo-500/10', level: 'Proficient', description: 'Designing and implementing scalable and maintainable web APIs.' },
+    { name: 'RESTful APIs', icon: LinkIconLucide, category: 'Architecture & APIs', colorClass: 'text-indigo-500 border-indigo-500/30 hover:bg-indigo-500/10', level: 'Proficient', description: 'Designing and implementing scalable and maintainable web APIs.' },
     { name: 'Microservices Architecture', icon: Layers, category: 'Architecture & APIs', colorClass: 'text-cyan-600 border-cyan-600/30 hover:bg-cyan-600/10', level: 'Experienced', description: 'Building applications as a suite of small, independent services.' },
     { name: 'Design Patterns (SOLID, etc.)', icon: Layers, category: 'Architecture & APIs', colorClass: 'text-blue-500 border-blue-500/30 hover:bg-blue-500/10', level: 'Experienced', description: 'Applying established solutions to common software design problems.' },
-    { name: 'WebSockets', icon: LinkIcon, category: 'Architecture & APIs', colorClass: 'text-pink-500 border-pink-500/30 hover:bg-pink-500/10', level: 'Experienced', description: 'Enabling real-time, bidirectional communication channels.' },
+    { name: 'WebSockets', icon: LinkIconLucide, category: 'Architecture & APIs', colorClass: 'text-pink-500 border-pink-500/30 hover:bg-pink-500/10', level: 'Experienced', description: 'Enabling real-time, bidirectional communication channels.' },
     { name: 'Swagger/OpenAPI', icon: BookOpen, category: 'Architecture & APIs', colorClass: 'text-green-400 border-green-400/30 hover:bg-green-400/10', level: 'Proficient', description: 'Standard for documenting and describing RESTful APIs.' },
     { name: 'JWT Authentication', icon: ShieldCheck, category: 'Architecture & APIs', colorClass: 'text-red-400 border-red-400/30 hover:bg-red-400/10', level: 'Proficient', description: 'Implementing secure token-based authentication mechanisms.'},
 
-    // Data Processing & AI/ML
     { name: 'Web Scraping (Requests, BeautifulSoup)', icon: DatabaseZap, category: 'Data & AI', colorClass: 'text-cyan-500 border-cyan-500/30 hover:bg-cyan-500/10', level: 'Experienced', description: 'Extracting data from websites for analysis and integration.' },
     { name: 'Pillow', icon: ImageIcon, category: 'Data & AI', colorClass: 'text-purple-500 border-purple-500/30 hover:bg-purple-500/10', level: 'Experienced', description: 'Python Imaging Library for image manipulation tasks.' },
     { name: 'OpenCV', icon: ImageIcon, category: 'Data & AI', colorClass: 'text-yellow-600 border-yellow-600/30 hover:bg-yellow-600/10', level: 'Experienced', description: 'Library for real-time computer vision and image processing.' },
     { name: 'Genkit (Google AI)', icon: BrainCircuit, category: 'Data & AI', colorClass: 'text-purple-600 border-purple-600/30 hover:bg-purple-600/10', level: 'Experienced', description: 'Developing AI-powered features using Google\'s generative models.' },
     { name: 'LLM Integration (Gemini)', icon: BrainCircuit, category: 'Data & AI', colorClass: 'text-violet-500 border-violet-500/30 hover:bg-violet-500/10', level: 'Familiar', description: 'Integrating large language models for various application features.' },
 
-    // Testing & Quality Assurance
     { name: 'Pytest', icon: TestTubeDiagonal, category: 'Testing & QA', colorClass: 'text-green-700 border-green-700/30 hover:bg-green-700/10', level: 'Experienced', description: 'Writing effective unit and integration tests for Python code.' },
     { name: 'Unit Testing', icon: TestTubeDiagonal, category: 'Testing & QA', colorClass: 'text-lime-600 border-lime-600/30 hover:bg-lime-600/10', level: 'Proficient', description: 'Verifying individual components of the software work correctly.' },
     { name: 'Integration Testing', icon: TestTubeDiagonal, category: 'Testing & QA', colorClass: 'text-emerald-600 border-emerald-600/30 hover:bg-emerald-600/10', level: 'Experienced', description: 'Testing the interaction between different software modules.' },
     { name: 'Code Quality Tools (SonarQube)', icon: Wrench, category: 'Testing & QA', colorClass: 'text-cyan-600 border-cyan-600/30 hover:bg-cyan-600/10', level: 'Familiar', description: 'Using static analysis tools to improve code quality and find bugs.' },
     { name: 'Security Scanning (Snyk)', icon: ShieldCheck, category: 'Testing & QA', colorClass: 'text-purple-600 border-purple-600/30 hover:bg-purple-600/10', level: 'Familiar', description: 'Identifying security vulnerabilities in code and dependencies.' },
 
-    // Tools & Methodologies
     { name: 'Git & GitHub', icon: GitBranch, category: 'Tools & Methodologies', colorClass: 'text-black dark:text-white border-gray-500/30 hover:bg-gray-500/10', level: 'Proficient', description: 'Version control and collaborative development workflow.' },
-    { name: 'Agile/Scrum', icon: Users, category: 'Tools & Methodologies', colorClass: 'text-blue-500 border-blue-500/30 hover:bg-blue-500/10', level: 'Experienced', description: 'Working effectively in iterative and collaborative development environments.' },
+    { name: 'Agile/Scrum', icon: UsersIcon, category: 'Tools & Methodologies', colorClass: 'text-blue-500 border-blue-500/30 hover:bg-blue-500/10', level: 'Experienced', description: 'Working effectively in iterative and collaborative development environments.' },
     { name: 'Jira/Confluence', icon: Wrench, category: 'Tools & Methodologies', colorClass: 'text-blue-600 border-blue-600/30 hover:bg-blue-600/10', level: 'Experienced', description: 'Project tracking, issue management, and documentation.' },
     { name: 'MkDocs', icon: BookOpen, category: 'Tools & Methodologies', colorClass: 'text-indigo-400 border-indigo-400/30 hover:bg-indigo-400/10', level: 'Experienced', description: 'Generating project documentation from Markdown files.' },
     { name: 'Performance Monitoring (Basic)', icon: Gauge, category: 'Tools & Methodologies', colorClass: 'text-orange-500 border-orange-500/30 hover:bg-orange-500/10', level: 'Familiar', description: 'Understanding and analyzing application performance metrics.' },
 ];
 
-
-// Define explicit order for categories
 const categoryOrder = [
   'All',
   'Languages & Core',
@@ -115,10 +103,9 @@ const categoryOrder = [
   'Tools & Methodologies',
 ];
 
-// Derive categories from the ordered list
 const categories = categoryOrder;
 
-const ITEMS_PER_PAGE = 24; // Increased items per page
+const ITEMS_PER_PAGE = 24; 
 
 export default function SkillsSection() {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -127,9 +114,8 @@ export default function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLHeadingElement>(null); // Ref for header
+  const headerRef = useRef<HTMLHeadingElement>(null); 
 
-  // Memoize filtered skills for performance
   const filteredSkills = useMemo(() => {
     return allSkills.filter(skill =>
       (selectedCategory === 'All' || skill.category === selectedCategory) &&
@@ -143,7 +129,6 @@ export default function SkillsSection() {
 
   const showLess = () => {
     setVisibleCount(ITEMS_PER_PAGE);
-    // Smooth scroll towards the top of the grid, slightly offset
     const gridTop = gridRef.current?.offsetTop;
     if (gridTop) {
       gsap.to(window, { duration: 0.8, scrollTo: { y: gridTop - 100, autoKill: false }, ease: 'power2.inOut' });
@@ -152,7 +137,6 @@ export default function SkillsSection() {
 
    useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate section header
              gsap.from(headerRef.current, {
                 opacity: 0,
                 y: 70,
@@ -161,11 +145,10 @@ export default function SkillsSection() {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 85%",
-                    toggleActions: "play none none reset", // Play once on enter
+                    toggleActions: "play none none reset", 
                 }
             });
 
-            // Animate filters (staggered fade-in)
              gsap.from(filtersRef.current?.children || [], {
                  opacity: 0,
                  y: 50,
@@ -176,7 +159,7 @@ export default function SkillsSection() {
                  scrollTrigger: {
                     trigger: filtersRef.current,
                     start: "top 88%",
-                    toggleActions: "play none none reset", // Play once on enter
+                    toggleActions: "play none none reset", 
                  }
              });
 
@@ -185,25 +168,20 @@ export default function SkillsSection() {
         return () => ctx.revert();
    }, []);
 
-    // GSAP animation for skill cards appearance, filtering, and reordering
     useEffect(() => {
         if (!gridRef.current) return;
 
         const cards = Array.from(gridRef.current.querySelectorAll<HTMLDivElement>('.skill-card'));
+        const state = Flip.getState(cards); 
 
-        // Use FLIP animation technique for smooth transitions during filtering/loading
-        const state = Flip.getState(cards); // Get initial state
-
-        // Update visibility and order based on filteredSkills and visibleCount
         cards.forEach(card => {
             const skillName = card.dataset.skillName;
             const skillIndex = filteredSkills.findIndex(s => s.name === skillName);
             const isVisible = skillIndex !== -1 && skillIndex < visibleCount;
 
-            // Apply initial hide/show (GSAP will handle the animation)
             gsap.set(card, { display: isVisible ? 'flex' : 'none' });
              if (isVisible) {
-                 gsap.set(card, { order: skillIndex }); // Ensure correct order
+                 gsap.set(card, { order: skillIndex }); 
              }
         });
 
@@ -217,7 +195,7 @@ export default function SkillsSection() {
              onLeave: elements => gsap.to(elements, {opacity: 0, scale: 0.9, y: -20, duration: 0.4})
         });
 
-    }, [filteredSkills, visibleCount]); // Depend on filteredSkills and visibleCount
+    }, [filteredSkills, visibleCount]); 
 
 
   return (
@@ -230,10 +208,7 @@ export default function SkillsSection() {
         >
           Technical Proficiency & Toolkit
         </h2>
-
-        {/* Filters Container */}
         <div ref={filtersRef} className="mb-14 flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
-             {/* Search Input */}
              <div className="relative w-full md:w-96">
                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none z-10" />
                  <Input
@@ -249,10 +224,9 @@ export default function SkillsSection() {
                     data-cursor-interactive
                  />
              </div>
-             {/* Category Buttons - Scrollable */}
              <div className="w-full md:w-auto overflow-x-auto pb-2.5 custom-scrollbar-horizontal">
                  <div className="flex flex-nowrap justify-start md:justify-center gap-3 min-w-max px-1">
-                    {categories.map(category => (
+                    {(categories || []).map(category => (
                     <Button
                         key={category}
                         variant={selectedCategory === category ? 'default' : 'outline'}
@@ -276,28 +250,24 @@ export default function SkillsSection() {
                  </div>
              </div>
         </div>
-
-        {/* Skills Grid */}
         <div
             ref={gridRef}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 md:gap-7"
         >
-          {/* Render all skills initially, visibility controlled by GSAP */}
-          {allSkills.map((skill) => (
+          {(allSkills || []).map((skill) => (
               <div key={skill.name} className="skill-card flex" data-skill-name={skill.name}>
                   <Card className={cn(
-                          "flex flex-col items-center justify-center p-5 text-center transition-all duration-300 ease-out border bg-card/85 backdrop-blur-lg rounded-xl shadow-sm cursor-pointer w-full aspect-square group", // Reduced padding slightly
+                          "flex flex-col items-center justify-center p-5 text-center transition-all duration-300 ease-out border bg-card/85 backdrop-blur-lg rounded-xl shadow-sm cursor-pointer w-full aspect-square group", 
                           "hover:shadow-xl hover:-translate-y-2 hover:scale-[1.04]",
                           "border-transparent hover:border-accent/60",
-                          skill.colorClass // Apply category color hint for background/border on hover
+                          skill.colorClass 
                       )}
                       data-cursor-interactive
-                      title={`${skill.name} - ${skill.level}${skill.years ? ` (${skill.years} yrs)` : ''}${skill.description ? `\n${skill.description}` : ''}`} // Enhanced tooltip
+                      title={`${skill.name} - ${skill.level}${skill.years ? ` (${skill.years} yrs)` : ''}${skill.description ? `\n${skill.description}` : ''}`} 
                   >
                       <CardContent className="flex flex-col items-center justify-center p-0 flex-grow">
                            <skill.icon className={cn("h-10 w-10 sm:h-11 w-11 mb-3 flex-shrink-0 transition-transform duration-300 group-hover:scale-110", skill.colorClass.split(' ')[0])} strokeWidth={1.5} />
-                          <span className="text-sm sm:text-[0.95rem] font-medium text-card-foreground leading-tight line-clamp-2">{skill.name}</span> {/* Allow two lines */}
-                           {/* Level Indicator */}
+                          <span className="text-sm sm:text-[0.95rem] font-medium text-card-foreground leading-tight line-clamp-2">{skill.name}</span> 
                            <span className={cn(
                                "text-xs mt-1.5 px-1.5 py-0.5 rounded opacity-90",
                                skill.level === 'Proficient' ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' :
@@ -311,8 +281,6 @@ export default function SkillsSection() {
               </div>
           ))}
         </div>
-
-        {/* Feedback for No Results */}
         {filteredSkills.length === 0 && (
              <div className="text-center text-muted-foreground mt-20 py-10 border border-dashed border-border/50 rounded-lg bg-muted/20">
                  <p className="text-lg mb-2">No skills found matching your criteria.</p>
@@ -320,8 +288,6 @@ export default function SkillsSection() {
                  {!searchTerm && selectedCategory !== 'All' && <p className="text-sm">Try the 'All' category or searching.</p>}
             </div>
         )}
-
-        {/* Load More / Show Less Buttons */}
         <div className="mt-20 text-center space-x-5">
             {filteredSkills.length > visibleCount && (
                 <Button onClick={loadMore} variant="outline" className="group border-primary/60 hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-300 px-6 py-3 text-base" data-cursor-interactive>
@@ -335,7 +301,6 @@ export default function SkillsSection() {
             )}
         </div>
       </div>
-       {/* Add pattern style */}
        <style jsx>{`
         .pattern-circuit-board {
             background-image: linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
@@ -345,21 +310,20 @@ export default function SkillsSection() {
             background-image: linear-gradient(hsl(var(--foreground) / 0.05) 1px, transparent 1px), linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
         }
         .custom-scrollbar-horizontal::-webkit-scrollbar {
-            height: 6px; /* Adjust height */
+            height: 6px; 
         }
         .custom-scrollbar-horizontal::-webkit-scrollbar-track {
-            background: hsl(var(--muted) / 0.5); /* Track background */
+            background: hsl(var(--muted) / 0.5); 
             border-radius: 10px;
         }
         .custom-scrollbar-horizontal::-webkit-scrollbar-thumb {
-            background: hsl(var(--accent) / 0.6); /* Thumb color */
+            background: hsl(var(--accent) / 0.6); 
             border-radius: 10px;
-            border: 1px solid hsl(var(--muted) / 0.5); /* Creates padding around thumb */
+            border: 1px solid hsl(var(--muted) / 0.5); 
         }
         .custom-scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
-            background: hsl(var(--accent) / 0.8); /* Thumb hover color */
+            background: hsl(var(--accent) / 0.8); 
         }
-        /* Firefox scrollbar */
         .custom-scrollbar-horizontal {
            scrollbar-width: thin;
            scrollbar-color: hsl(var(--accent) / 0.6) hsl(var(--muted) / 0.5);
