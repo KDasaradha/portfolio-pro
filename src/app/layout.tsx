@@ -44,9 +44,9 @@ export const metadata: Metadata = {
     images: ['/twitter-image-portfolio-pro.png'], 
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png', 
-    shortcut: '/favicon-32x32.png',
+    icon: '/favicon.ico', // Main favicon
+    shortcut: '/favicon-32x32.png', // For older browsers
+    apple: '/apple-touch-icon.png', // For Apple devices
   },
   manifest: '/site.webmanifest', 
   robots: {
@@ -72,28 +72,51 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* Apply font variables directly from the imported objects */}
       <body className={`${GeistSans.variable} ${GeistMono.variable} font-sans antialiased`}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="dark" 
-            enableSystem
-            disableTransitionOnChange={false} 
+            defaultTheme="dark" // Set dark as default
+            enableSystem={true} // Allow system preference to override if not set
+            disableTransitionOnChange={false} // Keep true for smoother transitions, set false if issues
         >
           <VersionProvider>
             <SmoothScrollProvider>
               <GsapProvider>
-                <div className="flex flex-col min-h-screen bg-background text-foreground site-wrapper pattern-grid selection:bg-accent selection:text-accent-foreground">
+                <div className="flex flex-col min-h-screen bg-background text-foreground site-wrapper pattern-grid selection:bg-accent selection:text-accent-foreground overflow-x-hidden"> {/* Added overflow-x-hidden */}
                     <Header />
-                    <main className="flex-grow pt-20 md:pt-24 lg:pt-28 relative z-10"> 
+                    {/* Adjust main content padding based on header height, typically h-16 or h-20 */}
+                    <main className="flex-grow pt-16 md:pt-20 relative z-10"> 
                       {children}
                     </main>
                     <Footer />
                 </div>
                 <Toaster />
                 <CustomCursor />
-                <div className="fixed inset-0 -z-20 opacity-10 dark:opacity-[0.15] overflow-hidden">
-                   <div className="blob opacity-50 dark:opacity-60 -z-10" style={{ animationDuration: '45s, 35s', width:'70vw', height:'70vw', top: '10%', left: '10%', background: 'radial-gradient(circle, hsl(var(--accent)/0.15) 0%, hsl(var(--primary)/0.05) 100%)', filter: 'blur(150px)'}} />
-                   <div className="blob opacity-40 dark:opacity-50 -z-10" style={{ animationDuration: '55s, 40s', width:'60vw', height:'60vw', top: '60%', left: '50%', background: 'radial-gradient(circle, hsl(var(--primary)/0.1) 0%, hsl(var(--accent)/0.1) 100%)', filter: 'blur(160px)'}} />
+                 {/* Enhanced Background Blobs - More subtle and layered */}
+                 <div className="fixed inset-0 -z-20 opacity-10 dark:opacity-[0.12] overflow-hidden pointer-events-none">
+                   <div 
+                     className="blob opacity-50 dark:opacity-60 -z-10" 
+                     style={{ 
+                       animationDuration: '50s, 38s', // Slower, more varied
+                       width:'clamp(300px, 75vw, 900px)', // Responsive size
+                       height:'clamp(300px, 75vw, 900px)',
+                       top: '5%', left: '5%', // Different positions
+                       background: 'radial-gradient(circle, hsl(var(--accent)/0.12) 0%, hsl(var(--primary)/0.04) 100%)', // More subtle gradient
+                       filter: 'blur(160px)' // More blur
+                     }} 
+                   />
+                   <div 
+                     className="blob opacity-40 dark:opacity-50 -z-10" 
+                     style={{ 
+                       animationDuration: '60s, 42s', // Slower, more varied
+                       width:'clamp(250px, 65vw, 800px)', 
+                       height:'clamp(250px, 65vw, 800px)',
+                       top: '55%', left: '60%', // Different positions
+                       background: 'radial-gradient(circle, hsl(var(--primary)/0.08) 0%, hsl(var(--accent)/0.08) 100%)',
+                       filter: 'blur(170px)' 
+                     }} 
+                   />
                 </div>
               </GsapProvider>
             </SmoothScrollProvider>

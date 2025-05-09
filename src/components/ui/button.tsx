@@ -42,21 +42,13 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, children, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    // Ensure children are wrapped correctly if asChild is true and children is an array (e.g. icon + text)
-    // However, Radix Slot handles this internally by expecting a single child.
-    // If asChild is true, the immediate child of Button (e.g., <a>) will receive the props.
-    // If that child itself has multiple children (icon + text), it's fine.
-    // The error "React.Children.only expected to receive a single React element child"
-    // usually occurs if <Slot> itself is passed multiple direct children.
-    // The way it's used with an <a> tag containing an icon and text is typically fine.
-    // The key is that the direct child passed to <Comp> (which is <Slot> when asChild is true) must be a single element.
-    // If 'children' passed to Button is an array when asChild=true, that's the problem.
-    // But usually, it's <Button asChild><a ...><Icon/> Text</a></Button> - here <a> is the single child of Slot.
     
-    // The previous fix attempt of wrapping `children` in `React.Fragment` when `asChild` is true
-    // and `children` is an array might be incorrect. `Slot` expects its direct child
-    // to be the one that receives the props.
-    // If `Comp` is `Slot`, then `children` should be a single React element that `Slot` can clone.
+    // If asChild is true and children is an array (e.g. icon + text),
+    // wrap them in a React.Fragment to ensure Slot receives a single child.
+    // This addresses the "React.Children.only expected to receive a single React element child" error.
+    const renderableChildren = (asChild && Array.isArray(children)) 
+        ? <React.Fragment>{children}</React.Fragment> 
+        : children;
 
     return (
       <Comp
@@ -64,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {children}
+        {renderableChildren}
       </Comp>
     )
   }
