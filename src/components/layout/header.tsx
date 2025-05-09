@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import { Menu, Moon, Sun, Code, X as CloseIcon, Settings2 } from 'lucide-react'; // Changed Code to Settings2 for logo
+import { Menu, Moon, Sun, Settings2 as LogoIcon, X as CloseIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from '@/lib/utils';
 import VersionToggle from './version-toggle';
-import { useVersion } from '@/context/version-context'; // Import useVersion
+import { useVersion } from '@/context/version-context';
+import React from 'react'; // Ensure React is imported
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,14 +29,14 @@ const navItemsV1 = [
 ];
 
 const navItemsV2 = [
-  { name: 'Intro', href: '#home-v2' }, // V2 specific home
+  { name: 'Intro', href: '#home-v2' },
   ...navItemsBase.map(item => ({ ...item, name: item.name === 'Summary' ? 'AI Assist' : (item.name === 'Contact' ? 'Reach Out' : item.name), href: `${item.hrefBase}-v2` }))
 ];
 
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
-  const { version } = useVersion(); // Get current version
+  const { version } = useVersion();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeHash, setActiveHash] = useState('');
   const headerRef = useRef<HTMLElement>(null);
@@ -45,36 +46,38 @@ export default function Header() {
   const currentNavItems = version === 'v2' ? navItemsV2 : navItemsV1;
   const homeHref = version === 'v2' ? '#home-v2' : '#home';
 
-
   useEffect(() => {
     const headerElement = headerRef.current;
     if (!headerElement) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(headerElement,
-        { yPercent: -120, autoAlpha: 0 }, // Start further up
-        { yPercent: 0, autoAlpha: 1, duration: 1, ease: 'expo.out', delay: 0.6 } // Smoother ease and longer duration
+        { yPercent: -110, autoAlpha: 0 },
+        { yPercent: 0, autoAlpha: 1, duration: 1.2, ease: 'expo.out', delay: 0.5 }
       );
 
       ScrollTrigger.create({
-        start: 'top+=50 top', // Trigger slightly later
+        start: 'top top-=60px', // Trigger when top of viewport is 60px below header's initial top
         end: 99999,
-        toggleClass: { targets: headerElement, className: "is-scrolled" }, // Use a class for scrolled state
-        onEnter: () => headerElement.classList.add('shadow-xl', 'bg-background/90', 'backdrop-blur-xl'),
-        onLeaveBack: () => headerElement.classList.remove('shadow-xl', 'bg-background/90', 'backdrop-blur-xl'),
+        onUpdate: (self) => {
+            if (self.direction === -1 && self.scroll() < 50) { // Scrolling up towards top
+                 headerElement.classList.remove('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl');
+            } else if (self.direction === 1 && self.scroll() > 50) { // Scrolling down away from top
+                 headerElement.classList.add('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl');
+            }
+        },
       });
       
       const sections = currentNavItems.map(item => document.querySelector(item.href)).filter(Boolean) as HTMLElement[];
 
       function updateActiveLink() {
-        let currentSectionId = version === 'v2' ? '#home-v2' : '#home'; // Default to current version's home
-        const headerHeight = headerElement?.offsetHeight ?? 80; // Default to 80 if not available
-        
+        let currentSectionId = version === 'v2' ? '#home-v2' : '#home';
+        const headerHeight = headerElement?.offsetHeight ?? 70; // Default to 70
+        const threshold = window.innerHeight * 0.4; // 40% of viewport height as threshold
+
         for (const section of sections) {
             const sectionTop = section.getBoundingClientRect().top;
-            // A section is active if its top is within a range from header bottom to mid-viewport
-            // Adjusted threshold for better accuracy, especially with larger header offsets
-            if (sectionTop <= headerHeight + 100 && section.getBoundingClientRect().bottom > headerHeight + 50) {
+            if (sectionTop < threshold && section.getBoundingClientRect().bottom > headerHeight) {
               currentSectionId = `#${section.id}`;
               break; 
             }
@@ -90,30 +93,30 @@ export default function Header() {
     }, headerRef);
 
     return () => ctx.revert();
-  }, [currentNavItems, version]); // Add version to dependencies
+  }, [currentNavItems, version]);
 
 
   useEffect(() => {
     const activeLinkIndex = currentNavItems.findIndex(item => item.href === activeHash);
     const activeLinkElement = navLinksRef.current[activeLinkIndex];
+    const indicator = indicatorRef.current;
 
-    if (activeLinkElement && indicatorRef.current && activeLinkElement.offsetParent !== null) {
-      const linkRect = activeLinkElement.getBoundingClientRect();
-      // Get parent NAV's bounding rect to calculate relative position accurately
+    if (activeLinkElement && indicator && activeLinkElement.offsetParent !== null) {
       const navElement = activeLinkElement.closest('nav');
-      const navRect = navElement?.getBoundingClientRect();
-
-      if (navRect) {
-        gsap.to(indicatorRef.current, {
-          x: linkRect.left - navRect.left + (linkRect.width / 2), // Centered under the link
-          width: linkRect.width * 0.8, // Indicator width relative to link
+      if (navElement) {
+        const linkRect = activeLinkElement.getBoundingClientRect();
+        const navRect = navElement.getBoundingClientRect();
+        
+        gsap.to(indicator, {
+          x: linkRect.left - navRect.left + (linkRect.width / 2), // Center under the link text
+          width: linkRect.width * 0.7, // Indicator relative to text width
           opacity: 1,
-          duration: 0.5,
+          duration: 0.45,
           ease: 'expo.out',
         });
       }
-    } else if (indicatorRef.current) {
-         gsap.to(indicatorRef.current, { width: 0, opacity: 0, duration: 0.4, ease: 'expo.out' });
+    } else if (indicator) {
+         gsap.to(indicator, { width: 0, opacity: 0, duration: 0.35, ease: 'expo.out' });
     }
   }, [activeHash, currentNavItems]);
 
@@ -129,81 +132,93 @@ export default function Header() {
     if (href.startsWith('#')) {
       const targetElement = document.querySelector<HTMLElement>(href);
       if (targetElement) {
-        const headerOffset = (headerRef.current?.offsetHeight || 80) + 20; // Adjusted offset
-        const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-        const offsetPosition = elementPosition - headerOffset;
-
+        const headerOffset = (headerRef.current?.offsetHeight || 70) + (version === 'v2' ? 30 : 20); // Adjusted offset
+        
         gsap.to(window, {
-          scrollTo: { y: offsetPosition, autoKill:true }, // autoKill can be true
-          duration: 1.5, 
-          ease: 'power4.inOut', // More pronounced ease
+          scrollTo: { y: targetElement, offsetY: headerOffset, autoKill:true },
+          duration: 1.6, 
+          ease: 'power3.inOut',
         });
         
         if (history.pushState) {
-           history.pushState(null, '', href);
+           history.pushState(null, null, href);
         } else {
            window.location.hash = href;
         }
         setActiveHash(href); 
       }
     } else if (href.startsWith('/')) {
-       window.location.href = href;
+       window.location.href = href; // For external or non-hash links
     }
   };
+  
+  const headerBaseClasses = "fixed top-0 left-0 z-[100] w-full transition-all duration-300 ease-in-out";
+  const headerInitialClasses = "border-b border-transparent bg-transparent";
+  const headerScrolledClasses = "shadow-xl bg-background/80 dark:bg-neutral-900/80 backdrop-blur-xl border-border/30 dark:border-neutral-700/50";
+
 
   return (
     <header
       ref={headerRef}
-      className="fixed top-0 z-[100] w-full border-b border-transparent bg-background/80 supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out shadow-sm" 
-      // Initial state, 'is-scrolled' class will add more pronounced shadow and blur
+      className={cn(headerBaseClasses, headerInitialClasses)}
     >
-      <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4 md:px-6 relative">
-        <Link href={homeHref} className="flex items-center space-x-2.5 mr-6 group shrink-0" aria-label="Portfolio Pro Home" onClick={(e) => handleLinkClick(e, homeHref)}>
-           <Settings2 className="h-7 w-7 md:h-8 md:w-8 text-accent transition-all duration-700 ease-out group-hover:rotate-[45deg] group-hover:scale-110" /> {/* Changed Icon */}
-          <span className="font-black text-xl md:text-2xl gradient-text transition-opacity duration-300 group-hover:opacity-85">PortfolioPro</span>
+      <div className="container mx-auto flex h-16 md:h-[72px] items-center justify-between px-4 sm:px-6 relative">
+        <Link href={homeHref} className="flex items-center gap-2.5 group shrink-0" aria-label="Portfolio Pro Home" onClick={(e) => handleLinkClick(e, homeHref)}>
+           <LogoIcon className={cn(
+               "h-7 w-7 md:h-8 md:w-8 transition-all duration-700 ease-out group-hover:rotate-[50deg] group-hover:scale-110",
+               version === 'v2' ? "text-purple-400" : "text-accent"
+            )} />
+          <span className={cn(
+              "font-black text-xl md:text-2xl tracking-tight transition-opacity duration-300 group-hover:opacity-90",
+              version === 'v2' ? "bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400" : "gradient-text"
+            )}
+          >
+            PortfolioPro
+          </span>
         </Link>
 
-        {/* Desktop Navigation - Centered */}
-        <nav className="hidden md:flex items-center justify-center flex-grow relative">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center justify-center flex-grow relative mx-4">
           {currentNavItems.map((item, index) => (
             <Link
-              key={`${item.name}-${version}`} // Ensure key is unique when version changes
+              key={`${item.name}-${version}`}
               ref={(el) => navLinksRef.current[index] = el}
               href={item.href}
               onClick={(e) => handleLinkClick(e, item.href)}
               className={cn(
-                "relative px-3.5 lg:px-4 py-2 text-sm font-medium transition-all duration-300 ease-out group/navlink", // Added group/navlink
+                "relative px-3.5 lg:px-4 py-2.5 text-sm font-medium transition-all duration-300 ease-out group/navlink rounded-md",
                 activeHash === item.href 
-                  ? 'text-accent scale-105 font-semibold' 
-                  : 'text-muted-foreground hover:text-accent hover:scale-105'
+                  ? (version === 'v2' ? 'text-purple-300 scale-105 font-semibold' : 'text-accent scale-105 font-semibold')
+                  : (version === 'v2' ? 'text-neutral-400 hover:text-purple-300 hover:bg-neutral-700/50' : 'text-muted-foreground hover:text-accent hover:bg-accent/10'),
+                "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               )}
               data-cursor-interactive
              >
               {item.name}
-              {/* Subtle underline effect for hover/active using pseudo-elements (optional) */}
-              <span className={cn(
-                "absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-accent transition-all duration-300 ease-out",
-                activeHash === item.href ? "w-3/5 opacity-100" : "w-0 opacity-0 group-hover/navlink:w-2/5 group-hover/navlink:opacity-70"
-              )}></span>
             </Link>
           ))}
-          {/* The moving indicator - ensure it's part of the nav for correct positioning */}
           <span
             ref={indicatorRef}
-            className="absolute bottom-[5px] left-0 h-[3px] bg-gradient-to-r from-accent/80 via-accent to-primary/70 rounded-full transform -translate-x-1/2 opacity-0" // Start invisible
-            style={{ width: 0 }} // Initial width
+            className={cn(
+                "absolute bottom-[6px] left-0 h-[2.5px] rounded-full transform -translate-x-1/2 opacity-0",
+                version === 'v2' ? "bg-gradient-to-r from-purple-500 to-pink-500" : "bg-gradient-to-r from-accent to-primary/80"
+            )}
+            style={{ width: 0 }} 
           />
         </nav>
 
-        {/* Right side controls */}
-        <div className="flex items-center space-x-2.5 md:space-x-3 ml-auto md:ml-6 shrink-0">
+        {/* Right side controls - Ensured this group is pushed to the right */}
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto pl-4 shrink-0">
           <VersionToggle /> 
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="transition-all duration-300 ease-in-out hover:scale-125 hover:rotate-[25deg] hover:text-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-full w-9 h-9 md:w-10 md:h-10" // Enhanced hover and focus
+            className={cn(
+                "transition-all duration-300 ease-in-out hover:scale-125 hover:rotate-[22deg] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-full w-9 h-9 md:w-10 md:h-10",
+                version === 'v2' ? "text-neutral-400 hover:text-purple-300" : "hover:text-accent"
+            )}
             data-cursor-interactive
           >
             <Sun className="h-[1.1rem] w-[1.1rem] md:h-5 md:w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -214,31 +229,43 @@ export default function Header() {
           <div className="md:hidden">
              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Toggle menu" data-cursor-interactive className="hover:text-accent transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9 md:w-10 md:h-10">
+                  <Button variant="ghost" size="icon" aria-label="Toggle menu" data-cursor-interactive 
+                    className={cn(
+                        "transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9 md:w-10 md:h-10",
+                         version === 'v2' ? "text-neutral-400 hover:text-purple-300" : "hover:text-accent"
+                    )}>
                     <Menu className="h-5 w-5 md:h-6 md:w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-[280px] p-6 bg-background/90 backdrop-blur-xl border-l border-border shadow-2xl">
+                <SheetContent 
+                    side="right" 
+                    className={cn(
+                        "w-[280px] p-6 border-l shadow-2xl",
+                        version === 'v2' ? "bg-neutral-800/95 border-neutral-700 text-neutral-200 backdrop-blur-lg" : "bg-background/90 border-border backdrop-blur-lg"
+                    )}
+                >
                    <div className="flex items-center justify-between mb-10">
-                       <Link href={homeHref} className="flex items-center space-x-2" aria-label="Portfolio Pro Home" onClick={() => setIsMobileMenuOpen(false)}>
-                         <Settings2 className="h-6 w-6 text-accent" />
-                         <span className="font-bold text-lg gradient-text">PortfolioPro</span>
+                       <Link href={homeHref} className="flex items-center gap-2" aria-label="Portfolio Pro Home" onClick={() => setIsMobileMenuOpen(false)}>
+                         <LogoIcon className={cn("h-6 w-6", version === 'v2' ? "text-purple-400" : "text-accent")} />
+                         <span className={cn("font-bold text-lg", version === 'v2' ? "bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400" : "gradient-text")}>PortfolioPro</span>
                        </Link>
                        <SheetClose asChild>
-                           <Button variant="ghost" size="icon" className="rounded-full focus-visible:ring-2 focus-visible:ring-ring text-muted-foreground hover:text-accent">
+                           <Button variant="ghost" size="icon" className={cn("rounded-full focus-visible:ring-2 focus-visible:ring-ring", version === 'v2' ? "text-neutral-400 hover:text-purple-300" : "text-muted-foreground hover:text-accent")}>
                                <CloseIcon className="h-5 w-5" />
                            </Button>
                        </SheetClose>
                    </div>
-                  <nav className="flex flex-col space-y-3">
+                  <nav className="flex flex-col space-y-2.5">
                     {currentNavItems.map((item) => (
                       <SheetClose key={`${item.name}-mobile-${version}`} asChild>
                         <Link
                           href={item.href}
                           onClick={(e) => handleLinkClick(e, item.href)}
                           className={cn(
-                            "text-base font-medium transition-all duration-200 ease-in-out hover:text-accent hover:bg-accent/15 py-3 rounded-lg px-4 -mx-2 block", 
-                            activeHash === item.href ? 'text-accent bg-accent/20 font-semibold shadow-inner' : 'text-foreground' 
+                            "text-base font-medium transition-all duration-200 ease-in-out py-3 rounded-lg px-3.5 -mx-2 block", 
+                            activeHash === item.href 
+                                ? (version === 'v2' ? 'bg-purple-500/20 text-purple-300 font-semibold shadow-inner' : 'bg-accent/20 text-accent font-semibold shadow-inner')
+                                : (version === 'v2' ? 'text-neutral-300 hover:text-purple-300 hover:bg-neutral-700/60' : 'text-foreground hover:text-accent hover:bg-accent/15')
                           )}
                           data-cursor-interactive
                          >
@@ -254,15 +281,18 @@ export default function Header() {
       </div>
       <style jsx>{`
         .is-scrolled {
-          /* These styles are applied when scrolled */
+          /* These styles are applied by GSAP ScrollTrigger */
         }
-        .gradient-text { /* Ensure this is defined if not globally */
+        .gradient-text { /* For V1 */
           background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
         }
+        .dark .gradient-text {
+           background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+        }
       `}</style>
     </header>
   );
-};
+}

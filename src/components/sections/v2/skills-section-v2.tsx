@@ -5,7 +5,7 @@ import {
   Server, Database, CodeXml, GitBranch, Wrench, PanelsTopLeft, Search,
   ChevronDown, ChevronUp, Cog, Cloud, BookOpen, Cpu, Paintbrush,
   DatabaseZap, ImageIcon, TerminalSquare, Palette, BrainCircuit, Layers,
-  TestTubeDiagonal, Package, Gauge, Link as LinkIconLucide, ShieldCheck, Users as UsersIcon, Filter, Star, TrendingUpIcon, Lightbulb // Added Lightbulb
+  TestTubeDiagonal, Package, Gauge, Link as LinkIconLucide, ShieldCheck, Users as UsersIcon, Filter, Star, TrendingUpIcon, Lightbulb
 } from 'lucide-react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
@@ -22,14 +22,13 @@ interface SkillV2 {
   name: string;
   icon: React.ElementType;
   category: string;
-  colorClass: string; // For icon and border accents e.g. text-purple-400 border-purple-400/50
+  colorClass: string; 
   level: 'Proficient' | 'Experienced' | 'Familiar';
   years?: number;
   description?: string;
-  gradient?: string; // Tailwind gradient classes e.g., from-purple-900/40 to-indigo-900/20
+  gradient?: string; 
 }
 
-// Enhanced and Re-categorized Skills List with refined descriptions and gradients
 const allSkillsV2: SkillV2[] = [
     { name: 'Python', icon: TerminalSquare, category: 'Languages & Core', colorClass: 'text-blue-400 border-blue-400/60', level: 'Proficient', years: 4, description: 'Core language for backend, scripting, automation, and AI/ML integration.', gradient: 'from-blue-900/50 via-blue-950/30 to-neutral-900/20' },
     { name: 'FastAPI', icon: Server, category: 'Backend', colorClass: 'text-teal-400 border-teal-400/60', level: 'Proficient', years: 3, description: 'Building high-performance, asynchronous RESTful APIs with modern Python features.', gradient: 'from-teal-900/50 via-teal-950/30 to-neutral-900/20' },
@@ -57,13 +56,12 @@ const allSkillsV2: SkillV2[] = [
     { name: 'Agile/Scrum', icon: UsersIcon, category: 'Tools & Methodologies', colorClass: 'text-indigo-300 border-indigo-300/60', level: 'Experienced', description: 'Practicing iterative and incremental development methodologies for adaptive planning.', gradient: 'from-indigo-800/40 via-indigo-900/20 to-neutral-900/10' },
 ];
 
-
 const categoryOrderV2 = [
   'All', 'Languages & Core', 'Backend', 'Frontend', 'Databases', 
   'DevOps & Cloud', 'Architecture & APIs', 'Data & AI', 'Testing & QA', 'Tools & Methodologies',
 ];
 const categoriesV2 = categoryOrderV2;
-const ITEMS_PER_PAGE_V2 = 20; // Adjusted for potentially larger cards
+const ITEMS_PER_PAGE_V2 = 20;
 
 export default function SkillsSectionV2() {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -84,16 +82,17 @@ export default function SkillsSectionV2() {
         if (levelOrder[a.level] !== levelOrder[b.level]) {
             return levelOrder[a.level] - levelOrder[b.level];
         }
-        return (b.years ?? 0) - (a.years ?? 0); // Secondary sort by years descending
+        return (b.years ?? 0) - (a.years ?? 0);
     });
   }, [selectedCategory, searchTerm]);
 
   const loadMore = () => setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE_V2, filteredSkills.length));
+  
   const showLess = () => {
     setVisibleCount(ITEMS_PER_PAGE_V2);
-    const headerElement = document.querySelector('#skills-v2 h2'); // More specific selector
-    if (headerElement) {
-        gsap.to(window, { duration: 1, scrollTo: { y: headerElement, offsetY: -50 }, ease: "power3.inOut"});
+    const targetElement = headerRef.current || sectionRef.current;
+    if (targetElement) {
+        gsap.to(window, { duration: 1, scrollTo: { y: targetElement, offsetY: -80 }, ease: "power3.inOut"});
     }
   }
 
@@ -114,44 +113,53 @@ export default function SkillsSectionV2() {
   useEffect(() => {
     if (!gridRef.current) return;
     const cards = Array.from(gridRef.current.querySelectorAll<HTMLDivElement>('.skill-card-v2'));
-    const state = Flip.getState(cards, {props: "opacity,transform,filter"});
+    
+    // Ensure all cards are in the DOM before Flip captures state
+    const state = Flip.getState(cards, {props: "opacity,transform,filter,display,order"});
 
     cards.forEach(card => {
       const skillName = card.dataset.skillName;
       const skillIndex = filteredSkills.findIndex(s => s.name === skillName);
       const isVisible = skillIndex !== -1 && skillIndex < visibleCount;
       
-      gsap.set(card, { display: isVisible ? 'flex' : 'none', order: isVisible ? skillIndex : undefined });
+      // Set properties directly for the final state, GSAP will animate from captured state
+      gsap.set(card, { 
+        display: isVisible ? 'flex' : 'none', 
+        order: isVisible ? skillIndex : card.style.order // Keep existing order if not visible or changing
+      });
     });
 
     Flip.from(state, {
-      duration: 0.8, scale: true, ease: "expo.out", stagger: 0.05, absolute: true,
+      duration: 0.7, // Slightly faster
+      scale: true, 
+      ease: "expo.out", 
+      stagger: 0.04, // Slightly faster stagger
+      absolute: false, // Important for in-place reflows
       onEnter: elements => gsap.fromTo(elements, 
-        { opacity: 0, scale: 0.85, y: 40, filter: 'blur(5px)' }, 
-        { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 0.65, stagger: 0.04, ease:'power3.out' }
+        { opacity: 0, scale: 0.9, y: 30, filter: 'blur(3px)' }, 
+        { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 0.6, stagger: 0.03, ease:'power2.out' }
       ),
       onLeave: elements => gsap.to(elements, 
-        { opacity: 0, scale: 0.85, y: -30, filter: 'blur(5px)', duration: 0.5, ease:'power2.in' }
+        { opacity: 0, scale: 0.9, y: -20, filter: 'blur(3px)', duration: 0.45, ease:'power1.in' }
       )
     });
   }, [filteredSkills, visibleCount]);
 
   const getLevelIndicator = (level: SkillV2['level']) => {
     switch (level) {
-        case 'Proficient': return { icon: Star, color: 'text-yellow-400', bgColor: 'bg-yellow-900/50 dark:bg-yellow-700/30' };
-        case 'Experienced': return { icon: TrendingUpIcon, color: 'text-green-400', bgColor: 'bg-green-900/50 dark:bg-green-700/30' };
-        case 'Familiar': return { icon: Lightbulb, color: 'text-sky-400', bgColor: 'bg-sky-900/50 dark:bg-sky-700/30' };
-        default: return { icon: Cog, color: 'text-neutral-400', bgColor: 'bg-neutral-700/30' };
+        case 'Proficient': return { icon: Star, color: 'text-yellow-400', bgColor: 'bg-yellow-900/60 dark:bg-yellow-700/40' };
+        case 'Experienced': return { icon: TrendingUpIcon, color: 'text-green-400', bgColor: 'bg-green-900/60 dark:bg-green-700/40' };
+        case 'Familiar': return { icon: Lightbulb, color: 'text-sky-400', bgColor: 'bg-sky-900/60 dark:bg-sky-700/40' };
+        default: return { icon: Cog, color: 'text-neutral-400', bgColor: 'bg-neutral-700/40' };
     }
   };
-
 
   return (
     <section ref={sectionRef} id="skills-v2" className="py-32 md:py-48 bg-gradient-to-br from-neutral-900 via-indigo-950 to-purple-950 text-neutral-200 relative overflow-hidden">
       <div className="absolute inset-0 opacity-[0.06] pattern-grid pattern-size-12 z-0" style={{
           backgroundImage: `
-            linear-gradient(hsl(var(--indigo-500)/0.1) 1px, transparent 1px),
-            linear-gradient(to right, hsl(var(--indigo-500)/0.1) 1px, transparent 1px)
+            linear-gradient(hsla(var(--indigo-500-hsl)/0.07) 1px, transparent 1px),
+            linear-gradient(to right, hsla(var(--indigo-500-hsl)/0.07) 1px, transparent 1px)
           `,
           backgroundSize: '30px 30px'
       }}></div>
@@ -160,7 +168,7 @@ export default function SkillsSectionV2() {
           My Technical Arsenal
         </h2>
 
-        <div ref={filtersRef} className="mb-16 flex flex-col md:flex-row justify-between items-center gap-6 p-5 bg-neutral-800/50 backdrop-blur-xl rounded-xl border border-neutral-700/80 shadow-2xl">
+        <div ref={filtersRef} className="mb-16 flex flex-col md:flex-row justify-between items-center gap-6 p-5 bg-neutral-800/60 backdrop-blur-xl rounded-xl border border-neutral-700/80 shadow-2xl">
           <div className="relative w-full md:flex-grow max-w-md">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
             <Input
@@ -190,35 +198,34 @@ export default function SkillsSectionV2() {
           </div>
         </div>
         
-        <TooltipProvider delayDuration={150}>
+        <TooltipProvider delayDuration={100}>
             <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-8 md:gap-x-8 md:gap-y-10">
               {allSkillsV2.map((skill) => {
                 const levelInfo = getLevelIndicator(skill.level);
                 return (
-                <div key={skill.name} className="skill-card-v2 opacity-0" data-skill-name={skill.name} style={{display: 'none'}}>
+                // Removed initial opacity-0 and style display:none to let GSAP control it
+                <div key={skill.name} className="skill-card-v2" data-skill-name={skill.name}>
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Card className={cn(
-                                "flex flex-col items-center justify-between p-6 text-center transition-all duration-350 ease-in-out border-2 bg-neutral-800/60 backdrop-blur-xl rounded-xl shadow-xl cursor-pointer w-full aspect-[5/6] group relative overflow-hidden",
+                                "flex flex-col items-center justify-between p-6 text-center transition-all duration-350 ease-in-out border-2 bg-neutral-800/70 backdrop-blur-xl rounded-xl shadow-xl cursor-pointer w-full aspect-[5/6] group relative overflow-hidden",
                                 `hover:shadow-[0_0_35px_-8px_var(--skill-color-hsl)]`,
-                                skill.colorClass.replace('text-','border-').replace('/60','/80'), // Use border color from colorClass
-                                `hover:border-${skill.colorClass.split('-')[1]}-400` // More specific hover border
+                                skill.colorClass.replace('text-','border-').replace('/60','/80'),
+                                `hover:border-${skill.colorClass.split('-')[1]}-400`
                                 )}
                                 style={{'--skill-color-hsl': `hsla(var(--${skill.colorClass.split('-')[1]}-400-hsl), 0.7)`} as React.CSSProperties}
                                 data-cursor-interactive
                             >
                                 <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br -z-10", skill.gradient, "mix-blend-overlay group-hover:mix-blend-soft-light")}></div>
-                                
                                 <div className={cn("absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-10 group-hover:opacity-20 transition-all duration-500 ease-out group-hover:scale-150", skill.gradient?.split(' ')[0].replace('from-','bg-'))}></div>
-
 
                                 <CardContent className="flex flex-col items-center justify-center p-0 flex-grow space-y-4 w-full">
                                     <div className={cn(
                                         "p-4 rounded-full transition-all duration-300 ease-out",
-                                        "bg-neutral-700/40 group-hover:bg-neutral-700/20",
+                                        "bg-neutral-700/50 group-hover:bg-neutral-700/30",
                                         `group-hover:shadow-[0_0_20px_-5px_var(--skill-color-hsl)]`
                                       )}>
-                                        <skill.icon className={cn("h-12 w-12 transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-[12deg]", skill.colorClass)} strokeWidth={1.5} />
+                                        <skill.icon className={cn("h-12 w-12 transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-[10deg]", skill.colorClass)} strokeWidth={1.5} />
                                     </div>
                                     <span className="text-lg font-bold text-neutral-50 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:via-neutral-200 group-hover:to-neutral-400 transition-all duration-300">{skill.name}</span>
                                     <div className={cn("flex items-center text-xs px-3 py-1 rounded-full font-medium transition-all duration-300 ease-out", levelInfo.bgColor, levelInfo.color, "group-hover:scale-105 group-hover:shadow-md")}>
@@ -227,13 +234,12 @@ export default function SkillsSectionV2() {
                                         {skill.years && <span className="ml-1 opacity-80">({skill.years}y)</span>}
                                     </div>
                                 </CardContent>
-                                {/* Hidden description for tooltip, shown on focus/hover via TooltipContent */}
                             </Card>
                         </TooltipTrigger>
                         <TooltipContent 
                             side="bottom" 
                             align="center"
-                            className={cn("bg-neutral-800/90 text-neutral-100 border-neutral-700 shadow-2xl max-w-sm p-4 rounded-lg text-sm leading-relaxed backdrop-blur-md", skill.colorClass.replace('text-','border-t-2 border-t-'))}
+                            className={cn("bg-neutral-800/95 text-neutral-100 border-neutral-700 shadow-2xl max-w-xs sm:max-w-sm p-4 rounded-lg text-sm leading-relaxed backdrop-blur-md", skill.colorClass.replace('text-','border-t-2 border-t-'))}
                         >
                            <div className="flex items-center mb-2">
                                <skill.icon className={cn("h-5 w-5 mr-2", skill.colorClass)} />
@@ -249,21 +255,20 @@ export default function SkillsSectionV2() {
             </div>
         </TooltipProvider>
 
-        {filteredSkills.length === 0 && searchTerm && (
+        {(filteredSkills.length === 0 && searchTerm) && (
              <div className="text-center text-neutral-500 mt-24 py-16 border-2 border-dashed border-neutral-700/70 rounded-xl bg-neutral-800/40 shadow-inner backdrop-blur-sm">
                  <Search className="h-16 w-16 mx-auto mb-6 text-neutral-600" strokeWidth={1} />
                  <p className="text-2xl mb-3 font-semibold text-neutral-300">No Skills Found Matching "{searchTerm}"</p>
                  <p className="text-md">Try a different keyword or adjust your category filter.</p>
             </div>
         )}
-         {filteredSkills.length === 0 && !searchTerm && selectedCategory !== 'All' && (
+         {(filteredSkills.length === 0 && !searchTerm && selectedCategory !== 'All') && (
              <div className="text-center text-neutral-500 mt-24 py-16 border-2 border-dashed border-neutral-700/70 rounded-xl bg-neutral-800/40 shadow-inner backdrop-blur-sm">
                  <Filter className="h-16 w-16 mx-auto mb-6 text-neutral-600" strokeWidth={1} />
                  <p className="text-2xl mb-3 font-semibold text-neutral-300">No Skills in "{selectedCategory}"</p>
                  <p className="text-md">Try the 'All' category or use the search.</p>
             </div>
         )}
-
 
         <div className="mt-24 text-center space-x-5">
             {filteredSkills.length > visibleCount && (
@@ -279,12 +284,11 @@ export default function SkillsSectionV2() {
         </div>
       </div>
        <style jsx>{`
-        .pattern-grid { /* Updated for V2 aesthetics */
+        .pattern-grid {
             background-image: 
                 linear-gradient(hsla(var(--indigo-500-hsl)/0.07) 1px, transparent 1px), 
                 linear-gradient(to right, hsla(var(--indigo-500-hsl)/0.07) 1px, transparent 1px);
         }
-        /* Enhance horizontal scrollbar for filter buttons */
         .custom-scrollbar-horizontal::-webkit-scrollbar { height: 8px; }
         .custom-scrollbar-horizontal::-webkit-scrollbar-track { background: hsl(var(--neutral-800)/0.5); border-radius: 10px; }
         .custom-scrollbar-horizontal::-webkit-scrollbar-thumb { background-color: hsl(var(--neutral-600)/0.7); border-radius: 10px; border: 2px solid hsl(var(--neutral-800)/0.5); }
@@ -294,4 +298,3 @@ export default function SkillsSectionV2() {
     </section>
   );
 }
-
