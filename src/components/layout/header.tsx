@@ -1,3 +1,4 @@
+// src/components/layout/header.tsx
 'use client';
 
 import Link from 'next/link';
@@ -157,7 +158,6 @@ export default function Header() {
   
   const headerBaseClasses = "fixed top-0 left-0 z-[100] w-full transition-all duration-300 ease-in-out";
   const headerInitialClasses = "border-b border-transparent bg-transparent";
-  // Scrolled classes are applied by GSAP ScrollTrigger
 
   return (
     <header
@@ -209,8 +209,8 @@ export default function Header() {
           />
         </nav>
 
-        {/* Right side controls */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0"> {/* Removed ml-auto pl-4 to allow natural flow */}
+        {/* Right side controls & Mobile Menu Trigger */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <VersionToggle /> 
           <Button
             variant="ghost"
@@ -228,21 +228,21 @@ export default function Header() {
           </Button>
 
           {/* Mobile Menu Trigger */}
-          <div className="md:hidden"> {/* This div handles visibility */}
+          <div className="md:hidden">
              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" aria-label="Toggle menu" data-cursor-interactive 
                     className={cn(
-                        "transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9", // Consistent size for mobile
+                        "transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9",
                          version === 'v2' ? "text-neutral-400 hover:text-purple-300" : "hover:text-accent"
                     )}>
-                    <Menu className="h-6 w-6" /> {/* Simplified icon size */}
+                    <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent 
                     side="right" 
                     className={cn(
-                        "w-[280px] p-6 border-l shadow-2xl", // Fixed width for mobile menu is fine
+                        "w-[280px] p-6 border-l shadow-2xl",
                         version === 'v2' ? "bg-neutral-800/95 border-neutral-700 text-neutral-200 backdrop-blur-lg" : "bg-background/90 border-border backdrop-blur-lg"
                     )}
                 >
@@ -282,7 +282,6 @@ export default function Header() {
         </div>
       </div>
       <style jsx>{`
-        /* is-scrolled class is dynamically added by GSAP for scrolled state styling */
         .is-scrolled {
           /* Example: border-bottom-color: hsl(var(--border)); */
         }
@@ -299,5 +298,3 @@ export default function Header() {
     </header>
   );
 }
-
-    
