@@ -11,7 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from '@/lib/utils';
 import VersionToggle from './version-toggle';
 import { useVersion } from '@/context/version-context';
-import React from 'react'; // Ensure React is imported
+import React from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,13 +57,16 @@ export default function Header() {
       );
 
       ScrollTrigger.create({
-        start: 'top top-=60px', // Trigger when top of viewport is 60px below header's initial top
+        start: 'top top-=60px', 
         end: 99999,
         onUpdate: (self) => {
-            if (self.direction === -1 && self.scroll() < 50) { // Scrolling up towards top
-                 headerElement.classList.remove('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl');
-            } else if (self.direction === 1 && self.scroll() > 50) { // Scrolling down away from top
-                 headerElement.classList.add('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl');
+            const isScrolled = self.scroll() > 50;
+            if (isScrolled) {
+                 headerElement.classList.add('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl', 'border-border/30', 'dark:border-neutral-700/50');
+                 headerElement.classList.remove('border-transparent', 'bg-transparent');
+            } else {
+                 headerElement.classList.remove('is-scrolled', 'shadow-xl', 'bg-background/90', 'dark:bg-neutral-900/90', 'backdrop-blur-xl', 'border-border/30', 'dark:border-neutral-700/50');
+                 headerElement.classList.add('border-transparent', 'bg-transparent');
             }
         },
       });
@@ -72,8 +75,8 @@ export default function Header() {
 
       function updateActiveLink() {
         let currentSectionId = version === 'v2' ? '#home-v2' : '#home';
-        const headerHeight = headerElement?.offsetHeight ?? 70; // Default to 70
-        const threshold = window.innerHeight * 0.4; // 40% of viewport height as threshold
+        const headerHeight = headerElement?.offsetHeight ?? 70;
+        const threshold = window.innerHeight * 0.4; 
 
         for (const section of sections) {
             const sectionTop = section.getBoundingClientRect().top;
@@ -108,8 +111,8 @@ export default function Header() {
         const navRect = navElement.getBoundingClientRect();
         
         gsap.to(indicator, {
-          x: linkRect.left - navRect.left + (linkRect.width / 2), // Center under the link text
-          width: linkRect.width * 0.7, // Indicator relative to text width
+          x: linkRect.left - navRect.left + (linkRect.width / 2), 
+          width: linkRect.width * 0.7, 
           opacity: 1,
           duration: 0.45,
           ease: 'expo.out',
@@ -132,7 +135,7 @@ export default function Header() {
     if (href.startsWith('#')) {
       const targetElement = document.querySelector<HTMLElement>(href);
       if (targetElement) {
-        const headerOffset = (headerRef.current?.offsetHeight || 70) + (version === 'v2' ? 30 : 20); // Adjusted offset
+        const headerOffset = (headerRef.current?.offsetHeight || 70) + (version === 'v2' ? 30 : 20);
         
         gsap.to(window, {
           scrollTo: { y: targetElement, offsetY: headerOffset, autoKill:true },
@@ -148,14 +151,13 @@ export default function Header() {
         setActiveHash(href); 
       }
     } else if (href.startsWith('/')) {
-       window.location.href = href; // For external or non-hash links
+       window.location.href = href;
     }
   };
   
   const headerBaseClasses = "fixed top-0 left-0 z-[100] w-full transition-all duration-300 ease-in-out";
   const headerInitialClasses = "border-b border-transparent bg-transparent";
-  const headerScrolledClasses = "shadow-xl bg-background/80 dark:bg-neutral-900/80 backdrop-blur-xl border-border/30 dark:border-neutral-700/50";
-
+  // Scrolled classes are applied by GSAP ScrollTrigger
 
   return (
     <header
@@ -207,8 +209,8 @@ export default function Header() {
           />
         </nav>
 
-        {/* Right side controls - Ensured this group is pushed to the right */}
-        <div className="flex items-center gap-2 sm:gap-3 ml-auto pl-4 shrink-0">
+        {/* Right side controls */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0"> {/* Removed ml-auto pl-4 to allow natural flow */}
           <VersionToggle /> 
           <Button
             variant="ghost"
@@ -226,21 +228,21 @@ export default function Header() {
           </Button>
 
           {/* Mobile Menu Trigger */}
-          <div className="md:hidden">
+          <div className="md:hidden"> {/* This div handles visibility */}
              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" aria-label="Toggle menu" data-cursor-interactive 
                     className={cn(
-                        "transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9 md:w-10 md:h-10",
+                        "transition-transform duration-300 hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring rounded-full w-9 h-9", // Consistent size for mobile
                          version === 'v2' ? "text-neutral-400 hover:text-purple-300" : "hover:text-accent"
                     )}>
-                    <Menu className="h-5 w-5 md:h-6 md:w-6" />
+                    <Menu className="h-6 w-6" /> {/* Simplified icon size */}
                   </Button>
                 </SheetTrigger>
                 <SheetContent 
                     side="right" 
                     className={cn(
-                        "w-[280px] p-6 border-l shadow-2xl",
+                        "w-[280px] p-6 border-l shadow-2xl", // Fixed width for mobile menu is fine
                         version === 'v2' ? "bg-neutral-800/95 border-neutral-700 text-neutral-200 backdrop-blur-lg" : "bg-background/90 border-border backdrop-blur-lg"
                     )}
                 >
@@ -280,8 +282,9 @@ export default function Header() {
         </div>
       </div>
       <style jsx>{`
+        /* is-scrolled class is dynamically added by GSAP for scrolled state styling */
         .is-scrolled {
-          /* These styles are applied by GSAP ScrollTrigger */
+          /* Example: border-bottom-color: hsl(var(--border)); */
         }
         .gradient-text { /* For V1 */
           background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
@@ -296,3 +299,5 @@ export default function Header() {
     </header>
   );
 }
+
+    

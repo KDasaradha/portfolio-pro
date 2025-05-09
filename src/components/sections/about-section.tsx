@@ -1,50 +1,46 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"; // Added CardDescription
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CheckCircle2, BookOpen, Target, TrendingUp, Link as LinkIconLucide, Cloud, Layers, TestTubeDiagonal, ShieldCheck, Users, BrainCircuit } from 'lucide-react'; // Added Users, BrainCircuit
+import { CheckCircle2, BookOpen, Target, TrendingUp, Link as LinkIconLucide, Cloud, Layers, TestTubeDiagonal, ShieldCheck, Users, BrainCircuit } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Enhanced Timeline Content
 const timeline = [
-  { year: "2021", title: "Foundation: Python & Problem Solving", description: "Built a strong programming foundation in Python, focusing on algorithmic thinking and developing a passion for elegant, logical solutions.", technologies: "Python Core, Data Structures" },
-  { year: "2022", title: "Internship: Java, OOP & Web Basics", description: "Applied Java and OOP principles within a corporate environment (Wipro), gaining practical experience with enterprise codebases and foundational web technologies.", technologies: "Java, OOP, HTML, CSS, Data Structures" },
-  { year: "2023", title: "Backend Specialization: APIs & Automation", description: "Developed and deployed production Flask/FastAPI applications at Karyahub, mastering API design (REST), web scraping, and backend automation.", technologies: "Python, Flask, FastAPI, REST APIs" },
-  { year: "2024", title: "Advanced Systems: Image Processing & Security", description: "Engineered complex features involving dynamic image generation (Pillow/OpenCV), interactive frontend integration (Fabric.js), asynchronous programming, JWT security, and ORM optimization.", technologies: "FastAPI, Pillow, OpenCV, Fabric.js, Asyncio, JWT, SQLAlchemy" },
-  { year: "2025", title: "Cloud & Scalability: Microservices & DevOps", description: "Architecting and deploying scalable applications using microservices, containerization (Docker), CI/CD pipelines (GitHub Actions, Jenkins), and AWS cloud services. Integrating full-stack solutions with React/Next.js.", technologies: "Docker, CI/CD, AWS, React, Next.js, Microservices" },
+  { year: "2021", title: "Foundation: Python & Problem Solving", description: "Forged a robust Python foundation, mastering data structures and algorithms, sparking a passion for elegant, high-performance solutions.", technologies: "Python Core, Data Structures, Algorithmic Thinking" },
+  { year: "2022", title: "Internship: Java, OOP & Web Fundamentals", description: "Applied Java and OOP principles in an enterprise setting (Wipro), gaining hands-on experience with large-scale codebases and core web technologies.", technologies: "Java, OOP, HTML, CSS, JavaScript Basics, SQL" },
+  { year: "2023", title: "Backend Specialization: APIs & Automation", description: "Engineered and deployed production-grade Flask/FastAPI applications at Karyahub, mastering RESTful API design, web scraping, and backend automation.", technologies: "Python, Flask, FastAPI, REST APIs, Web Scraping, PostgreSQL" },
+  { year: "2024", title: "Advanced Systems: Image Processing & Security", description: "Developed complex features including dynamic image generation (Pillow/OpenCV), interactive frontend elements (Fabric.js), asynchronous programming, JWT/OAuth2 security, and ORM optimization (SQLAlchemy).", technologies: "FastAPI, Pillow, OpenCV, Fabric.js, Asyncio, JWT, OAuth2, SQLAlchemy" },
+  { year: "2025+", title: "Cloud & Scalability: Microservices & DevOps", description: "Architecting and deploying scalable applications using microservices, containerization (Docker), CI/CD pipelines (GitHub Actions, Jenkins), and AWS. Integrating full-stack solutions with React/Next.js.", technologies: "Docker, Kubernetes (learning), CI/CD, AWS (EC2, S3, RDS, Lambda), React, Next.js, Microservices, Serverless" },
 ];
 
-// Enhanced Philosophy Points
 const philosophyPoints = [
-  { icon: Layers, title: "Scalable Architecture", description: "Designing systems with modularity and clear separation of concerns (SOLID) for future growth and maintainability." },
-  { icon: ShieldCheck, title: "Security by Design", description: "Integrating security best practices (OWASP) throughout the SDLC, from data validation to secure deployment configurations." },
-  { icon: TrendingUp, title: "Performance Optimization", description: "Employing profiling, efficient database interactions (query optimization, indexing), and asynchronous processing for optimal performance." },
-  { icon: LinkIconLucide, title: "API-First Development", description: "Creating well-documented, versioned, and intuitive APIs (OpenAPI) that enable seamless integration and developer productivity." },
-  { icon: Cloud, title: "Cloud-Native Principles", description: "Leveraging cloud infrastructure (AWS/GCP) for elasticity, resilience, and cost-effectiveness, utilizing services like Lambda, EC2, S3." },
-  { icon: BrainCircuit, title: "Pragmatic Innovation", description: "Applying modern technologies and patterns thoughtfully, balancing cutting-edge solutions with stability and practical needs." },
-  { icon: Users, title: "Collaborative Mindset", description: "Fostering clear communication, knowledge sharing, and effective teamwork within Agile/Scrum environments." },
+  { icon: Layers, title: "Architectural Excellence", description: "Designing resilient, modular systems (SOLID, Microservices) for adaptability and long-term maintainability." },
+  { icon: ShieldCheck, title: "Security-First Mindset", description: "Integrating security best practices (OWASP Top 10, Threat Modeling) throughout the SDLC, from design to deployment." },
+  { icon: TrendingUp, title: "Performance Optimization", description: "Employing profiling, efficient database interactions (query optimization, indexing), and asynchronous processing for optimal system performance." },
+  { icon: LinkIconLucide, title: "API-Centric Design", description: "Creating well-documented, versioned, and intuitive APIs (OpenAPI, GraphQL exploration) that enable seamless integration and developer productivity." },
+  { icon: Cloud, title: "Cloud-Native Proficiency", description: "Leveraging cloud infrastructure (AWS/GCP) for elasticity, resilience, and cost-effectiveness, utilizing services like Lambda, EC2, S3, and serverless paradigms." },
+  { icon: BrainCircuit, title: "Pragmatic Innovation", description: "Applying modern technologies and AI-driven patterns thoughtfully, balancing cutting-edge solutions with stability and practical business needs." },
+  { icon: Users, title: "Collaborative Synergy", description: "Fostering transparent communication, knowledge sharing, and effective teamwork within Agile/Scrum environments to achieve collective goals." },
 ];
 
-// Refined Learning Goals
 const learningGoals = [
-  "Deepening expertise in Serverless Architectures & Event-Driven Systems (AWS Lambda, SQS, EventBridge).",
-  "Mastering advanced database patterns (e.g., CQRS, sharding) and NoSQL solutions.",
-  "Implementing robust monitoring and observability strategies (Prometheus, Grafana, ELK Stack).",
-  "Exploring Infrastructure as Code (IaC) with Terraform for automated provisioning.",
-  "Contributing to open-source projects in the Python/backend ecosystem.",
+  "Deepening expertise in Distributed Systems Design & Event-Driven Architectures (e.g., Kafka, RabbitMQ).",
+  "Mastering advanced NoSQL solutions (e.g., MongoDB, DynamoDB) and data warehousing patterns.",
+  "Implementing robust monitoring, observability, and alerting strategies (Prometheus, Grafana, ELK Stack).",
+  "Advancing skills in Infrastructure as Code (IaC) with Terraform for automated, reproducible environments.",
+  "Exploring advanced AI/ML model deployment techniques and MLOps practices.",
 ];
 
-// Refined Why Work With Me
 const whyWorkWithMe = [
-    "Proven track record in designing, building, and deploying reliable, high-performance backend systems.",
-    "Dedicated to writing clean, maintainable, and well-tested code following industry best practices.",
-    "Strong problem-solving skills with a proactive approach to identifying and resolving technical challenges.",
-    "Excellent collaborator experienced in cross-functional Agile teams, bridging technical and non-technical communication.",
-    "Continuous learner committed to staying current with emerging technologies and driving innovation.",
+    "Proven ability to translate complex business requirements into high-performance, scalable backend systems.",
+    "Dedicated to writing clean, maintainable, and thoroughly tested code following industry best practices (TDD/BDD).",
+    "Strategic problem-solver with a proactive approach to identifying, analyzing, and resolving technical challenges efficiently.",
+    "Exceptional collaborator and communicator, experienced in leading and mentoring within cross-functional Agile teams.",
+    "A continuous learner and innovator, committed to staying at the forefront of technology and driving impactful solutions.",
 ];
 
 
@@ -53,103 +49,66 @@ export default function AboutSection() {
     const timelineRef = useRef<HTMLOListElement>(null);
     const cardsRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLHeadingElement>(null);
-    const introRef = useRef<HTMLParagraphElement>(null); // Ref for intro paragraph
+    const introRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            // Animate section header and intro paragraph
-            gsap.from([headerRef.current, introRef.current], { // Target both header and intro
-                opacity: 0,
-                y: 60, // Increased offset
-                duration: 0.9, // Increased duration
-                stagger: 0.2, // Stagger the animations
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 80%", // Trigger a bit earlier
-                    toggleActions: "play none none none",
-                }
+            gsap.from([headerRef.current, introRef.current], {
+                opacity: 0, y: 70, duration: 1, stagger: 0.25, ease: 'power3.out',
+                scrollTrigger: { trigger: sectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
             });
 
-            // Animate timeline items
             const timelineItems = timelineRef.current?.querySelectorAll('.timeline-item');
             if (timelineItems) {
                 gsap.from(timelineItems, {
-                    opacity: 0,
-                    x: -70, // Increased offset
-                    duration: 0.8, // Increased duration
-                    stagger: 0.3, // Increased stagger
-                    scrollTrigger: {
-                        trigger: timelineRef.current,
-                        start: "top 70%", // Trigger earlier
-                        toggleActions: "play none none none",
-                    }
+                    opacity: 0, x: -80, duration: 0.9, stagger: 0.35, ease: 'power2.out',
+                    scrollTrigger: { trigger: timelineRef.current, start: "top 75%", toggleActions: "play none none reset" }
                 });
             }
 
-            // Animate cards on the right
             const rightCards = cardsRef.current?.querySelectorAll('.animate-card');
              if (rightCards) {
                 gsap.from(rightCards, {
-                    opacity: 0,
-                    y: 70, // Increased offset
-                    scale: 0.95, // Add scale effect
-                    duration: 0.9, // Increased duration
-                    stagger: 0.35, // Increased stagger
-                    scrollTrigger: {
-                        trigger: cardsRef.current,
-                        start: "top 75%", // Trigger a bit earlier
-                        toggleActions: "play none none none",
-                    }
+                    opacity: 0, y: 80, scale: 0.96, duration: 1, stagger: 0.4, ease: 'power3.out',
+                    scrollTrigger: { trigger: cardsRef.current, start: "top 80%", toggleActions: "play none none reset" }
                 });
              }
-
         }, sectionRef);
-
         return () => ctx.revert();
     }, []);
 
-
   return (
-    <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/25 py-32 md:py-40"> {/* Adjusted padding & background */}
+    <section ref={sectionRef} id="about" className="bg-gradient-to-b from-background to-secondary/30 py-24 md:py-32 lg:py-40">
       <div className="container mx-auto px-4 md:px-6">
-        <h2
-          ref={headerRef}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-center gradient-text" /* Adjusted margin */
-        >
+        <h2 ref={headerRef} className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-center gradient-text tracking-tight">
           Crafting Digital Foundations
         </h2>
-        {/* Added Introductory Paragraph */}
-        <p ref={introRef} className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto text-center mb-20 md:mb-28 leading-relaxed">
-            Driven by a passion for building robust and efficient systems, I specialize in backend development with a focus on scalability, security, and performance. My journey involves continuous learning and applying modern technologies to solve complex problems.
+        <p ref={introRef} className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto text-center mb-16 md:mb-24 leading-relaxed">
+            Driven by a passion for building robust, efficient, and scalable systems, I specialize in backend architecture and development. My journey is one of continuous learning, applying modern technologies and best practices to solve complex engineering problems and deliver tangible business value.
         </p>
 
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-20"> {/* Increased gap */}
-          {/* Timeline on the left */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16">
           <div className="lg:col-span-2">
-             {/* Enhanced Timeline Card */}
-             <Card className="h-full shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-accent bg-card/90 backdrop-blur-sm">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-semibold">My Technical Evolution</CardTitle>
-                <CardDescription className="text-sm text-muted-foreground">Key milestones in my development journey.</CardDescription> {/* Added description */}
+             <Card className="h-full shadow-xl hover:shadow-2xl transition-shadow duration-300 border-l-4 border-accent bg-card/90 backdrop-blur-md">
+              <CardHeader className="pb-5">
+                <CardTitle className="text-2xl md:text-3xl font-semibold">My Technical Evolution</CardTitle>
+                <CardDescription className="text-sm md:text-base text-muted-foreground mt-1.5">Key milestones shaping my expertise.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ol ref={timelineRef} className="relative border-l-2 border-accent/50 ml-3 space-y-14"> {/* Increased spacing & adjusted border */}
+                <ol ref={timelineRef} className="relative border-l-2 border-accent/60 ml-2 md:ml-3 space-y-12 md:space-y-16">
                   {timeline.map((item, index) => (
-                    <li key={index} className="ml-12 group timeline-item"> {/* Increased margin */}
-                       {/* Enhanced Year Marker */}
+                    <li key={index} className="ml-8 md:ml-10 lg:ml-12 group timeline-item">
                        <span className={cn(
-                           "absolute -left-3.5 -top-1", // Adjusted positioning
-                           "flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent to-primary ring-8 ring-background text-accent-foreground font-bold text-sm transition-all duration-400 group-hover:scale-110 group-hover:shadow-lg shadow-md"
+                           "absolute -left-[1.1rem] md:-left-5 -top-1.5", // Adjusted for new li margin
+                           "flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent to-primary/80 ring-4 md:ring-[6px] ring-background text-accent-foreground font-bold text-xs md:text-sm transition-all duration-400 group-hover:scale-110 group-hover:shadow-lg shadow-md"
                        )}>
-                         '{item.year.substring(2)} {/* Added apostrophe */}
+                         '{item.year.substring(2)}
                        </span>
-                       {/* Enhanced Timeline Item Content Box */}
-                       <div className="p-6 rounded-lg border border-border bg-background/70 transition-all duration-300 group-hover:border-accent/70 group-hover:shadow-lg group-hover:-translate-y-1.5 transform backdrop-blur-sm will-change-transform">
-                           <h3 className="text-lg font-semibold text-foreground mb-2">{item.title}</h3>
-                           <p className="text-sm text-muted-foreground mb-3.5 leading-relaxed">{item.description}</p>
-                           <p className="text-xs font-medium text-muted-foreground/80">
-                            <strong className="text-primary/90">Key Tech:</strong> {item.technologies}
+                       <div className="p-5 md:p-6 rounded-lg border border-border/80 bg-background/80 transition-all duration-300 group-hover:border-accent/80 group-hover:shadow-xl group-hover:-translate-y-2 transform backdrop-blur-sm will-change-transform">
+                           <h3 className="text-lg md:text-xl font-semibold text-foreground mb-2.5">{item.title}</h3>
+                           <p className="text-sm md:text-base text-muted-foreground mb-4 leading-relaxed">{item.description}</p>
+                           <p className="text-xs md:text-sm font-medium text-muted-foreground/90">
+                            <strong className="text-primary/95">Key Tech:</strong> {item.technologies}
                            </p>
                        </div>
                     </li>
@@ -159,22 +118,20 @@ export default function AboutSection() {
             </Card>
           </div>
 
-          {/* Cards on the right */}
-          <div ref={cardsRef} className="lg:col-span-3 space-y-12 p-2 md:p-6"> {/* Increased spacing */}
-            {/* Philosophy Card */}
-            <Card className="animate-card shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary bg-card/90 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-2xl font-semibold">🚀 Core Development Philosophy</CardTitle>
-                <CardDescription className="text-sm text-muted-foreground mt-1">Principles guiding my approach to software engineering.</CardDescription>
+          <div ref={cardsRef} className="lg:col-span-3 space-y-10 md:space-y-12 p-1 md:p-4">
+            <Card className="animate-card shadow-xl hover:shadow-2xl transition-shadow duration-300 border-t-4 border-primary bg-card/90 backdrop-blur-md">
+              <CardHeader className="p-5 md:p-7">
+                <CardTitle className="text-2xl md:text-3xl font-semibold">🚀 Core Development Philosophy</CardTitle>
+                <CardDescription className="text-sm md:text-base text-muted-foreground mt-1.5">Guiding principles for impactful software engineering.</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-7"> {/* Increased spacing */}
+              <CardContent className="p-5 md:p-7">
+                <ul className="space-y-6">
                   {philosophyPoints.map((point, index) => (
-                    <li key={index} className="flex items-start gap-5"> {/* Increased gap */}
-                       <point.icon className="h-8 w-8 text-accent mt-0 flex-shrink-0" strokeWidth={1.5} /> {/* Slightly larger icon */}
+                    <li key={index} className="flex items-start gap-4 md:gap-5">
+                       <point.icon className="h-7 w-7 md:h-8 md:w-8 text-accent mt-0.5 flex-shrink-0" strokeWidth={1.75} />
                        <div>
-                        <h3 className="font-semibold text-lg text-primary mb-1.5">{point.title}</h3> {/* Adjusted spacing */}
-                        <p className="text-sm text-muted-foreground leading-relaxed">{point.description}</p>
+                        <h3 className="font-semibold text-md md:text-lg text-primary mb-1.5">{point.title}</h3>
+                        <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{point.description}</p>
                        </div>
                     </li>
                   ))}
@@ -182,35 +139,33 @@ export default function AboutSection() {
               </CardContent>
             </Card>
 
-            {/* Learning Goals Card */}
-            <Card className="animate-card shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card/90 backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle className="text-xl font-semibold">💡 Continuous Growth Areas</CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground mt-1">Actively expanding my knowledge in:</CardDescription>
+            <Card className="animate-card shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-card/90 backdrop-blur-md">
+                <CardHeader className="p-5 md:p-7">
+                    <CardTitle className="text-xl md:text-2xl font-semibold">💡 Continuous Growth & Learning</CardTitle>
+                    <CardDescription className="text-sm md:text-base text-muted-foreground mt-1.5">Actively expanding knowledge in:</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <ul className="space-y-4"> {/* Increased spacing */}
+                <CardContent className="p-5 md:p-7">
+                    <ul className="space-y-3.5 md:space-y-4">
                     {learningGoals.map((goal, index) => (
-                         <li key={index} className="flex items-center gap-3 text-muted-foreground">
-                           <span className="text-accent font-bold text-lg">&rarr;</span> <span className="flex-1 text-sm leading-relaxed">{goal}</span> {/* Adjusted size & leading */}
+                         <li key={index} className="flex items-center gap-2.5 md:gap-3 text-muted-foreground">
+                           <span className="text-accent font-bold text-md md:text-lg">&rarr;</span> <span className="flex-1 text-sm md:text-base leading-relaxed">{goal}</span>
                          </li>
                     ))}
                     </ul>
                 </CardContent>
             </Card>
 
-            {/* Why Work With Me Card */}
-             <Card className="animate-card shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card/90 backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle className="text-xl font-semibold">🤝 What I Bring to the Table</CardTitle>
-                     <CardDescription className="text-sm text-muted-foreground mt-1">Key strengths and contributions.</CardDescription>
+             <Card className="animate-card shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-card/90 backdrop-blur-md">
+                <CardHeader className="p-5 md:p-7">
+                    <CardTitle className="text-xl md:text-2xl font-semibold">🤝 Value Proposition</CardTitle>
+                     <CardDescription className="text-sm md:text-base text-muted-foreground mt-1.5">Key strengths I bring to your team/project.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <ul className="space-y-4"> {/* Increased spacing */}
+                <CardContent className="p-5 md:p-7">
+                    <ul className="space-y-3.5 md:space-y-4">
                     {whyWorkWithMe.map((reason, index) => (
-                         <li key={index} className="flex items-start gap-3.5 text-muted-foreground"> {/* Increased gap */}
-                            <CheckCircle2 className="h-5 w-5 text-accent mt-1 flex-shrink-0" strokeWidth={2}/> {/* Adjusted icon & margin */}
-                            <span className="text-sm leading-relaxed">{reason}</span> {/* Adjusted size & leading */}
+                         <li key={index} className="flex items-start gap-3 md:gap-3.5 text-muted-foreground">
+                            <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-accent mt-0.5 md:mt-1 flex-shrink-0" strokeWidth={2}/>
+                            <span className="text-sm md:text-base leading-relaxed">{reason}</span>
                          </li>
                     ))}
                     </ul>
@@ -222,3 +177,5 @@ export default function AboutSection() {
     </section>
   );
 }
+
+    

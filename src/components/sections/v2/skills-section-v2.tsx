@@ -114,7 +114,6 @@ export default function SkillsSectionV2() {
     if (!gridRef.current) return;
     const cards = Array.from(gridRef.current.querySelectorAll<HTMLDivElement>('.skill-card-v2'));
     
-    // Ensure all cards are in the DOM before Flip captures state
     const state = Flip.getState(cards, {props: "opacity,transform,filter,display,order"});
 
     cards.forEach(card => {
@@ -122,19 +121,18 @@ export default function SkillsSectionV2() {
       const skillIndex = filteredSkills.findIndex(s => s.name === skillName);
       const isVisible = skillIndex !== -1 && skillIndex < visibleCount;
       
-      // Set properties directly for the final state, GSAP will animate from captured state
       gsap.set(card, { 
         display: isVisible ? 'flex' : 'none', 
-        order: isVisible ? skillIndex : card.style.order // Keep existing order if not visible or changing
+        order: isVisible ? skillIndex : card.style.order 
       });
     });
 
     Flip.from(state, {
-      duration: 0.7, // Slightly faster
+      duration: 0.7, 
       scale: true, 
       ease: "expo.out", 
-      stagger: 0.04, // Slightly faster stagger
-      absolute: false, // Important for in-place reflows
+      stagger: 0.04, 
+      absolute: false, 
       onEnter: elements => gsap.fromTo(elements, 
         { opacity: 0, scale: 0.9, y: 30, filter: 'blur(3px)' }, 
         { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)', duration: 0.6, stagger: 0.03, ease:'power2.out' }
@@ -168,7 +166,7 @@ export default function SkillsSectionV2() {
           My Technical Arsenal
         </h2>
 
-        <div ref={filtersRef} className="mb-16 flex flex-col md:flex-row justify-between items-center gap-6 p-5 bg-neutral-800/60 backdrop-blur-xl rounded-xl border border-neutral-700/80 shadow-2xl">
+        <div ref={filtersRef} className="mb-16 flex flex-col md:flex-row justify-between items-center gap-6 p-4 md:p-6 bg-neutral-800/60 backdrop-blur-xl rounded-xl border border-neutral-700/80 shadow-2xl">
           <div className="relative w-full md:flex-grow max-w-md">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-neutral-500 pointer-events-none" />
             <Input
@@ -203,8 +201,7 @@ export default function SkillsSectionV2() {
               {allSkillsV2.map((skill) => {
                 const levelInfo = getLevelIndicator(skill.level);
                 return (
-                // Removed initial opacity-0 and style display:none to let GSAP control it
-                <div key={skill.name} className="skill-card-v2" data-skill-name={skill.name}>
+                <div key={skill.name} className="skill-card-v2" data-skill-name={skill.name} style={{ display: 'none' }}> {/* Initially hidden, GSAP controls */}
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Card className={cn(
@@ -298,3 +295,5 @@ export default function SkillsSectionV2() {
     </section>
   );
 }
+
+    
